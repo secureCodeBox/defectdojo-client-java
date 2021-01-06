@@ -27,7 +27,32 @@ publishing {
         register("jar", MavenPublication) {
             from(components["java"])
             pom {
-                url.set("https://github.com/securecodebox/defectdojo-client-java.git")
+                name = 'DefectDojo Client Java'
+                description = 'Java Client to interact with the DefectDojo API.'
+                url = 'https://github.com/secureCodeBox/defectdojo-client-java'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'jannik.hollenbach'
+                        name = 'Jannik Hollenbach'
+                        email = 'jannik.hollenbach@iteratec.com'
+                    }
+                    developer {
+                        id = 'robert.seedorff'
+                        name = 'Robert Seedorff'
+                        email = 'robert.seedorff@iteratec.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git@github.com:secureCodeBox/defectdojo-client-java.git'
+                    developerConnection = 'scm:git@github.com:secureCodeBox/defectdojo-client-java.git'
+                    url = 'https://github.com/secureCodeBox/defectdojo-client-java'
+                }
             }
         }
     }
