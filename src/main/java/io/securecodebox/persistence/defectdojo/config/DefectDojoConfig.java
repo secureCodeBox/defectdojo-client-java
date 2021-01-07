@@ -11,9 +11,13 @@ public class DefectDojoConfig {
     @Getter
     private final String apiKey;
 
-    static DefectDojoConfig fromEnv(){
+    @Getter
+    private final String username;
+
+    public static DefectDojoConfig fromEnv(){
         String url = System.getenv("DEFECTDOJO_URL");
-        String username = System.getenv("DEFECTDOJO_USERNMAE");
-        return new DefectDojoConfig(url, username);
+        String username = System.getenv("DEFECTDOJO_USERNAME");
+        String apiKey = System.getenv("DEFECTDOJO_APIKEY");
+        return new DefectDojoConfig(url, apiKey, username);
     }
 }
