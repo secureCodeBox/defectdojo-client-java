@@ -107,11 +107,10 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
     do {
       var response = internalSearch(queryParams, DEFECT_DOJO_OBJET_LIMIT, DEFECT_DOJO_OBJET_LIMIT * page++);
       objects.addAll(response.getResults());
-      if (response.getNext() != null) {
-        hasNext = true;
-      }
+
+      hasNext = response.getNext() != null;
       if (page > 100) {
-        throw new DefectDojoLoopException("Looked for DefectDojo Object but could not find it after " + page + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
+        throw new DefectDojoLoopException("Found too many response object. Quitting after " + page + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
       }
     } while (hasNext);
 

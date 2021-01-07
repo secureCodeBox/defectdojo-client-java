@@ -33,12 +33,13 @@ public class FindingService extends GenericDefectDojoService<Finding> {
   }
 
   public List<Finding> getUnhandledFindingsForProduct(long productId, Finding.Severity minimumSeverity) throws URISyntaxException, JsonProcessingException {
-    return this.search(Map.of("test__engagement__product", productId, "active", true)).stream().filter((finding -> {
+    return this.search(Map.of("test__engagement__product", Long.toString(productId), "active", Boolean.toString(true))).stream().filter((finding -> {
       return finding.getSeverity().getNumericRepresentation() >= minimumSeverity.getNumericRepresentation();
     })).collect(Collectors.toList());
   }
+
   public List<Finding> getUnhandledFindingsForEngagement(long engagementId, Finding.Severity minimumSeverity) throws URISyntaxException, JsonProcessingException {
-    return this.search(Map.of("test__engagement", engagementId, "active", true)).stream().filter((finding -> {
+    return this.search(Map.of("test__engagement", Long.toString(engagementId), "active", Boolean.toString(true))).stream().filter((finding -> {
       return finding.getSeverity().getNumericRepresentation() >= minimumSeverity.getNumericRepresentation();
     })).collect(Collectors.toList());
   }
