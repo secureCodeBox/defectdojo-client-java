@@ -154,4 +154,12 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
 
     restTemplate.exchange(defectDojoUrl + "/api/v2/" + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
   }
+
+  public T update(T object, long objectId) {
+    RestTemplate restTemplate = new RestTemplate();
+    HttpEntity<T> payload = new HttpEntity<T>(object, getDefectDojoAuthorizationHeaders());
+
+    ResponseEntity<T> response = restTemplate.exchange(defectDojoUrl + "/api/v2/" + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
+    return response.getBody();
+  }
 }
