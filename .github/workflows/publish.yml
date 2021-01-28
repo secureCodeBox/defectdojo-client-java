@@ -20,5 +20,10 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Build with Gradle
+    - name: Assemble jar
+      run: ./gradlew build
+    - name: Publish to Maven Central
+      env:
+        MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
       run: ./gradlew publish
