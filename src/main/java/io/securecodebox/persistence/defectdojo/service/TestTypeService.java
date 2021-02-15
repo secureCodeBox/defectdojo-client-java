@@ -13,7 +13,7 @@ public class TestTypeService extends GenericDefectDojoService<TestType> {
 
   @Override
   protected String getUrlPath() {
-    return "tool_type";
+    return "test_types";
   }
 
   @Override
