@@ -115,7 +115,7 @@ public class Finding extends DefectDojoModel {
     Medium(3),
     @JsonProperty("Low")
     Low(2),
-    @JsonProperty("Informational")
+    @JsonProperty("Info")
     Informational(1),
     ;
 
