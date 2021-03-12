@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.securecodebox.persistence.defectdojo.exceptions.DefectDojoPersistenceException;
 import lombok.*;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -78,10 +79,19 @@ public class Finding extends DefectDojoModel {
   @Builder.Default
   Boolean duplicate = false;
 
+  @JsonProperty("duplicate_finding")
+  @Builder.Default
+  Long duplicateFinding = null;
+
   @JsonProperty("false_p")
   @NonNull
   @Builder.Default
   Boolean falsePositive = false;
+
+  @JsonProperty
+  @NonNull
+  @Builder.Default
+  List<Long> endpoints = new LinkedList<>();
 
   @JsonProperty("numerical_severity")
   public String getNumericalSeverity() {
