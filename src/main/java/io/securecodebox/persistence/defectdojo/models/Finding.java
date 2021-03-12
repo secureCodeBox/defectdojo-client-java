@@ -17,6 +17,7 @@
  */
 package io.securecodebox.persistence.defectdojo.models;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.securecodebox.persistence.defectdojo.exceptions.DefectDojoPersistenceException;
@@ -125,7 +126,10 @@ public class Finding extends DefectDojoModel {
     Medium(3),
     @JsonProperty("Low")
     Low(2),
+    // Depending on the Scanner DefectDojo uses either Info or Informational
+    // E.g. Nmap uses Info, Zap uses Informational
     @JsonProperty("Info")
+    @JsonAlias("Informational")
     Informational(1),
     ;
 
