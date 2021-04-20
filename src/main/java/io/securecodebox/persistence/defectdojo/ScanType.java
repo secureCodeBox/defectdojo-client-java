@@ -56,7 +56,7 @@ public enum ScanType {
   DSOP_SCAN("DSOP Scan"),
   ES_LINT_SCAN("ESLint Scan"),
   FORTIFY("Fortify"),
-  GENERIC_FINDINGS_IMPORT("Generic Findings Import"),
+  GENERIC_SCB_FINDINGS_IMPORT("SCB Scan"),
   GITHUB_VULNERABILITY_SCAN("Github Vulnerability Scan"),
   GITLAB_SAST_REPORT("GitLab SAST Report"),
   GITLAB_DEPENDENCY_SCANNING_REPORT("GitLab Dependency Scanning Report"),
