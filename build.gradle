@@ -48,6 +48,11 @@ publishing {
                         name = 'Robert Seedorff'
                         email = 'robert.seedorff@iteratec.com'
                     }
+                    developer {
+                        id = 'johannes.zahn'
+                        name = 'Johannes Zahn'
+                        email = 'johannes.zahn@iteratec.com'
+                    }
                 }
                 scm {
                     connection = 'scm:git@github.com:secureCodeBox/defectdojo-client-java.git'
