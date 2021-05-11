@@ -58,7 +58,6 @@ public class Finding extends DefectDojoModel {
   Long test;
 
   @JsonProperty
-  @NonNull
   String mitigation;
 
   @JsonProperty
