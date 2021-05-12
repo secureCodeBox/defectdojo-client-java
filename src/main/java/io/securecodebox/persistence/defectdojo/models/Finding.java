@@ -61,7 +61,6 @@ public class Finding extends DefectDojoModel {
   String mitigation;
 
   @JsonProperty
-  @NonNull
   String impact;
 
   @JsonProperty
