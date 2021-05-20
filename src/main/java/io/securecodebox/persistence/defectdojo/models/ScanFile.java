@@ -11,4 +11,13 @@ public class ScanFile {
     // unless the parser pays attention to file endings like json or xml
     String name = "default-name.txt";
 
+    public ScanFile(String content){
+        this.content = content;
+    }
+
+    public ScanFile(String content, String name){
+        this.content = content;
+        this.name = name;
+    }
+
 }
