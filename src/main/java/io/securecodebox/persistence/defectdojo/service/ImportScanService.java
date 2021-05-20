@@ -69,7 +69,7 @@ public class ImportScanService {
       new FormHttpMessageConverter(),
       new ResourceHttpMessageConverter(),
       new MappingJackson2HttpMessageConverter())
-      );
+    );
 
     MultiValueMap<String, Object> mvn = new LinkedMultiValueMap<>();
 
@@ -87,11 +87,11 @@ public class ImportScanService {
 
     try {
       ByteArrayResource contentsAsResource = new ByteArrayResource(scanFile.getContent().getBytes(StandardCharsets.UTF_8)) {
-            @Override
-            public String getFilename() {
-              return scanFile.getName();
-            }
-          };
+        @Override
+        public String getFilename() {
+          return scanFile.getName();
+        }
+      };
 
       mvn.add("file", contentsAsResource);
 
