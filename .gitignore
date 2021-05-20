@@ -51,3 +51,6 @@ gradle-app.setting
 **/build/
 
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij
+.classpath
+.project
+.settings/org.eclipse.buildship.core.prefs

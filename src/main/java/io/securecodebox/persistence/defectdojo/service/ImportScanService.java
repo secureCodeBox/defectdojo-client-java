@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
 import io.securecodebox.persistence.defectdojo.exceptions.DefectDojoPersistenceException;
+import io.securecodebox.persistence.defectdojo.models.ScanFile;
 import lombok.Data;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
@@ -60,7 +61,7 @@ public class ImportScanService {
   /**
    * Before version 1.5.4. testName (in DefectDojo _test_type_) must be defectDojoScanName, afterwards, you can have somethings else
    */
-  protected ImportScanResponse createFindings(String rawResult, String endpoint, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, Object> options) {
+  protected ImportScanResponse createFindings(ScanFile scanFile, String endpoint, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, Object> options) {
     RestTemplate restTemplate = new RestTemplate();
     HttpHeaders headers = getDefectDojoAuthorizationHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -85,10 +86,10 @@ public class ImportScanService {
     mvn.addAll(options);
 
     try {
-      ByteArrayResource contentsAsResource = new ByteArrayResource(rawResult.getBytes(StandardCharsets.UTF_8)) {
+      ByteArrayResource contentsAsResource = new ByteArrayResource(scanFile.getContent().getBytes(StandardCharsets.UTF_8)) {
         @Override
         public String getFilename() {
-          return "this_needs_to_be_here_but_doesnt_really_matter.txt";
+          return scanFile.getName();
         }
       };
 
@@ -102,18 +103,18 @@ public class ImportScanService {
     }
   }
 
-  public ImportScanResponse importScan(String rawResults, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
+  public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
     var additionalValues = new LinkedMultiValueMap<String, Object>();
     additionalValues.add("engagement", Long.toString(engagementId));
 
-    return this.createFindings(rawResults, "import-scan", lead, currentDate, scanType, testType, additionalValues);
+    return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, additionalValues);
   }
 
-  public ImportScanResponse reimportScan(String rawResults, long testId, long lead, String currentDate, ScanType scanType, long testType) {
+  public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
     var additionalValues = new LinkedMultiValueMap<String, Object>();
     additionalValues.add("test", Long.toString(testId));
 
-    return this.createFindings(rawResults, "reimport-scan", lead, currentDate, scanType, testType, additionalValues);
+    return this.createFindings(scanFile, "reimport-scan", lead, currentDate, scanType, testType, additionalValues);
   }
 
   @Data
