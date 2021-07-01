@@ -51,6 +51,12 @@ public class Product extends DefectDojoModel {
 
   @JsonProperty("prod_type")
   Long productType;
+  
+  @JsonProperty("enable_simple_risk_acceptance")
+  Boolean enableSimpleRiskAcceptance;
+  
+  @JsonProperty("enable_full_risk_acceptance")
+  Boolean enableFullRiskAcceptance;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
