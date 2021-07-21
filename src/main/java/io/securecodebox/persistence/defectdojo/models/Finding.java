@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.securecodebox.persistence.defectdojo.exceptions.DefectDojoPersistenceException;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -91,6 +92,9 @@ public class Finding extends DefectDojoModel {
   @NonNull
   @Builder.Default
   List<Long> endpoints = new LinkedList<>();
+
+  @JsonProperty("created")
+  LocalDateTime createdAt;
 
   @JsonProperty("numerical_severity")
   public String getNumericalSeverity() {
