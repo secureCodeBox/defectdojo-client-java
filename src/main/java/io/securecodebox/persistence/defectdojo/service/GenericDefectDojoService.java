@@ -50,7 +50,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
 
         this.objectMapper = new ObjectMapper();
         this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        // this.objectMapper.findAndRegisterModules();
+        this.objectMapper.findAndRegisterModules();
 
         this.searchStringMapper = new ObjectMapper();
         this.searchStringMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
