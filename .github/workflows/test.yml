@@ -2,10 +2,7 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
 name: Publish to Maven Central
-
-on:
-  release:
-    types: [published]
+on: push
 
 jobs:
   build:
