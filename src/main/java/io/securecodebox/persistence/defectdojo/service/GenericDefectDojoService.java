@@ -126,7 +126,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
             objects.addAll(response.getResults());
 
             hasNext = response.getNext() != null;
-            if (page > 100) {
+            if (page > 1000) {
                 throw new DefectDojoLoopException("Found too many response object. Quitting after " + page + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
             }
         } while (hasNext);
