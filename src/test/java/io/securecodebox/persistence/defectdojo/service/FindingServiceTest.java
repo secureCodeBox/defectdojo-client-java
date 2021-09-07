@@ -113,7 +113,7 @@ class FindingServiceTest {
 
     @BeforeEach
     void setup() {
-        config = new DefectDojoConfig("https://defectdojo.example.com", "abc", "test-user");
+        config = new DefectDojoConfig("https://defectdojo.example.com", "abc", "test-user", 42);
         underTest = new FindingService(config);
     }
 
