@@ -38,15 +38,13 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
-    protected String defectDojoUrl;
-    protected String defectDojoApiKey;
+    protected DefectDojoConfig defectDojoConfig;
 
     protected ObjectMapper objectMapper;
     protected ObjectMapper searchStringMapper;
 
     public GenericDefectDojoService(DefectDojoConfig config) {
-        this.defectDojoUrl = config.getUrl();
-        this.defectDojoApiKey = config.getApiKey();
+        this.defectDojoConfig = config;
 
         this.objectMapper = new ObjectMapper();
         this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -65,7 +63,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
      */
     private HttpHeaders getDefectDojoAuthorizationHeaders() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Token " + defectDojoApiKey);
+        headers.set("Authorization", "Token " + this.defectDojoConfig.getApiKey());
         return headers;
     }
 
@@ -80,7 +78,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
         HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
         ResponseEntity<T> response = restTemplate.exchange(
-                defectDojoUrl + "/api/v2/" + this.getUrlPath() + "/" + id,
+                this.defectDojoConfig.getUrl() + "/api/v2/" + this.getUrlPath() + "/" + id,
                 HttpMethod.GET,
                 payload,
                 getModelClass()
@@ -103,7 +101,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
             multiValueMap.set(entry.getKey(), String.valueOf(entry.getValue()));
         }
 
-        var url = new URI(defectDojoUrl + "/api/v2/" + this.getUrlPath() + "/");
+        var url = new URI(this.defectDojoConfig.getUrl() + "/api/v2/" + this.getUrlPath() + "/");
         var uriBuilder = UriComponentsBuilder.fromUri(url).queryParams(multiValueMap);
 
         ResponseEntity<String> responseString = restTemplate.exchange(
@@ -126,8 +124,8 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
             objects.addAll(response.getResults());
 
             hasNext = response.getNext() != null;
-            if (page > 100) {
-                throw new DefectDojoLoopException("Found too many response object. Quitting after " + page + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
+            if (page > this.defectDojoConfig.getMaxPageCountForGets()) {
+                throw new DefectDojoLoopException("Found too many response object. Quitting after " + (page - 1)  + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
             }
         } while (hasNext);
 
@@ -161,7 +159,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<T> payload = new HttpEntity<T>(object, getDefectDojoAuthorizationHeaders());
 
-        ResponseEntity<T> response = restTemplate.exchange(defectDojoUrl + "/api/v2/" + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
+        ResponseEntity<T> response = restTemplate.exchange(this.defectDojoConfig.getUrl() + "/api/v2/" + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
         return response.getBody();
     }
 
@@ -169,14 +167,14 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
-        restTemplate.exchange(defectDojoUrl + "/api/v2/" + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
+        restTemplate.exchange(this.defectDojoConfig.getUrl() + "/api/v2/" + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
     }
 
     public T update(T object, long objectId) {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<T> payload = new HttpEntity<T>(object, getDefectDojoAuthorizationHeaders());
 
-        ResponseEntity<T> response = restTemplate.exchange(defectDojoUrl + "/api/v2/" + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
+        ResponseEntity<T> response = restTemplate.exchange(this.defectDojoConfig.getUrl() + "/api/v2/" + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
         return response.getBody();
     }
 }

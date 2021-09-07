@@ -31,10 +31,21 @@ public class DefectDojoConfig {
     @Getter
     private final String username;
 
+    /**
+     * Determines how many apiPages of Objects are fetched before giving up and failing to avoid outOfMemory scenarios.
+     */
+    @Getter
+    private final int maxPageCountForGets;
+
     public static DefectDojoConfig fromEnv(){
         String url = System.getenv("DEFECTDOJO_URL");
         String username = System.getenv("DEFECTDOJO_USERNAME");
         String apiKey = System.getenv("DEFECTDOJO_APIKEY");
-        return new DefectDojoConfig(url, apiKey, username);
+
+        int maxPageCountForGets = 100;
+        if (System.getenv("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS") != null) {
+            maxPageCountForGets = Integer.parseInt(System.getenv("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS"));
+        }
+        return new DefectDojoConfig(url, apiKey, username, maxPageCountForGets);
     }
 }
