@@ -35,6 +35,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
@@ -64,6 +65,15 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
     private HttpHeaders getDefectDojoAuthorizationHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Token " + this.defectDojoConfig.getApiKey());
+
+        String username = System.getProperty("http.proxyUser", "");
+        String password = System.getProperty("http.proxyPassword", "");
+
+        if (!username.isEmpty() || !password.isEmpty()) {
+            System.out.println("Setting Proxy Auth Header...");
+            headers.set(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString((username + ':' + password).getBytes(StandardCharsets.UTF_8)));
+        }
+
         return headers;
     }
 
