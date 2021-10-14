@@ -25,16 +25,26 @@ import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
 import io.securecodebox.persistence.defectdojo.exceptions.DefectDojoLoopException;
 import io.securecodebox.persistence.defectdojo.models.DefectDojoModel;
 import io.securecodebox.persistence.defectdojo.models.DefectDojoResponse;
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.ProxyAuthenticationStrategy;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
@@ -64,7 +74,41 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
     private HttpHeaders getDefectDojoAuthorizationHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Token " + this.defectDojoConfig.getApiKey());
+
+        String username = System.getProperty("http.proxyUser", "");
+        String password = System.getProperty("http.proxyPassword", "");
+
+        if (!username.isEmpty() || !password.isEmpty()) {
+            System.out.println("Setting Proxy Auth Header...");
+            headers.set(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString((username + ':' + password).getBytes(StandardCharsets.UTF_8)));
+        }
+
         return headers;
+    }
+
+    protected RestTemplate getRestTemplate() {
+        if (System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null) {
+            // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
+            CredentialsProvider credsProvider = new BasicCredentialsProvider();
+            credsProvider.setCredentials(
+                    new AuthScope(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))),
+                    new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"))
+            );
+            HttpClientBuilder clientBuilder = HttpClientBuilder.create();
+
+            clientBuilder.useSystemProperties();
+            clientBuilder.setProxy(new HttpHost(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))));
+            clientBuilder.setDefaultCredentialsProvider(credsProvider);
+            clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+
+            CloseableHttpClient client = clientBuilder.build();
+
+            HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+            factory.setHttpClient(client);
+            return new RestTemplate(factory);
+        } else {
+            return new RestTemplate();
+        }
     }
 
     protected abstract String getUrlPath();
@@ -74,7 +118,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
     protected abstract DefectDojoResponse<T> deserializeList(String response) throws JsonProcessingException;
 
     public T get(long id) {
-        RestTemplate restTemplate = new RestTemplate();
+        var restTemplate = this.getRestTemplate();
         HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
         ResponseEntity<T> response = restTemplate.exchange(
@@ -88,7 +132,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
     }
 
     protected DefectDojoResponse<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) throws JsonProcessingException, URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
+        var restTemplate = this.getRestTemplate();
         HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
         var mutableQueryParams = new HashMap<String, Object>(queryParams);
@@ -125,7 +169,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
 
             hasNext = response.getNext() != null;
             if (page > this.defectDojoConfig.getMaxPageCountForGets()) {
-                throw new DefectDojoLoopException("Found too many response object. Quitting after " + (page - 1)  + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
+                throw new DefectDojoLoopException("Found too many response object. Quitting after " + (page - 1) + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
             }
         } while (hasNext);
 
@@ -156,7 +200,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
     }
 
     public T create(T object) {
-        RestTemplate restTemplate = new RestTemplate();
+        var restTemplate = this.getRestTemplate();
         HttpEntity<T> payload = new HttpEntity<T>(object, getDefectDojoAuthorizationHeaders());
 
         ResponseEntity<T> response = restTemplate.exchange(this.defectDojoConfig.getUrl() + "/api/v2/" + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
@@ -164,14 +208,14 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
     }
 
     public void delete(long id) {
-        RestTemplate restTemplate = new RestTemplate();
+        var restTemplate = this.getRestTemplate();
         HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
         restTemplate.exchange(this.defectDojoConfig.getUrl() + "/api/v2/" + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
     }
 
     public T update(T object, long objectId) {
-        RestTemplate restTemplate = new RestTemplate();
+        var restTemplate = this.getRestTemplate();
         HttpEntity<T> payload = new HttpEntity<T>(object, getDefectDojoAuthorizationHeaders());
 
         ResponseEntity<T> response = restTemplate.exchange(this.defectDojoConfig.getUrl() + "/api/v2/" + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
