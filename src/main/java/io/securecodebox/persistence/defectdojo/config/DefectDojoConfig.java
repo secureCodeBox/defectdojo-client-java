@@ -43,7 +43,7 @@ public class DefectDojoConfig {
      * If not null, the id should be used instead of the username.
      */
     @Getter
-    private final Integer userId;
+    private final Long userId;
 
     public DefectDojoConfig(String url, String apiKey, String username, int maxPageCountForGets) {
         this(url,apiKey,username, maxPageCountForGets, null);
@@ -53,8 +53,8 @@ public class DefectDojoConfig {
         String url = System.getenv("DEFECTDOJO_URL");
         String username = System.getenv("DEFECTDOJO_USERNAME");
         String apiKey = System.getenv("DEFECTDOJO_APIKEY");
-        Integer userId = Optional.ofNullable(System.getenv("DEFECTDOJO_USER_ID"))
-                .map(Integer::parseInt)
+        Long userId = Optional.ofNullable(System.getenv("DEFECTDOJO_USER_ID"))
+                .map(Long::parseLong)
                 .orElse(null);
 
         int maxPageCountForGets = 100;
