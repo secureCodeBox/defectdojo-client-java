@@ -20,6 +20,8 @@ package io.securecodebox.persistence.defectdojo.config;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 public class DefectDojoConfig {
     @Getter
@@ -37,15 +39,28 @@ public class DefectDojoConfig {
     @Getter
     private final int maxPageCountForGets;
 
+    /**
+     * If not null, the id should be used instead of the username.
+     */
+    @Getter
+    private final Integer userId;
+
+    public DefectDojoConfig(String url, String apiKey, String username, int maxPageCountForGets) {
+        this(url,apiKey,username, maxPageCountForGets, null);
+    }
+
     public static DefectDojoConfig fromEnv(){
         String url = System.getenv("DEFECTDOJO_URL");
         String username = System.getenv("DEFECTDOJO_USERNAME");
         String apiKey = System.getenv("DEFECTDOJO_APIKEY");
+        Integer userId = Optional.ofNullable(System.getenv("DEFECTDOJO_USER_ID"))
+                .map(Integer::parseInt)
+                .orElse(null);
 
         int maxPageCountForGets = 100;
         if (System.getenv("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS") != null) {
             maxPageCountForGets = Integer.parseInt(System.getenv("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS"));
         }
-        return new DefectDojoConfig(url, apiKey, username, maxPageCountForGets);
+        return new DefectDojoConfig(url, apiKey, username, maxPageCountForGets, userId);
     }
 }
