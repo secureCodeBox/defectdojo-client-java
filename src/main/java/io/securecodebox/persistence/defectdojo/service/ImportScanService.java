@@ -68,22 +68,24 @@ public class ImportScanService {
     }
 
     protected RestTemplate getRestTemplate() {
-        if (System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null) {
-            // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
-            CredentialsProvider credsProvider = new BasicCredentialsProvider();
-            credsProvider.setCredentials(
-                    new AuthScope(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))),
-                    new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"))
-            );
+        if (System.getProperty("http.proxyHost") != null && System.getProperty("http.proxyPort") != null) {
             HttpClientBuilder clientBuilder = HttpClientBuilder.create();
-
             clientBuilder.useSystemProperties();
             clientBuilder.setProxy(new HttpHost(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))));
-            clientBuilder.setDefaultCredentialsProvider(credsProvider);
-            clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+
+            if (System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null) {
+                // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
+                CredentialsProvider credsProvider = new BasicCredentialsProvider();
+                credsProvider.setCredentials(
+                        new AuthScope(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))),
+                        new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"))
+                );
+
+                clientBuilder.setDefaultCredentialsProvider(credsProvider);
+                clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+            }
 
             CloseableHttpClient client = clientBuilder.build();
-
             HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
             factory.setHttpClient(client);
             return new RestTemplate(factory);
