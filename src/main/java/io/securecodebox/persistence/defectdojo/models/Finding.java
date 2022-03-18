@@ -74,6 +74,16 @@ public class Finding extends DefectDojoModel {
   @Builder.Default
   Boolean verified = true;
 
+  @JsonProperty("risk_accepted")
+  @NonNull
+  @Builder.Default
+  Boolean riskAccepted = false;
+
+  @JsonProperty("out_of_scope")
+  @NonNull
+  @Builder.Default
+  Boolean outOfScope = false;
+
   @JsonProperty
   @NonNull
   @Builder.Default
