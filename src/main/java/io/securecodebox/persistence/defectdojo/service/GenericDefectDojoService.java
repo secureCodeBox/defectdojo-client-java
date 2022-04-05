@@ -21,10 +21,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.cfg.CoercionAction;
+import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
 import io.securecodebox.persistence.defectdojo.exceptions.DefectDojoLoopException;
 import io.securecodebox.persistence.defectdojo.models.DefectDojoModel;
 import io.securecodebox.persistence.defectdojo.models.DefectDojoResponse;
+import io.securecodebox.persistence.defectdojo.models.Engagement;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -38,6 +41,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.FormHttpMessageConverter;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -58,10 +65,12 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
 
         this.objectMapper = new ObjectMapper();
         this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        this.objectMapper.coercionConfigFor(Engagement.Status.class).setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
         this.objectMapper.findAndRegisterModules();
 
         this.searchStringMapper = new ObjectMapper();
         this.searchStringMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        this.searchStringMapper.coercionConfigFor(Engagement.Status.class).setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
         this.searchStringMapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
     }
 
@@ -87,6 +96,8 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
     }
 
     protected RestTemplate getRestTemplate() {
+        RestTemplate restTemplate;
+
         if (System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null) {
             // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
             CredentialsProvider credsProvider = new BasicCredentialsProvider();
@@ -105,10 +116,20 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
 
             HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
             factory.setHttpClient(client);
-            return new RestTemplate(factory);
+            restTemplate = new RestTemplate(factory);
         } else {
-            return new RestTemplate();
+            restTemplate = new RestTemplate();
         }
+
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(this.objectMapper);
+        restTemplate.setMessageConverters(List.of(
+                new FormHttpMessageConverter(),
+                new ResourceHttpMessageConverter(),
+                new StringHttpMessageConverter(),
+                converter
+        ));
+        return restTemplate;
     }
 
     protected abstract String getUrlPath();
