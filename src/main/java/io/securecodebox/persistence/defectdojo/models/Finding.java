@@ -106,6 +106,9 @@ public class Finding extends DefectDojoModel {
   @JsonProperty("created")
   LocalDateTime createdAt;
 
+  @JsonProperty("mitigated")
+  LocalDateTime mitigatedAt;
+
   @JsonProperty("numerical_severity")
   public String getNumericalSeverity() {
     switch (this.severity) {
