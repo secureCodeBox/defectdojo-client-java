@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Data
@@ -30,46 +30,53 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Product extends DefectDojoModel {
+public class RiskAcceptance extends DefectDojoModel {
   @JsonProperty
   Long id;
 
   @JsonProperty
-  String name;
+  String recommendation;
+
+  @JsonProperty("recommendation_details")
+  String recommendationDetails;
+
+  String decision;
+
+  @JsonProperty("decision_details")
+  String decision_details;
 
   @JsonProperty
-  List<String> tags;
+  String path;
 
   @JsonProperty
-  String description;
+  String accepted_by;
 
-  @JsonProperty("findings_count")
-  Long findingsCount;
+  @JsonProperty
+  String expiration_date;
 
-  @JsonProperty("authorized_users")
-  List<String> authorizedUsers;
+  @JsonProperty
+  Long expiration_date_warned;
 
-  @JsonProperty("prod_type")
-  Long productType;
-  
-  @JsonProperty("enable_simple_risk_acceptance")
-  Boolean enableSimpleRiskAcceptance;
-  
-  @JsonProperty("enable_full_risk_acceptance")
-  Boolean enableFullRiskAcceptance;
+  @JsonProperty
+  Boolean expiration_date_handled;
 
-  @JsonProperty("authorization_groups")
-  List<Long> authorizationGroups;
+  @JsonProperty("created")
+  LocalDateTime createdAt;
+
+  @JsonProperty("updated")
+  LocalDateTime updatedAt;
+
+  @JsonProperty
+  Long owner;
+
+  @JsonProperty
+  String notes;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
     if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
       return true;
     }
-    if (queryParams.containsKey("name") && queryParams.get("name").equals(this.name)) {
-      return true;
-    }
-
     return false;
   }
 }
