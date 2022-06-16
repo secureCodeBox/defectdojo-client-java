@@ -33,12 +33,6 @@ public class ProductGroup extends DefectDojoModel {
         if (queryParams.containsKey("product") && queryParams.get("product").equals(this.product) && queryParams.containsKey("group") && queryParams.get("group").equals(this.group)) {
             return true;
         }
-        if (queryParams.containsKey("product") && queryParams.get("product").equals(this.product) && !queryParams.containsKey("group")) {
-            return true;
-        }
-        if (queryParams.containsKey("group") && queryParams.get("group").equals(this.group) && !queryParams.containsKey("product")) {
-            return true;
-        }
         return false;
     }
 }
