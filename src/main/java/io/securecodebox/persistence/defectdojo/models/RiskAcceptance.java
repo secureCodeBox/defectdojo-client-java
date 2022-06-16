@@ -69,9 +69,6 @@ public class RiskAcceptance extends DefectDojoModel {
   @JsonProperty
   Long owner;
 
-  @JsonProperty
-  String notes;
-
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
     if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
