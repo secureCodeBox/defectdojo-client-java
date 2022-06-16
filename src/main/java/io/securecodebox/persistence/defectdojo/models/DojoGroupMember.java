@@ -30,6 +30,9 @@ public class DojoGroupMember extends DefectDojoModel {
         if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
             return true;
         }
+        if (queryParams.containsKey("group") && queryParams.get("group").equals(this.group)) {
+            return true;
+        }
         return false;
     }
 }
