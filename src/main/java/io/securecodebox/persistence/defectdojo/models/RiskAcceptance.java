@@ -43,22 +43,22 @@ public class RiskAcceptance extends DefectDojoModel {
   String decision;
 
   @JsonProperty("decision_details")
-  String decision_details;
+  String decisionDetails;
 
   @JsonProperty
   String path;
 
-  @JsonProperty
-  String accepted_by;
+  @JsonProperty("accepted_by")
+  String acceptedBy;
 
-  @JsonProperty
-  String expiration_date;
+  @JsonProperty("expiration_date")
+  LocalDateTime expirationDate;
 
-  @JsonProperty
-  LocalDateTime expiration_date_warned;
+  @JsonProperty("expiration_date_warned")
+  LocalDateTime expirationDateWarned;
 
-  @JsonProperty
-  LocalDateTime expiration_date_handled;
+  @JsonProperty("expiration_date_handled")
+  LocalDateTime expirationDateHandled;
 
   @JsonProperty("created")
   LocalDateTime createdAt;
