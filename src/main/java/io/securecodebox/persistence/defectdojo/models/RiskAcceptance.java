@@ -55,7 +55,10 @@ public class RiskAcceptance extends DefectDojoModel {
   String expiration_date;
 
   @JsonProperty
-  Boolean expiration_date_handled;
+  LocalDateTime expiration_date_warned;
+
+  @JsonProperty
+  LocalDateTime expiration_date_handled;
 
   @JsonProperty("created")
   LocalDateTime createdAt;
