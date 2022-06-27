@@ -145,7 +145,7 @@ public enum ScanType {
   SPOT_BUGS_SCAN("SpotBugs Scan"),
   SSL_LABS_SCAN("SSL Labs Scan"),
   SSLSCAN("Sslscan"),
-  SSLYZE_3_JSON_SCAN("SSLyze 3 Scan (JSON)"),
+  SSLYZE_JSON_SCAN("SSLyze Scan (JSON)"),
   SSLYZE_SCAN("Sslyze Scan"),
   STATIC_CHECK("Static Check"),
   TERRASCAN_SCAN("Terrascan Scan"),
