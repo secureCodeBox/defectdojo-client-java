@@ -98,6 +98,15 @@ public class Finding extends DefectDojoModel {
   @Builder.Default
   Boolean falsePositive = false;
 
+  @JsonProperty("component_name")
+  String componentName;
+
+  @JsonProperty("component_version")
+  String componentVersion;
+
+  @JsonProperty("file_path")
+  String filePath;  
+  
   @JsonProperty
   @NonNull
   @Builder.Default
