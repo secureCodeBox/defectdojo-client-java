@@ -27,6 +27,9 @@ public class DojoGroup extends DefectDojoModel {
     @JsonProperty
     List<Long> users;
 
+    @JsonProperty("social_provider")
+    String socialProvider;
+
     @Override
     public boolean equalsQueryString(Map<String, Object> queryParams) {
         if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
