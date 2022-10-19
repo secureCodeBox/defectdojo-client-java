@@ -31,3 +31,6 @@ public class DefectDojoClientTest {
     }
 }
 ```
+
+## Testing a modified client
+To build a gradle project that depends on this client one can use `./gradlew build --include-build <path_to_this_folder>`. Gradle will then build the project with this local version of the the client.
