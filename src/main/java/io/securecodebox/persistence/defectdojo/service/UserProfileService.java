@@ -17,8 +17,12 @@
  */
 package io.securecodebox.persistence.defectdojo.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
 import io.securecodebox.persistence.defectdojo.models.DefectDojoResponse;
 import io.securecodebox.persistence.defectdojo.models.UserProfile;
@@ -41,7 +45,15 @@ public class UserProfileService extends GenericDefectDojoService<UserProfile>{
 
     @Override
     protected DefectDojoResponse<UserProfile> deserializeList(String response) throws JsonProcessingException {
-        return this.objectMapper.readValue(response, new TypeReference<>() {});
+        // GenericDefectDojoService expects that the response from the defectdojo api is a list
+        // This endpoint returns a single object though, to not break the code this response gets converted to a defectdojo response
+        UserProfile userProfile = this.objectMapper.readValue(response, new TypeReference<>() {});
+        List<UserProfile> userProfileList = new ArrayList<>();
+        userProfileList.add(userProfile);
+
+        DefectDojoResponse<UserProfile> fakeResult = new DefectDojoResponse<>();
+        fakeResult.setResults(userProfileList);
+        fakeResult.setCount(1);
+        return fakeResult;
     }
-    
 }
