@@ -2,16 +2,24 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import io.securecodebox.persistence.defectdojo.models.Finding;
+import java.net.URISyntaxException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.web.client.MockRestServiceServer;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+ 
+
+
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.http.MediaType;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
-class FindingServiceTest {
+class FindingServiceTest{
 
     DefectDojoConfig config;
     FindingService underTest;
+    MockRestServiceServer mockServer;
 
     String findingResponse = "{\n" +
             "  \"count\": 1,\n" +
@@ -115,6 +123,7 @@ class FindingServiceTest {
     void setup() {
         config = new DefectDojoConfig("https://defectdojo.example.com", "abc", "test-user", 42);
         underTest = new FindingService(config);
+        mockServer = MockRestServiceServer.createServer(underTest.getRestTemplate());
     }
 
     @Test
@@ -122,5 +131,17 @@ class FindingServiceTest {
         var foo = underTest.deserializeList(findingResponse);
 
         assertEquals(1, foo.getCount());
+    }
+
+    @Test
+    void testSearch() throws JsonProcessingException, URISyntaxException {
+        var url = config.getUrl() + "/api/v2/" + underTest.getUrlPath() + "/?offset=0&limit=100";        
+        mockServer.expect(requestTo(url)).andRespond(withSuccess(findingResponse, MediaType.APPLICATION_JSON));
+        
+        var expected = underTest.deserializeList(findingResponse).getResults();
+        var actual = underTest.search();
+        
+        mockServer.verify();
+        assertIterableEquals(expected, actual);
     }
 }
