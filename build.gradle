@@ -6,7 +6,7 @@ plugins {
 
 group 'io.securecodebox'
 version (System.getenv("DD_CLIENT_VERSION") ? System.getenv("DD_CLIENT_VERSION") : '0.42.0-SNAPSHOT')
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
