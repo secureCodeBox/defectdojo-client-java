@@ -15,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.http.MediaType;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
+
+// This test is sufficient for all services (except user profile) as all the code is generic
 class FindingServiceTest{
 
     DefectDojoConfig config;
