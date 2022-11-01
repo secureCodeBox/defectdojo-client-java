@@ -21,103 +21,106 @@ class FindingServiceTest{
     FindingService underTest;
     MockRestServiceServer mockServer;
 
-    String findingResponse = "{\n" +
-            "  \"count\": 1,\n" +
-            "  \"next\": null,\n" +
-            "  \"previous\": null,\n" +
-            "  \"results\": [\n" +
-            "    {\n" +
-            "      \"id\": 42,\n" +
-            "      \"tags\": [],\n" +
-            "      \"request_response\": {\n" +
-            "        \"req_resp\": []\n" +
-            "      },\n" +
-            "      \"accepted_risks\": [],\n" +
-            "      \"push_to_jira\": false,\n" +
-            "      \"age\": 145,\n" +
-            "      \"sla_days_remaining\": null,\n" +
-            "      \"finding_meta\": [],\n" +
-            "      \"related_fields\": null,\n" +
-            "      \"jira_creation\": null,\n" +
-            "      \"jira_change\": null,\n" +
-            "      \"display_status\": \"Active, Verified\",\n" +
-            "      \"finding_groups\": [],\n" +
-            "      \"title\": \"Open Port: 9929/TCP\",\n" +
-            "      \"date\": \"2021-03-18\",\n" +
-            "      \"sla_start_date\": null,\n" +
-            "      \"cwe\": 0,\n" +
-            "      \"cve\": null,\n" +
-            "      \"cvssv3\": null,\n" +
-            "      \"cvssv3_score\": null,\n" +
-            "      \"url\": null,\n" +
-            "      \"severity\": \"Info\",\n" +
-            "      \"description\": \"### Host\\n\\n**IP Address:** 198.51.100.0\\n**FQDN:** scanme.nmap.org\\n\\n\\n**Port/Protocol:** 9929/tcp\\n\\n\\n\\n\\n\",\n" +
-            "      \"mitigation\": \"N/A\",\n" +
-            "      \"impact\": \"No impact provided\",\n" +
-            "      \"steps_to_reproduce\": null,\n" +
-            "      \"severity_justification\": null,\n" +
-            "      \"references\": null,\n" +
-            "      \"is_template\": false,\n" +
-            "      \"active\": true,\n" +
-            "      \"verified\": true,\n" +
-            "      \"false_p\": false,\n" +
-            "      \"duplicate\": false,\n" +
-            "      \"out_of_scope\": false,\n" +
-            "      \"risk_accepted\": false,\n" +
-            "      \"under_review\": false,\n" +
-            "      \"last_status_update\": \"2021-07-21T12:43:36.628994Z\",\n" +
-            "      \"under_defect_review\": false,\n" +
-            "      \"is_mitigated\": false,\n" +
-            "      \"thread_id\": 0,\n" +
-            "      \"mitigated\": null,\n" +
-            "      \"numerical_severity\": \"S4\",\n" +
-            "      \"last_reviewed\": \"2021-07-21T12:43:36.545348Z\",\n" +
-            "      \"line_number\": null,\n" +
-            "      \"sourcefilepath\": null,\n" +
-            "      \"sourcefile\": null,\n" +
-            "      \"param\": null,\n" +
-            "      \"payload\": null,\n" +
-            "      \"hash_code\": \"8dbaad23d4056f0a97bb8f487795fe392b4124f28d4049d16430e43415f1c219\",\n" +
-            "      \"line\": null,\n" +
-            "      \"file_path\": null,\n" +
-            "      \"component_name\": null,\n" +
-            "      \"component_version\": null,\n" +
-            "      \"static_finding\": false,\n" +
-            "      \"dynamic_finding\": true,\n" +
-            "      \"created\": \"2021-07-21T12:43:36.549669Z\",\n" +
-            "      \"scanner_confidence\": null,\n" +
-            "      \"unique_id_from_tool\": null,\n" +
-            "      \"vuln_id_from_tool\": null,\n" +
-            "      \"sast_source_object\": null,\n" +
-            "      \"sast_sink_object\": null,\n" +
-            "      \"sast_source_line\": null,\n" +
-            "      \"sast_source_file_path\": null,\n" +
-            "      \"nb_occurences\": null,\n" +
-            "      \"publish_date\": null,\n" +
-            "      \"test\": 222,\n" +
-            "      \"duplicate_finding\": null,\n" +
-            "      \"review_requested_by\": null,\n" +
-            "      \"defect_review_requested_by\": null,\n" +
-            "      \"mitigated_by\": null,\n" +
-            "      \"reporter\": 5,\n" +
-            "      \"last_reviewed_by\": 5,\n" +
-            "      \"sonarqube_issue\": null,\n" +
-            "      \"endpoints\": [\n" +
-            "        875\n" +
-            "      ],\n" +
-            "      \"endpoint_status\": [\n" +
-            "        8640\n" +
-            "      ],\n" +
-            "      \"reviewers\": [],\n" +
-            "      \"notes\": [],\n" +
-            "      \"files\": [],\n" +
-            "      \"found_by\": [\n" +
-            "        132\n" +
-            "      ]\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"prefetch\": {}\n" +
-            "}";
+    String findingResponse = """
+            {
+                "count": 1,
+                "next": null,
+                "previous": null,
+                "results":
+                [
+                    {
+                      "id": 42,
+                      "tags": [],
+                      "request_response": {
+                        "req_resp": []
+                      },
+                      "accepted_risks": [],
+                      "push_to_jira": false,
+                      "age": 145,
+                      "sla_days_remaining": null,
+                      "finding_meta": [],
+                      "related_fields": null,
+                      "jira_creation": null,
+                      "jira_change": null,
+                      "display_status": "Active, Verified",
+                      "finding_groups": [],
+                      "title": "Open Port: 9929/TCP",
+                      "date": "2021-03-18",
+                      "sla_start_date": null,
+                      "cwe": 0,
+                      "cve": null,
+                      "cvssv3": null,
+                      "cvssv3_score": null,
+                      "url": null,
+                      "severity": "Info",
+                      "description": "### Host\\n\\n**IP Address:** 198.51.100.0\\n**FQDN:** scanme.nmap.org\\n\\n\\n**Port/Protocol:** 9929/tcp\\n\\n\\n\\n\\n",
+                      "mitigation": "N/A",
+                      "impact": "No impact provided",
+                      "steps_to_reproduce": null,
+                      "severity_justification": null,
+                      "references": null,
+                      "is_template": false,
+                      "active": true,
+                      "verified": true,
+                      "false_p": false,
+                      "duplicate": false,
+                      "out_of_scope": false,
+                      "risk_accepted": false,
+                      "under_review": false,
+                      "last_status_update": "2021-07-21T12:43:36.628994Z",
+                      "under_defect_review": false,
+                      "is_mitigated": false,
+                      "thread_id": 0,
+                      "mitigated": null,
+                      "numerical_severity": "S4",
+                      "last_reviewed": "2021-07-21T12:43:36.545348Z",
+                      "line_number": null,
+                      "sourcefilepath": null,
+                      "sourcefile": null,
+                      "param": null,
+                      "payload": null,
+                      "hash_code": "8dbaad23d4056f0a97bb8f487795fe392b4124f28d4049d16430e43415f1c219",
+                      "line": null,
+                      "file_path": null,
+                      "component_name": null,
+                      "component_version": null,
+                      "static_finding": false,
+                      "dynamic_finding": true,
+                      "created": "2021-07-21T12:43:36.549669Z",
+                      "scanner_confidence": null,
+                      "unique_id_from_tool": null,
+                      "vuln_id_from_tool": null,
+                      "sast_source_object": null,
+                      "sast_sink_object": null,
+                      "sast_source_line": null,
+                      "sast_source_file_path": null,
+                      "nb_occurences": null,
+                      "publish_date": null,
+                      "test": 222,
+                      "duplicate_finding": null,
+                      "review_requested_by": null,
+                      "defect_review_requested_by": null,
+                      "mitigated_by": null,
+                      "reporter": 5,
+                      "last_reviewed_by": 5,
+                      "sonarqube_issue": null,
+                      "endpoints": [
+                        875
+                      ],
+                      "endpoint_status": [
+                        8640
+                      ],
+                      "reviewers": [],
+                      "notes": [],
+                      "files": [],
+                      "found_by": [
+                        132
+                      ]
+                    }
+                ],
+                "prefetch": {}
+            }
+                             """;
 
     @BeforeEach
     void setup() {
