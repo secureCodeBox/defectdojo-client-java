@@ -60,6 +60,9 @@ public class Product extends DefectDojoModel {
 
   @JsonProperty("authorization_groups")
   List<Long> authorizationGroups;
+  
+  @JsonProperty
+  String lifecycle;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
