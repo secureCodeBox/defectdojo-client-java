@@ -3,7 +3,12 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
+import io.securecodebox.persistence.defectdojo.models.User;
+import io.securecodebox.persistence.defectdojo.models.UserProfile;
+
 import java.net.URISyntaxException;
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +55,9 @@ public class UserProfileServiceTest {
         var url = config.getUrl() + "/api/v2/" + underTest.getUrlPath() + "/?offset=0&limit=100";        
         mockServer.expect(requestTo(url)).andRespond(withSuccess(apiResponse, MediaType.APPLICATION_JSON));
         
-        var expected = underTest.deserializeList(apiResponse).getResults();
+        var user = new User(0L, "GdqmXprK.j7R+OYE49SzL3mM2U6I0DyLRHnDg87i9It0AfP-kxvswW3qOI2i+31-@0", "string", "string");
+        var userProfile = new UserProfile(user);
+        var expected = Arrays.asList(userProfile);
         var actual = underTest.search();
         
         mockServer.verify();
