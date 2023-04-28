@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 iteratec GmbH
+//
+// SPDX-License-Identifier: Apache-2.0
 
 package io.securecodebox.persistence.defectdojo.service;
 

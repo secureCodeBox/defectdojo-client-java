@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 iteratec GmbH
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # DefectDojo Client Java
 
 Java Client to interact with the DefectDojo API.
