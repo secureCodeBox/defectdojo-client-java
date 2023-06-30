@@ -55,7 +55,7 @@ public class ImportScanService {
         return headers;
     }
 
-    protected RestTemplate getRestTemplate() {
+    protected RestTemplate createRestTemplate() {
         if (System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null) {
             // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
             CredentialsProvider credsProvider = new BasicCredentialsProvider();
@@ -84,7 +84,7 @@ public class ImportScanService {
      * Before version 1.5.4. testName (in DefectDojo _test_type_) must be defectDojoScanName, afterwards, you can have somethings else
      */
     protected ImportScanResponse createFindings(ScanFile scanFile, String endpoint, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, Object> options) {
-        var restTemplate = this.getRestTemplate();
+        var restTemplate = this.createRestTemplate();
         HttpHeaders headers = getDefectDojoAuthorizationHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         restTemplate.setMessageConverters(List.of(
@@ -124,7 +124,7 @@ public class ImportScanService {
             throw new DefectDojoPersistenceException("Failed to attach findings to engagement.");
         }
     }
-    
+
     public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
         var additionalValues = new LinkedMultiValueMap<String, Object>();
         additionalValues.add("engagement", Long.toString(engagementId));
