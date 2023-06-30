@@ -93,7 +93,7 @@ public class ImportScanService {
                 new MappingJackson2HttpMessageConverter())
         );
 
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        final var body = new LinkedMultiValueMap<String, Object>();
 
         body.add("lead", Long.toString(lead));
         body.add("scan_date", currentDate);
@@ -102,9 +102,10 @@ public class ImportScanService {
         body.add("skip_duplicates", "false");
         body.add("test_type", String.valueOf(testType));
 
-        for (String theKey : options.keySet()) {
+        for (final var theKey : options.keySet()) {
             body.remove(theKey);
         }
+
         body.addAll(options);
 
         try {
@@ -117,7 +118,7 @@ public class ImportScanService {
 
             body.add("file", contentsAsResource);
 
-            var payload = new HttpEntity<>(body, headers);
+            final var payload = new HttpEntity<>(body, headers);
 
             return restTemplate.exchange(defectDojoUrl + "/api/v2/" + endpoint + "/", HttpMethod.POST, payload, ImportScanResponse.class).getBody();
         } catch (HttpClientErrorException e) {
