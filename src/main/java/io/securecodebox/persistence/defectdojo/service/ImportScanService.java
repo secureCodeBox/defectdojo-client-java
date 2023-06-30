@@ -124,8 +124,7 @@ public class ImportScanService {
             throw new DefectDojoPersistenceException("Failed to attach findings to engagement.");
         }
     }
-
-
+    
     public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
         var additionalValues = new LinkedMultiValueMap<String, Object>();
         additionalValues.add("engagement", Long.toString(engagementId));
@@ -141,7 +140,7 @@ public class ImportScanService {
     }
 
     //overloading with optional parameter
-     public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, LinkedMultiValueMap<String, Object> additionalValues) {
+    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, LinkedMultiValueMap<String, Object> additionalValues) {
         additionalValues.add("engagement", Long.toString(engagementId));
 
         return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, additionalValues);
