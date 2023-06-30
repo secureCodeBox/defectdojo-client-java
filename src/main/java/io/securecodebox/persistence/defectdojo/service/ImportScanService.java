@@ -93,19 +93,19 @@ public class ImportScanService {
                 new MappingJackson2HttpMessageConverter())
         );
 
-        MultiValueMap<String, Object> mvn = new LinkedMultiValueMap<>();
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
-        mvn.add("lead", Long.toString(lead));
-        mvn.add("scan_date", currentDate);
-        mvn.add("scan_type", scanType.getTestType());
-        mvn.add("close_old_findings", "true");
-        mvn.add("skip_duplicates", "false");
-        mvn.add("test_type", String.valueOf(testType));
+        body.add("lead", Long.toString(lead));
+        body.add("scan_date", currentDate);
+        body.add("scan_type", scanType.getTestType());
+        body.add("close_old_findings", "true");
+        body.add("skip_duplicates", "false");
+        body.add("test_type", String.valueOf(testType));
 
         for (String theKey : options.keySet()) {
-            mvn.remove(theKey);
+            body.remove(theKey);
         }
-        mvn.addAll(options);
+        body.addAll(options);
 
         try {
             ByteArrayResource contentsAsResource = new ByteArrayResource(scanFile.getContent().getBytes(StandardCharsets.UTF_8)) {
@@ -115,9 +115,9 @@ public class ImportScanService {
                 }
             };
 
-            mvn.add("file", contentsAsResource);
+            body.add("file", contentsAsResource);
 
-            var payload = new HttpEntity<>(mvn, headers);
+            var payload = new HttpEntity<>(body, headers);
 
             return restTemplate.exchange(defectDojoUrl + "/api/v2/" + endpoint + "/", HttpMethod.POST, payload, ImportScanResponse.class).getBody();
         } catch (HttpClientErrorException e) {
