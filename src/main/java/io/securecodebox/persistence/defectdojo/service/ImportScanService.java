@@ -58,22 +58,21 @@ public class ImportScanService {
     protected RestTemplate createRestTemplate() {
         if (System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null) {
             // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
-            CredentialsProvider credsProvider = new BasicCredentialsProvider();
-            credsProvider.setCredentials(
+            final var credentials = new BasicCredentialsProvider();
+            credentials.setCredentials(
                     new AuthScope(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))),
                     new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"))
             );
-            HttpClientBuilder clientBuilder = HttpClientBuilder.create();
+
+            final var clientBuilder = HttpClientBuilder.create();
 
             clientBuilder.useSystemProperties();
             clientBuilder.setProxy(new HttpHost(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))));
-            clientBuilder.setDefaultCredentialsProvider(credsProvider);
+            clientBuilder.setDefaultCredentialsProvider(credentials);
             clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
 
-            CloseableHttpClient client = clientBuilder.build();
-
-            HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-            factory.setHttpClient(client);
+            final var factory = new HttpComponentsClientHttpRequestFactory();
+            factory.setHttpClient(clientBuilder.build());
             return new RestTemplate(factory);
         } else {
             return new RestTemplate();
