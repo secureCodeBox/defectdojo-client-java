@@ -120,8 +120,10 @@ public class ImportScanService {
                 }
             };
 
+            // FIXME Why do we add the whole byte array resiurce here as object? Is not simply the file name sufficient here? Then we could use <String, String>
             body.add("file", contentsAsResource);
 
+            // FIXME: We do not define the the type T of the body here!
             final var payload = new HttpEntity<>(body, headers);
 
             return restTemplate.exchange(defectDojoUrl + "/api/v2/" + endpoint + "/", HttpMethod.POST, payload, ImportScanResponse.class).getBody();
