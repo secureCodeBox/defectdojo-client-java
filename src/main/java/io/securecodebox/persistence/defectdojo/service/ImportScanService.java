@@ -56,7 +56,7 @@ public class ImportScanService {
      */
     private HttpHeaders createDefectDojoAuthorizationHeaders() {
         final var authorizationHeader = new HttpHeaders();
-        authorizationHeader.set(HttpHeaders.AUTHORIZATION, "Token " + defectDojoApiKey);
+        authorizationHeader.set(HttpHeaders.AUTHORIZATION, String.format("Token %s", defectDojoApiKey));
         return authorizationHeader;
     }
 
