@@ -132,7 +132,7 @@ public class ImportScanService {
 
     public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
         final var options = new LinkedMultiValueMap<String, Object>();
-        options.add("engagement", Long.toString(engagementId)); // FIXME Seems to be duplicated.
+        options.add("engagement", Long.toString(engagementId)); // FIXME Seems to be duplicated bc it is done again in the overloaded method.
 
         return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, options);
     }
@@ -145,7 +145,7 @@ public class ImportScanService {
 
     public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
         final var options = new LinkedMultiValueMap<String, Object>();
-        options.add("test", Long.toString(testId)); // FIXME Seems to be duplicated.
+        options.add("test", Long.toString(testId)); // FIXME Seems to be duplicated bc it is done again in the overloaded method.
 
         return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, options);
     }
