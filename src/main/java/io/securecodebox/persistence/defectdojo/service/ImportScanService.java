@@ -87,7 +87,7 @@ public class ImportScanService {
     /*
      * Before version 1.5.4. testName (in DefectDojo _test_type_) must be defectDojoScanName, afterward, you can have something else.
      */
-    protected ImportScanResponse createFindings(ScanFile scanFile, String endpoint, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, Object> options) {
+    protected ImportScanResponse createFindings(ScanFile scanFile, String endpoint, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
         var restTemplate = this.createRestTemplate();
         HttpHeaders headers = createDefectDojoAuthorizationHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -110,7 +110,10 @@ public class ImportScanService {
             body.remove(optionName);
         }
 
-        body.addAll(options);
+        // FIXME: Workaround due to type incompatibility of MultiValueMap<String, String> and MultiValueMap<String, Object>.
+        for (final var option : options.entrySet()) {
+            body.add(option.getKey(), option.getValue());
+        }
 
         try {
             ByteArrayResource contentsAsResource = new ByteArrayResource(scanFile.getContent().getBytes(StandardCharsets.UTF_8)) {
@@ -133,26 +136,26 @@ public class ImportScanService {
     }
 
     public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
-        final var options = new LinkedMultiValueMap<String, Object>();
+        final var options = new LinkedMultiValueMap<String, String>();
         options.add("engagement", Long.toString(engagementId)); // FIXME Seems to be duplicated bc it is done again in the overloaded method.
 
         return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, options);
     }
 
-    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, Object> options) {
+    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
         options.add("engagement", Long.toString(engagementId));
 
         return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, options);
     }
 
     public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
-        final var options = new LinkedMultiValueMap<String, Object>();
+        final var options = new LinkedMultiValueMap<String, String>();
         options.add("test", Long.toString(testId)); // FIXME Seems to be duplicated bc it is done again in the overloaded method.
 
         return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, options);
     }
 
-    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, Object> options) {
+    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
         options.add("test", Long.toString(testId));
 
         return this.createFindings(scanFile, "reimport-scan", lead, currentDate, scanType, testType, options);
