@@ -106,8 +106,8 @@ public class ImportScanService {
         body.add("skip_duplicates", "false");
         body.add("test_type", String.valueOf(testType));
 
-        for (final var theKey : options.keySet()) {
-            body.remove(theKey);
+        for (final var optionName : options.keySet()) {
+            body.remove(optionName);
         }
 
         body.addAll(options);
