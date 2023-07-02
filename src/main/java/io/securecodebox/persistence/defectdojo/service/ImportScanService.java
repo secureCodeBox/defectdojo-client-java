@@ -137,7 +137,7 @@ public class ImportScanService {
         return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, options);
     }
 
-    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, LinkedMultiValueMap<String, Object> options) {
+    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, Object> options) {
         options.add("engagement", Long.toString(engagementId));
 
         return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, options);
@@ -150,7 +150,7 @@ public class ImportScanService {
         return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, options);
     }
 
-    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, LinkedMultiValueMap<String, Object> options) {
+    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, Object> options) {
         options.add("test", Long.toString(testId));
 
         return this.createFindings(scanFile, "reimport-scan", lead, currentDate, scanType, testType, options);
