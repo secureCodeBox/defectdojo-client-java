@@ -42,6 +42,7 @@ public class ImportScanService {
     protected String defectDojoApiKey;
 
     public ImportScanService(DefectDojoConfig config) {
+        super();
         this.defectDojoUrl = config.getUrl();
         this.defectDojoApiKey = config.getApiKey();
     }
