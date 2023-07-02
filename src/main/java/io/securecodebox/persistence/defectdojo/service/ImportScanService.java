@@ -55,9 +55,9 @@ public class ImportScanService {
      * @return The DefectDojo Authentication Header
      */
     private HttpHeaders createDefectDojoAuthorizationHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.AUTHORIZATION, "Token " + defectDojoApiKey);
-        return headers;
+        final var authorizationHeader = new HttpHeaders();
+        authorizationHeader.set(HttpHeaders.AUTHORIZATION, "Token " + defectDojoApiKey);
+        return authorizationHeader;
     }
 
     protected RestTemplate createRestTemplate() {
