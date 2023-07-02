@@ -131,29 +131,29 @@ public class ImportScanService {
     }
 
     public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
-        var additionalValues = new LinkedMultiValueMap<String, Object>();
-        additionalValues.add("engagement", Long.toString(engagementId)); // FIXME Seems to be duplicated.
+        final var options = new LinkedMultiValueMap<String, Object>();
+        options.add("engagement", Long.toString(engagementId)); // FIXME Seems to be duplicated.
 
-        return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, additionalValues);
+        return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, options);
     }
 
-    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, LinkedMultiValueMap<String, Object> additionalValues) {
-        additionalValues.add("engagement", Long.toString(engagementId));
+    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, LinkedMultiValueMap<String, Object> options) {
+        options.add("engagement", Long.toString(engagementId));
 
-        return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, additionalValues);
+        return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, options);
     }
 
     public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
-        var additionalValues = new LinkedMultiValueMap<String, Object>();
-        additionalValues.add("test", Long.toString(testId)); // FIXME Seems to be duplicated.
+        final var options = new LinkedMultiValueMap<String, Object>();
+        options.add("test", Long.toString(testId)); // FIXME Seems to be duplicated.
 
-        return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, additionalValues);
+        return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, options);
     }
 
-    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, LinkedMultiValueMap<String, Object> additionalValues) {
-        additionalValues.add("test", Long.toString(testId));
+    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, LinkedMultiValueMap<String, Object> options) {
+        options.add("test", Long.toString(testId));
 
-        return this.createFindings(scanFile, "reimport-scan", lead, currentDate, scanType, testType, additionalValues);
+        return this.createFindings(scanFile, "reimport-scan", lead, currentDate, scanType, testType, options);
     }
 
     @Data
