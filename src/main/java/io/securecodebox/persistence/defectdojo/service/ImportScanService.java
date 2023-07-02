@@ -54,7 +54,7 @@ public class ImportScanService {
     /**
      * @return The DefectDojo Authentication Header
      */
-    private HttpHeaders getDefectDojoAuthorizationHeaders() {
+    private HttpHeaders createDefectDojoAuthorizationHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "Token " + defectDojoApiKey);
         return headers;
@@ -89,7 +89,7 @@ public class ImportScanService {
      */
     protected ImportScanResponse createFindings(ScanFile scanFile, String endpoint, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, Object> options) {
         var restTemplate = this.createRestTemplate();
-        HttpHeaders headers = getDefectDojoAuthorizationHeaders();
+        HttpHeaders headers = createDefectDojoAuthorizationHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         restTemplate.setMessageConverters(List.of(
                 new FormHttpMessageConverter(),
