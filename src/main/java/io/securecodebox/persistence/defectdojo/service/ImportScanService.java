@@ -39,8 +39,8 @@ import java.util.List;
 
 public class ImportScanService {
 
-    protected String defectDojoUrl;
-    protected String defectDojoApiKey;
+    private final String defectDojoUrl;
+    private final String defectDojoApiKey;
 
     /**
      * Dedicated constructor.
