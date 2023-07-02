@@ -11,6 +11,7 @@ import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
 import io.securecodebox.persistence.defectdojo.exceptions.DefectDojoPersistenceException;
 import io.securecodebox.persistence.defectdojo.models.ScanFile;
 import lombok.Data;
+import lombok.NonNull;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -41,7 +42,12 @@ public class ImportScanService {
     protected String defectDojoUrl;
     protected String defectDojoApiKey;
 
-    public ImportScanService(DefectDojoConfig config) {
+    /**
+     * Dedicated constructor.
+     *
+     * @param config not {@code null}
+     */
+    public ImportScanService(final @NonNull DefectDojoConfig config) {
         super();
         this.defectDojoUrl = config.getUrl();
         this.defectDojoApiKey = config.getApiKey();
