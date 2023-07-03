@@ -52,9 +52,11 @@ final class ImportScanService {
     }
 
     /**
-     * @return The DefectDojo Authentication Header
+     * The DefectDojo Authentication Header
+     *
+     * @return never {@code null}
      */
-    private HttpHeaders createDefectDojoAuthorizationHeaders() {
+    HttpHeaders createDefectDojoAuthorizationHeaders() {
         final var authorizationHeader = new HttpHeaders();
         authorizationHeader.set(HttpHeaders.AUTHORIZATION, String.format("Token %s", defectDojoApiKey));
         return authorizationHeader;
