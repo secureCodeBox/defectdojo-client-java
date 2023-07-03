@@ -3,6 +3,7 @@ package io.securecodebox.persistence.defectdojo.service;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,5 +27,14 @@ class ImportScanServiceTest {
         assertThrows(NullPointerException.class, () -> {
             new ImportScanService(null);
         });
+    }
+
+    @Test
+    void createDefectDojoAuthorizationHeaders_apiKeyFromConfigShouldBePresentAsAuthHEader() {
+        final var authorizationHeaders = sut.createDefectDojoAuthorizationHeaders();
+        assertAll(
+                () -> assertEquals(1, authorizationHeaders.size(), "Expected is exactly one authorization header!"),
+                () -> assertEquals("Token apiKey", authorizationHeaders.get(HttpHeaders.AUTHORIZATION).get(0))
+        );
     }
 }
