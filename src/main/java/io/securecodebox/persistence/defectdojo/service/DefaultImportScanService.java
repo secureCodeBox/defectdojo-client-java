@@ -60,6 +60,8 @@ final class DefaultImportScanService implements ImportScanService {
     }
 
     private RestTemplate createRestTemplate() {
+        final var template = new RestTemplate();
+
         if (shouldConfigureProxySettings()) {
             // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
             final var credentials = new BasicCredentialsProvider();
@@ -77,10 +79,10 @@ final class DefaultImportScanService implements ImportScanService {
 
             final var factory = new HttpComponentsClientHttpRequestFactory();
             factory.setHttpClient(clientBuilder.build());
-            return new RestTemplate(factory);
-        } else {
-            return new RestTemplate();
+            template.setRequestFactory(factory);
         }
+
+        return template;
     }
 
     private static boolean shouldConfigureProxySettings() {
