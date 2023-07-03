@@ -35,7 +35,7 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class ImportScanService {
+final class ImportScanService {
 
     private final String defectDojoUrl;
     private final String defectDojoApiKey;
