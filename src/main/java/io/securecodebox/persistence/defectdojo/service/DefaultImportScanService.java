@@ -87,8 +87,8 @@ final class DefaultImportScanService implements ImportScanService {
      * Before version 1.5.4. testName (in DefectDojo _test_type_) must be defectDojoScanName, afterward, you can have something else.
      */
     private ImportScanResponse createFindings(ScanFile scanFile, String endpoint, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
-        var restTemplate = this.createRestTemplate();
-        HttpHeaders headers = createDefectDojoAuthorizationHeaders();
+        final var restTemplate = this.createRestTemplate();
+        final var headers = createDefectDojoAuthorizationHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         restTemplate.setMessageConverters(List.of(
                 new FormHttpMessageConverter(),
@@ -115,7 +115,7 @@ final class DefaultImportScanService implements ImportScanService {
         }
 
         try {
-            ByteArrayResource contentsAsResource = new ByteArrayResource(scanFile.getContent().getBytes(StandardCharsets.UTF_8)) {
+            final var contentsAsResource = new ByteArrayResource(scanFile.getContent().getBytes(StandardCharsets.UTF_8)) {
                 @Override
                 public String getFilename() {
                     return scanFile.getName();
