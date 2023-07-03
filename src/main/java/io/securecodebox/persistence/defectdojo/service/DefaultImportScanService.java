@@ -60,7 +60,7 @@ final class DefaultImportScanService implements ImportScanService {
     }
 
     private RestTemplate createRestTemplate() {
-        if (System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null) {
+        if (shouldConfigureProxySettings()) {
             // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
             final var credentials = new BasicCredentialsProvider();
             credentials.setCredentials(
@@ -81,6 +81,10 @@ final class DefaultImportScanService implements ImportScanService {
         } else {
             return new RestTemplate();
         }
+    }
+
+    private static boolean shouldConfigureProxySettings() {
+        return System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null;
     }
 
     /*
