@@ -48,49 +48,36 @@ final class DefaultImportScanService implements ImportScanService {
         this.defectDojoApiKey = config.getApiKey();
     }
 
-    /**
-     * The DefectDojo Authentication Header
-     *
-     * @return never {@code null}
-     */
-    HttpHeaders createDefectDojoAuthorizationHeaders() {
-        final var authorizationHeader = new HttpHeaders();
-        authorizationHeader.set(HttpHeaders.AUTHORIZATION, String.format("Token %s", defectDojoApiKey));
-        return authorizationHeader;
+    @Override
+    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
+        final var options = new LinkedMultiValueMap<String, String>();
+        options.add("engagement", Long.toString(engagementId)); // FIXME Seems to be duplicated bc it is done again in the overloaded method.
+
+        return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, options);
     }
 
-    private RestTemplate createRestTemplate() {
-        final var template = new RestTemplate();
+    @Override
+    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
+        options.add("engagement", Long.toString(engagementId));
 
-        if (shouldConfigureProxySettings()) {
-            template.setRequestFactory(createRequestFactoryWithProxyAuthConfig());
-        }
-
-        return template;
+        // FIXME: Why is engagementId hardcoded overwritten with "import-scan"
+        return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, options);
     }
 
-    private static boolean shouldConfigureProxySettings() {
-        return System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null;
+    @Override
+    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
+        final var options = new LinkedMultiValueMap<String, String>();
+        options.add("test", Long.toString(testId)); // FIXME Seems to be duplicated bc it is done again in the overloaded method.
+
+        return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, options);
     }
 
-    private static HttpComponentsClientHttpRequestFactory createRequestFactoryWithProxyAuthConfig() {
-        // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
-        final var credentials = new BasicCredentialsProvider();
-        credentials.setCredentials(
-                new AuthScope(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))),
-                new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"))
-        );
+    @Override
+    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
+        options.add("test", Long.toString(testId));
 
-        final var clientBuilder = HttpClientBuilder.create();
-
-        clientBuilder.useSystemProperties();
-        clientBuilder.setProxy(new HttpHost(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))));
-        clientBuilder.setDefaultCredentialsProvider(credentials);
-        clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
-
-        final var factory = new HttpComponentsClientHttpRequestFactory();
-        factory.setHttpClient(clientBuilder.build());
-        return factory;
+        // FIXME: Why is engagementId hardcoded overwritten with "reimport-scan"
+        return this.createFindings(scanFile, "reimport-scan", lead, currentDate, scanType, testType, options);
     }
 
     /*
@@ -143,36 +130,51 @@ final class DefaultImportScanService implements ImportScanService {
             throw new DefectDojoPersistenceException("Failed to attach findings to engagement.");
         }
     }
-
-    @Override
-    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
-        final var options = new LinkedMultiValueMap<String, String>();
-        options.add("engagement", Long.toString(engagementId)); // FIXME Seems to be duplicated bc it is done again in the overloaded method.
-
-        return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, options);
+    
+    /**
+     * The DefectDojo Authentication Header
+     *
+     * @return never {@code null}
+     */
+    HttpHeaders createDefectDojoAuthorizationHeaders() {
+        final var authorizationHeader = new HttpHeaders();
+        authorizationHeader.set(HttpHeaders.AUTHORIZATION, String.format("Token %s", defectDojoApiKey));
+        return authorizationHeader;
     }
 
-    @Override
-    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
-        options.add("engagement", Long.toString(engagementId));
+    private RestTemplate createRestTemplate() {
+        final var template = new RestTemplate();
 
-        // FIXME: Why is engagementId hardcoded overwritten with "import-scan"
-        return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, options);
+        if (shouldConfigureProxySettings()) {
+            template.setRequestFactory(createRequestFactoryWithProxyAuthConfig());
+        }
+
+        return template;
     }
 
-    @Override
-    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
-        final var options = new LinkedMultiValueMap<String, String>();
-        options.add("test", Long.toString(testId)); // FIXME Seems to be duplicated bc it is done again in the overloaded method.
-
-        return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, options);
+    private static boolean shouldConfigureProxySettings() {
+        return System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null;
     }
 
-    @Override
-    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
-        options.add("test", Long.toString(testId));
+    private static HttpComponentsClientHttpRequestFactory createRequestFactoryWithProxyAuthConfig() {
+        // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
+        final var credentials = new BasicCredentialsProvider();
+        credentials.setCredentials(
+                new AuthScope(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))),
+                new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"))
+        );
 
-        // FIXME: Why is engagementId hardcoded overwritten with "reimport-scan"
-        return this.createFindings(scanFile, "reimport-scan", lead, currentDate, scanType, testType, options);
+        final var clientBuilder = HttpClientBuilder.create();
+
+        clientBuilder.useSystemProperties();
+        clientBuilder.setProxy(new HttpHost(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))));
+        clientBuilder.setDefaultCredentialsProvider(credentials);
+        clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+
+        final var factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setHttpClient(clientBuilder.build());
+        return factory;
     }
+
+
 }
