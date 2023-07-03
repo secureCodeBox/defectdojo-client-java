@@ -146,6 +146,7 @@ final class DefaultImportScanService implements ImportScanService {
     public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
         options.add("engagement", Long.toString(engagementId));
 
+        // FIXME: Why is engagementId hardcoded overwritten with "import-scan"
         return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, options);
     }
 
@@ -161,8 +162,7 @@ final class DefaultImportScanService implements ImportScanService {
     public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
         options.add("test", Long.toString(testId));
 
+        // FIXME: Why is engagementId hardcoded overwritten with "reimport-scan"
         return this.createFindings(scanFile, "reimport-scan", lead, currentDate, scanType, testType, options);
-
-
     }
 }
