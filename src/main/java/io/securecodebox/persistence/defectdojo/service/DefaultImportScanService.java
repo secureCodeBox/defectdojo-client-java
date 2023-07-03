@@ -126,7 +126,7 @@ final class DefaultImportScanService implements ImportScanService {
             body.add("file", contentsAsResource);
 
             // FIXME: We do not define the the type T of the body here!
-            final var payload = new HttpEntity<>(body, headers);
+            final var payload = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
 
             return restTemplate.exchange(defectDojoUrl + "/api/v2/" + endpoint + "/", HttpMethod.POST, payload, ImportScanResponse.class).getBody();
         } catch (HttpClientErrorException e) {
