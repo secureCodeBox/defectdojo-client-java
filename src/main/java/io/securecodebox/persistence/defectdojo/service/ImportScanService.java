@@ -10,6 +10,7 @@ import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
 import io.securecodebox.persistence.defectdojo.models.ScanFile;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
 import org.springframework.util.MultiValueMap;
 
@@ -45,5 +46,29 @@ public interface ImportScanService {
 
         @JsonProperty("test")
         protected long testId;
+    }
+
+    /**
+     * These properties can be configured by passing them to the running Java process w/ flag {@literal -D}
+     * <p>
+     * Example: {@literal java -Dhttp.proxyHost=... -D... -jar ...}
+     * </p>
+     * <p>
+     * <strong>Important</strong>: All four parameters are mandatory. You must set them all
+     * or none of them!
+     * </p>
+     */
+    enum ProxyConfigNames {
+        HTTP_PROXY_HOST("http.proxyHost"),
+        HTTP_PROXY_PORT("http.proxyPort"),
+        HTTP_PROXY_USER("http.proxyUser"),
+        HTTP_PROXY_PASSWORD("http.proxyPassword");
+
+        @Getter
+        private final String literat;
+
+        ProxyConfigNames(String literat) {
+            this.literat = literat;
+        }
     }
 }

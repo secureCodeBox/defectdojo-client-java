@@ -21,6 +21,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
@@ -34,6 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 final class DefaultImportScanService implements ImportScanService {
+    private final SystemPropertyFinder properties = new SystemPropertyFinder();
     private final String defectDojoUrl;
     private final String defectDojoApiKey;
 
@@ -88,9 +90,9 @@ final class DefaultImportScanService implements ImportScanService {
         final var headers = createDefectDojoAuthorizationHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         restTemplate.setMessageConverters(List.of(
-                new FormHttpMessageConverter(),
-                new ResourceHttpMessageConverter(),
-                new MappingJackson2HttpMessageConverter())
+            new FormHttpMessageConverter(),
+            new ResourceHttpMessageConverter(),
+            new MappingJackson2HttpMessageConverter())
         );
 
         // FIXME: Why do we use a multi value map here? Do we need multiple values for any given key?
@@ -154,22 +156,67 @@ final class DefaultImportScanService implements ImportScanService {
         return template;
     }
 
-    private static boolean shouldConfigureProxySettings() {
-        return System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null;
+    boolean shouldConfigureProxySettings() {
+        return properties.hasProperty(ProxyConfigNames.HTTP_PROXY_USER)
+            && properties.hasProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD);
     }
 
-    private static HttpComponentsClientHttpRequestFactory createRequestFactoryWithProxyAuthConfig() {
-        // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
+    /**
+     * Configuring proxy authentication explicitly
+     *
+     * <p>
+     * This isn't done by default for spring rest templates.This method expects these four system properties (Java flag
+     * {@literal -DpropertyName}) to be set:
+     * </p>
+     * <ul>
+     *     <li>http.proxyUser</li>
+     *     <li>http.proxyPassword</li>
+     *     <li>http.proxyHost</li>
+     *     <li>http.proxyPort</li>
+     * </ul>
+     *
+     * @return never {@code null}
+     */
+    ClientHttpRequestFactory createRequestFactoryWithProxyAuthConfig() {
+        if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_USER)) {
+            throw new MissingProxyAuthenticationConfig(ProxyConfigNames.HTTP_PROXY_USER);
+        }
+
+        if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD)) {
+            throw new MissingProxyAuthenticationConfig(ProxyConfigNames.HTTP_PROXY_PASSWORD);
+        }
+
+        if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_HOST)) {
+            throw new MissingProxyAuthenticationConfig(ProxyConfigNames.HTTP_PROXY_HOST);
+        }
+
+        if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_PORT)) {
+            throw new MissingProxyAuthenticationConfig(ProxyConfigNames.HTTP_PROXY_PORT);
+        }
+
+        final var proxyHost = properties.getProperty(ProxyConfigNames.HTTP_PROXY_HOST);
+        final int proxyPort;
+        try {
+            proxyPort = Integer.parseInt(properties.getProperty(ProxyConfigNames.HTTP_PROXY_PORT));
+        } catch (final NumberFormatException e) {
+            throw new IllegalArgumentException(
+                String.format("Given port for proxy authentication configuration (property '%s') is not a valid number! Given value wa '%s'.",
+                    ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(),
+                    System.getProperty("http.proxyPort")),
+                e);
+        }
+
         final var credentials = new BasicCredentialsProvider();
         credentials.setCredentials(
-                new AuthScope(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))),
-                new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"))
+            new AuthScope(proxyHost, proxyPort),
+            new UsernamePasswordCredentials(
+                properties.getProperty(ProxyConfigNames.HTTP_PROXY_USER),
+                properties.getProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD))
         );
 
         final var clientBuilder = HttpClientBuilder.create();
-
         clientBuilder.useSystemProperties();
-        clientBuilder.setProxy(new HttpHost(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))));
+        clientBuilder.setProxy(new HttpHost(proxyHost, proxyPort));
         clientBuilder.setDefaultCredentialsProvider(credentials);
         clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
 
@@ -178,5 +225,23 @@ final class DefaultImportScanService implements ImportScanService {
         return factory;
     }
 
+    private static class SystemPropertyFinder {
+        private boolean hasProperty(@NonNull final ProxyConfigNames name) {
+            return System.getProperty(name.getLiterat()) != null;
+        }
 
+        private boolean notHasProperty(@NonNull final ProxyConfigNames name) {
+            return !hasProperty(name);
+        }
+
+        private String getProperty(@NonNull final ProxyConfigNames name) {
+            return System.getProperty(name.getLiterat());
+        }
+    }
+
+    final static class MissingProxyAuthenticationConfig extends RuntimeException {
+        MissingProxyAuthenticationConfig(ProxyConfigNames name) {
+            super(String.format("Expected System property '%s' not set!", name.getLiterat()));
+        }
+    }
 }
