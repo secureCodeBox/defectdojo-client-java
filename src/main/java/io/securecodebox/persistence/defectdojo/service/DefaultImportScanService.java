@@ -63,23 +63,7 @@ final class DefaultImportScanService implements ImportScanService {
         final var template = new RestTemplate();
 
         if (shouldConfigureProxySettings()) {
-            // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
-            final var credentials = new BasicCredentialsProvider();
-            credentials.setCredentials(
-                    new AuthScope(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))),
-                    new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"))
-            );
-
-            final var clientBuilder = HttpClientBuilder.create();
-
-            clientBuilder.useSystemProperties();
-            clientBuilder.setProxy(new HttpHost(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))));
-            clientBuilder.setDefaultCredentialsProvider(credentials);
-            clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
-
-            final var factory = new HttpComponentsClientHttpRequestFactory();
-            factory.setHttpClient(clientBuilder.build());
-            template.setRequestFactory(factory);
+            template.setRequestFactory(createRequestFactoryWithProxyAuthConfig());
         }
 
         return template;
@@ -87,6 +71,26 @@ final class DefaultImportScanService implements ImportScanService {
 
     private static boolean shouldConfigureProxySettings() {
         return System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null;
+    }
+
+    private static HttpComponentsClientHttpRequestFactory createRequestFactoryWithProxyAuthConfig() {
+        // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
+        final var credentials = new BasicCredentialsProvider();
+        credentials.setCredentials(
+                new AuthScope(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))),
+                new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"))
+        );
+
+        final var clientBuilder = HttpClientBuilder.create();
+
+        clientBuilder.useSystemProperties();
+        clientBuilder.setProxy(new HttpHost(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))));
+        clientBuilder.setDefaultCredentialsProvider(credentials);
+        clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+
+        final var factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setHttpClient(clientBuilder.build());
+        return factory;
     }
 
     /*
