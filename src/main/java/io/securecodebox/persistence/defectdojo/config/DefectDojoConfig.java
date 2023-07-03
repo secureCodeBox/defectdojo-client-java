@@ -34,16 +34,14 @@ public class DefectDojoConfig {
     private final Long userId;
 
     public DefectDojoConfig(String url, String apiKey, String username, int maxPageCountForGets) {
-        this(url,apiKey,username, maxPageCountForGets, null);
+        this(url, apiKey, username, maxPageCountForGets, null);
     }
 
-    public static DefectDojoConfig fromEnv(){
+    public static DefectDojoConfig fromEnv() {
         String url = System.getenv("DEFECTDOJO_URL");
         String username = System.getenv("DEFECTDOJO_USERNAME");
         String apiKey = System.getenv("DEFECTDOJO_APIKEY");
-        Long userId = Optional.ofNullable(System.getenv("DEFECTDOJO_USER_ID"))
-                .map(Long::parseLong)
-                .orElse(null);
+        Long userId = Optional.ofNullable(System.getenv("DEFECTDOJO_USER_ID")).map(Long::parseLong).orElse(null);
 
         int maxPageCountForGets = 100;
         if (System.getenv("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS") != null) {
