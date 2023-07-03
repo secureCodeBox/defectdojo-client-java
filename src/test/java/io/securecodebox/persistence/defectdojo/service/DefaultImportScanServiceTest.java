@@ -1,18 +1,16 @@
 package io.securecodebox.persistence.defectdojo.service;
 
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 /**
- * Tests for {@link ImportScanService}
+ * Tests for {@link DefaultImportScanService}
  */
-class ImportScanServiceTest {
+class DefaultImportScanServiceTest {
     private final DefectDojoConfig config = new DefectDojoConfig(
             "url",
             "apiKey",
@@ -20,12 +18,12 @@ class ImportScanServiceTest {
             23,
             42L
     );
-    private final ImportScanService sut = new ImportScanService(config);
+    private final DefaultImportScanService sut = new DefaultImportScanService(config);
 
     @Test
     void constructorShouldThrowExceptionOnNullConfig() {
         assertThrows(NullPointerException.class, () -> {
-            new ImportScanService(null);
+            new DefaultImportScanService(null);
         });
     }
 
