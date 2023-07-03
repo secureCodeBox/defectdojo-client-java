@@ -93,6 +93,7 @@ final class DefaultImportScanService implements ImportScanService {
                 new MappingJackson2HttpMessageConverter())
         );
 
+        // FIXME: Why do we use a multi value map here? Do we need multiple values for any given key?
         final var body = new LinkedMultiValueMap<String, Object>();
 
         body.add("lead", Long.toString(lead));
@@ -102,6 +103,7 @@ final class DefaultImportScanService implements ImportScanService {
         body.add("skip_duplicates", "false");
         body.add("test_type", String.valueOf(testType));
 
+        // Avoid duplicate entries:
         for (final var optionName : options.keySet()) {
             body.remove(optionName);
         }
@@ -119,7 +121,7 @@ final class DefaultImportScanService implements ImportScanService {
                 }
             };
 
-            // FIXME Why do we add the whole byte array resiurce here as object? Is not simply the file name sufficient here? Then we could use <String, String>
+            // FIXME: Why do we add the whole byte array resiurce here as object? Is not simply the file name sufficient here? Then we could use <String, String>
             body.add("file", contentsAsResource);
 
             // FIXME: We do not define the the type T of the body here!
@@ -130,7 +132,7 @@ final class DefaultImportScanService implements ImportScanService {
             throw new DefectDojoPersistenceException("Failed to attach findings to engagement.");
         }
     }
-    
+
     /**
      * The DefectDojo Authentication Header
      *
