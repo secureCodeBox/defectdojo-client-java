@@ -119,17 +119,20 @@ class DefaultImportScanService implements ImportScanService {
             body.add("file", contentsAsResource);
 
             final var payload = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
-
-            final var restTemplate = this.createRestTemplate();
-            return restTemplate.exchange(
-                    generateApiUrl(endpoint),
-                    HttpMethod.POST,
-                    payload,
-                    ImportScanResponse.class)
-                .getBody();
+            return exchangeRequest(endpoint, payload);
         } catch (HttpClientErrorException e) {
             throw new DefectDojoPersistenceException("Failed to attach findings to engagement.");
         }
+    }
+
+    ImportScanResponse exchangeRequest(String endpoint, HttpEntity<?> payload) {
+        final var restTemplate = this.createRestTemplate();
+        return restTemplate.exchange(
+                generateApiUrl(endpoint),
+                HttpMethod.POST,
+                payload,
+                ImportScanResponse.class)
+            .getBody();
     }
 
     String generateApiUrl(final String endpoint) {
