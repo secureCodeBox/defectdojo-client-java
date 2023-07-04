@@ -52,33 +52,25 @@ final class DefaultImportScanService implements ImportScanService {
 
     @Override
     public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
-        final var options = new LinkedMultiValueMap<String, String>();
-        options.add("engagement", Long.toString(engagementId)); // FIXME Seems to be duplicated bc it is done again in the overloaded method.
-
-        return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, options);
+        return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, new LinkedMultiValueMap<>());
     }
 
     @Override
     public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
         options.add("engagement", Long.toString(engagementId));
 
-        // FIXME: Why is engagementId hardcoded overwritten with "import-scan"
         return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, options);
     }
 
     @Override
     public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
-        final var options = new LinkedMultiValueMap<String, String>();
-        options.add("test", Long.toString(testId)); // FIXME Seems to be duplicated bc it is done again in the overloaded method.
-
-        return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, options);
+        return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, new LinkedMultiValueMap<>());
     }
 
     @Override
     public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
         options.add("test", Long.toString(testId));
 
-        // FIXME: Why is engagementId hardcoded overwritten with "reimport-scan"
         return this.createFindings(scanFile, "reimport-scan", lead, currentDate, scanType, testType, options);
     }
 
@@ -88,6 +80,9 @@ final class DefaultImportScanService implements ImportScanService {
     private ImportScanResponse createFindings(ScanFile scanFile, String endpoint, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
         final var restTemplate = this.createRestTemplate();
         final var headers = createDefectDojoAuthorizationHeaders();
+        // We use multipart because we send two "parts" in the request body:
+        // 1. generic info as key=value&key=value...
+        // 2. the raw scan result as file
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         restTemplate.setMessageConverters(List.of(
             new FormHttpMessageConverter(),
@@ -116,6 +111,7 @@ final class DefaultImportScanService implements ImportScanService {
         }
 
         try {
+            // scanFile is the raw result from lurker.
             final var contentsAsResource = new ByteArrayResource(scanFile.getContent().getBytes(StandardCharsets.UTF_8)) {
                 @Override
                 public String getFilename() {
@@ -124,6 +120,7 @@ final class DefaultImportScanService implements ImportScanService {
             };
 
             // FIXME: Why do we add the whole byte array resiurce here as object? Is not simply the file name sufficient here? Then we could use <String, String>
+            // We send the whole file content, so DefectDojo can parse the finding by itself.
             body.add("file", contentsAsResource);
 
             // FIXME: We do not define the the type T of the body here!
