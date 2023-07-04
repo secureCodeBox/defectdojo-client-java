@@ -122,10 +122,14 @@ class DefaultImportScanService implements ImportScanService {
             // FIXME: We do not define the the type T of the body here!
             final var payload = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
 
-            return restTemplate.exchange(defectDojoUrl + "/api/v2/" + endpoint + "/", HttpMethod.POST, payload, ImportScanResponse.class).getBody();
+            return restTemplate.exchange(generateApiUrl(endpoint), HttpMethod.POST, payload, ImportScanResponse.class).getBody();
         } catch (HttpClientErrorException e) {
             throw new DefectDojoPersistenceException("Failed to attach findings to engagement.");
         }
+    }
+
+    String generateApiUrl(final String endpoint) {
+        return String.format("%s/api/v2/%s/", getDefectDojoUrl(), endpoint);
     }
 
     /**
