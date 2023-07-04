@@ -122,7 +122,6 @@ class DefaultImportScanService implements ImportScanService {
             final var payload = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
 
             final var restTemplate = this.createRestTemplate();
-            restTemplate.setMessageConverters(HTTP_MESSAGE_CONVERTERS);
             return restTemplate.exchange(
                     generateApiUrl(endpoint),
                     HttpMethod.POST,
@@ -155,6 +154,8 @@ class DefaultImportScanService implements ImportScanService {
         if (shouldConfigureProxySettings()) {
             template.setRequestFactory(createRequestFactoryWithProxyAuthConfig());
         }
+
+        template.setMessageConverters(HTTP_MESSAGE_CONVERTERS);
 
         return template;
     }
