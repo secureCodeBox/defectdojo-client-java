@@ -9,6 +9,7 @@ import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
 import io.securecodebox.persistence.defectdojo.exceptions.DefectDojoPersistenceException;
 import io.securecodebox.persistence.defectdojo.models.ScanFile;
+import lombok.Getter;
 import lombok.NonNull;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -34,9 +35,14 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-final class DefaultImportScanService implements ImportScanService {
+/*
+ * https://defectdojo.security.iteratec.dev/api/v2/oa3/swagger-ui/#operations-tag-import-scan
+ */
+class DefaultImportScanService implements ImportScanService {
     private final SystemPropertyFinder properties = new SystemPropertyFinder();
+    @Getter
     private final String defectDojoUrl;
+    @Getter
     private final String defectDojoApiKey;
 
     /**
