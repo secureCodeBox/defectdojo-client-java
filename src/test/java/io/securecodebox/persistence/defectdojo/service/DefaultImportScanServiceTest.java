@@ -11,8 +11,10 @@ import org.springframework.http.HttpHeaders;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link DefaultImportScanService}
@@ -64,8 +66,8 @@ class DefaultImportScanServiceTest {
     void createDefectDojoAuthorizationHeaders_apiKeyFromConfigShouldBePresentAsAuthHEader() {
         final var authorizationHeaders = sut.createDefectDojoAuthorizationHeaders();
         assertAll(
-            () -> assertEquals(1, authorizationHeaders.size(), "Expected is exactly one authorization header!"),
-            () -> assertEquals("Token apiKey", authorizationHeaders.get(HttpHeaders.AUTHORIZATION).get(0))
+            () -> assertThat(authorizationHeaders.size(), is(1)),
+            () -> assertThat(authorizationHeaders.get(HttpHeaders.AUTHORIZATION).get(0), is("Token apiKey"))
         );
     }
 
@@ -74,7 +76,7 @@ class DefaultImportScanServiceTest {
         System.clearProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat());
         System.clearProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat());
 
-        assertFalse(sut.shouldConfigureProxySettings());
+        assertThat(sut.shouldConfigureProxySettings(), is(false));
     }
 
     @Test
@@ -82,7 +84,7 @@ class DefaultImportScanServiceTest {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
         System.clearProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat());
 
-        assertFalse(sut.shouldConfigureProxySettings());
+        assertThat(sut.shouldConfigureProxySettings(), is(false));
     }
 
     @Test
@@ -90,7 +92,7 @@ class DefaultImportScanServiceTest {
         System.clearProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat());
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
 
-        assertFalse(sut.shouldConfigureProxySettings());
+        assertThat(sut.shouldConfigureProxySettings(), is(false));
     }
 
     @Test
@@ -98,7 +100,7 @@ class DefaultImportScanServiceTest {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
 
-        assertTrue(sut.shouldConfigureProxySettings());
+        assertThat(sut.shouldConfigureProxySettings(), is(true));
     }
 
     @Test
@@ -112,7 +114,7 @@ class DefaultImportScanServiceTest {
             MissingProxyAuthenticationConfig.class,
             sut::createRequestFactoryWithProxyAuthConfig);
 
-        assertEquals("Expected System property 'http.proxyUser' not set!", thrown.getMessage());
+        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyUser' not set!"));
     }
 
     @Test
@@ -126,7 +128,7 @@ class DefaultImportScanServiceTest {
             MissingProxyAuthenticationConfig.class,
             sut::createRequestFactoryWithProxyAuthConfig);
 
-        assertEquals("Expected System property 'http.proxyPassword' not set!", thrown.getMessage());
+        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyPassword' not set!"));
     }
 
     @Test
@@ -140,7 +142,7 @@ class DefaultImportScanServiceTest {
             MissingProxyAuthenticationConfig.class,
             sut::createRequestFactoryWithProxyAuthConfig);
 
-        assertEquals("Expected System property 'http.proxyHost' not set!", thrown.getMessage());
+        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyHost' not set!"));
     }
 
     @Test
@@ -154,7 +156,7 @@ class DefaultImportScanServiceTest {
             MissingProxyAuthenticationConfig.class,
             sut::createRequestFactoryWithProxyAuthConfig);
 
-        assertEquals("Expected System property 'http.proxyPort' not set!", thrown.getMessage());
+        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyPort' not set!"));
     }
 
     @Test
