@@ -18,7 +18,7 @@ class ImportScanServiceTest {
             ImportScanService.createDefault(null);
         });
     }
-    
+
     @Test
     void createDefault_passesConfig() {
         final var config = new DefectDojoConfig(
