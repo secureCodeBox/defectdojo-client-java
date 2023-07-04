@@ -11,7 +11,6 @@ import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
 import io.securecodebox.persistence.defectdojo.models.ScanFile;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NonNull;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -25,7 +24,7 @@ public interface ImportScanService {
      * @param config must not be {@code null}
      * @return never {@code null}
      */
-    default ImportScanService createDefault(@NonNull DefectDojoConfig config) {
+    static ImportScanService createDefault(final DefectDojoConfig config) {
         return new DefaultImportScanService(config);
     }
 
