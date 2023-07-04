@@ -161,7 +161,7 @@ public enum ScanType {
     ZAP_SCAN("ZAP Scan");
 
     @Getter
-    String testType;
+    private final String testType;
 
     ScanType(String testType) {
         this.testType = testType;
