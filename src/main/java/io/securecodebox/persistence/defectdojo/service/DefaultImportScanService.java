@@ -51,20 +51,10 @@ final class DefaultImportScanService implements ImportScanService {
     }
 
     @Override
-    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
-        return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, new LinkedMultiValueMap<>());
-    }
-
-    @Override
     public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
         options.add("engagement", Long.toString(engagementId));
 
         return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, options);
-    }
-
-    @Override
-    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
-        return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, new LinkedMultiValueMap<>());
     }
 
     @Override

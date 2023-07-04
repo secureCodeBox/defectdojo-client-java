@@ -12,6 +12,7 @@ import io.securecodebox.persistence.defectdojo.models.ScanFile;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 /**
@@ -28,11 +29,15 @@ public interface ImportScanService {
         return new DefaultImportScanService(config);
     }
 
-    ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType);
+    default ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
+        return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, new LinkedMultiValueMap<>());
+    }
 
     ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options);
 
-    ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType);
+    default ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
+        return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, new LinkedMultiValueMap<>());
+    }
 
     ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options);
 
