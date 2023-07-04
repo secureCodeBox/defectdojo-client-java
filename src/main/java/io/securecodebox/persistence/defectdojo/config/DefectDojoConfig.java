@@ -7,30 +7,28 @@ package io.securecodebox.persistence.defectdojo.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Optional;
 
+@Getter
+@ToString
 @AllArgsConstructor
 public class DefectDojoConfig {
-    @Getter
     private final String url;
 
-    @Getter
     private final String apiKey;
 
-    @Getter
     private final String username;
 
     /**
      * Determines how many apiPages of Objects are fetched before giving up and failing to avoid outOfMemory scenarios.
      */
-    @Getter
     private final int maxPageCountForGets;
 
     /**
      * If not null, the id should be used instead of the username.
      */
-    @Getter
     private final Long userId;
 
     public DefectDojoConfig(String url, String apiKey, String username, int maxPageCountForGets) {
