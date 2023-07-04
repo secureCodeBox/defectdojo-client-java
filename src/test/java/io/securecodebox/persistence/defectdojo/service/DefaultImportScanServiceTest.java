@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class DefaultImportScanServiceTest {
     private final DefectDojoConfig config = new DefectDojoConfig(
-        "url",
+        "http://localhost",
         "apiKey",
         "username",
         23,
@@ -169,8 +169,13 @@ class DefaultImportScanServiceTest {
             IllegalArgumentException.class,
             sut::createRequestFactoryWithProxyAuthConfig);
 
-        assertEquals(
-            "Given port for proxy authentication configuration (property 'http.proxyPort') is not a valid number! Given value wa 'FUBAR'.",
-            thrown.getMessage());
+        assertThat(
+            thrown.getMessage(),
+            is("Given port for proxy authentication configuration (property 'http.proxyPort') is not a valid number! Given value wa 'FUBAR'."));
+    }
+
+    @Test
+    void generateApiUrl() {
+        assertThat(sut.generateApiUrl("foo"), is("http://localhost/api/v2/foo/"));
     }
 }
