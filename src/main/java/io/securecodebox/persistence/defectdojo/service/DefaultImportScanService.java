@@ -79,13 +79,11 @@ class DefaultImportScanService implements ImportScanService {
      * Before version 1.5.4. testName (in DefectDojo _test_type_) must be defectDojoScanName, afterward, you can have something else.
      */
     private ImportScanResponse createFindings(ScanFile scanFile, String endpoint, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
-        final var restTemplate = this.createRestTemplate();
         final var headers = createDefectDojoAuthorizationHeaders();
         // We use multipart because we send two "parts" in the request body:
         // 1. generic info as key=value&key=value...
         // 2. the raw scan result as file
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        restTemplate.setMessageConverters(HTTP_MESSAGE_CONVERTERS);
 
         // FIXME: Why do we use a multi value map here? Do we need multiple values for any given key?
         final var body = new LinkedMultiValueMap<String, Object>();
@@ -123,7 +121,14 @@ class DefaultImportScanService implements ImportScanService {
             // FIXME: We do not define the the type T of the body here!
             final var payload = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
 
-            return restTemplate.exchange(generateApiUrl(endpoint), HttpMethod.POST, payload, ImportScanResponse.class).getBody();
+            final var restTemplate = this.createRestTemplate();
+            restTemplate.setMessageConverters(HTTP_MESSAGE_CONVERTERS);
+            return restTemplate.exchange(
+                    generateApiUrl(endpoint),
+                    HttpMethod.POST,
+                    payload,
+                    ImportScanResponse.class)
+                .getBody();
         } catch (HttpClientErrorException e) {
             throw new DefectDojoPersistenceException("Failed to attach findings to engagement.");
         }
