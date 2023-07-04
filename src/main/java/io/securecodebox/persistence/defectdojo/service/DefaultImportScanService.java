@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.FormHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
@@ -39,6 +40,10 @@ import java.util.List;
  * https://defectdojo.security.iteratec.dev/api/v2/oa3/swagger-ui/#operations-tag-import-scan
  */
 class DefaultImportScanService implements ImportScanService {
+    private static final List<HttpMessageConverter<?>> HTTP_MESSAGE_CONVERTERS = List.of(
+        new FormHttpMessageConverter(),
+        new ResourceHttpMessageConverter(),
+        new MappingJackson2HttpMessageConverter());
     private final SystemPropertyFinder properties = new SystemPropertyFinder();
     @Getter
     private final String defectDojoUrl;
@@ -80,11 +85,7 @@ class DefaultImportScanService implements ImportScanService {
         // 1. generic info as key=value&key=value...
         // 2. the raw scan result as file
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        restTemplate.setMessageConverters(List.of(
-            new FormHttpMessageConverter(),
-            new ResourceHttpMessageConverter(),
-            new MappingJackson2HttpMessageConverter())
-        );
+        restTemplate.setMessageConverters(HTTP_MESSAGE_CONVERTERS);
 
         // FIXME: Why do we use a multi value map here? Do we need multiple values for any given key?
         final var body = new LinkedMultiValueMap<String, Object>();
