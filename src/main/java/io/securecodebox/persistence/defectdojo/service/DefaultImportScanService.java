@@ -118,7 +118,6 @@ class DefaultImportScanService implements ImportScanService {
             // We send the whole file content, so DefectDojo can parse the finding by itself.
             body.add("file", contentsAsResource);
 
-            // FIXME: We do not define the the type T of the body here!
             final var payload = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
 
             final var restTemplate = this.createRestTemplate();
