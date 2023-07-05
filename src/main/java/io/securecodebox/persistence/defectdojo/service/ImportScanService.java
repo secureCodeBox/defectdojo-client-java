@@ -11,8 +11,9 @@ import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
 import io.securecodebox.persistence.defectdojo.models.ScanFile;
 import lombok.Data;
 import lombok.Getter;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Service to re/import findings into DefectDojo
@@ -29,16 +30,16 @@ public interface ImportScanService {
     }
 
     default ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
-        return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, new LinkedMultiValueMap<>());
+        return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, new HashMap<>());
     }
 
-    ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options);
+    ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, Map<String, String> options);
 
     default ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
-        return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, new LinkedMultiValueMap<>());
+        return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, new HashMap<>());
     }
 
-    ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options);
+    ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, Map<String, String> options);
 
     @Data
     class ImportScanResponse {
