@@ -35,6 +35,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 /*
  * https://defectdojo.security.iteratec.dev/api/v2/oa3/swagger-ui/#operations-tag-import-scan
@@ -62,15 +63,15 @@ class DefaultImportScanService implements ImportScanService {
     }
 
     @Override
-    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
-        options.add("engagement", Long.toString(engagementId));
+    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, Map<String, String> options) {
+        options.put("engagement", Long.toString(engagementId));
 
         return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, options);
     }
 
     @Override
-    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
-        options.add("test", Long.toString(testId));
+    public ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, Map<String, String> options) {
+        options.put("test", Long.toString(testId));
 
         return this.createFindings(scanFile, "reimport-scan", lead, currentDate, scanType, testType, options);
     }
@@ -78,7 +79,7 @@ class DefaultImportScanService implements ImportScanService {
     /*
      * Before version 1.5.4. testName (in DefectDojo _test_type_) must be defectDojoScanName, afterward, you can have something else.
      */
-    private ImportScanResponse createFindings(ScanFile scanFile, String endpoint, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, String> options) {
+    private ImportScanResponse createFindings(ScanFile scanFile, String endpoint, long lead, String currentDate, ScanType scanType, long testType, Map<String, String> options) {
         final var headers = createDefectDojoAuthorizationHeaders();
         // We use multipart because we send two "parts" in the request body:
         // 1. generic info as key=value&key=value...
