@@ -43,6 +43,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import lombok.Getter;
 
+// FIXME: Should be package private bc implementation detail.
 abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
     protected DefectDojoConfig defectDojoConfig;
 
