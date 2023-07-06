@@ -5,7 +5,7 @@
 package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
+import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.User;
 import io.securecodebox.persistence.defectdojo.model.UserProfile;
 
@@ -25,7 +25,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 // but the generic code assumes every endpoint returns a list
 public class UserProfileServiceTest {
     
-    DefectDojoConfig config;
+    Config config;
     UserProfileService underTest;
     MockRestServiceServer mockServer;
     
@@ -48,7 +48,7 @@ public class UserProfileServiceTest {
     
     @BeforeEach
     void setup() {
-        config = new DefectDojoConfig("https://defectdojo.example.com", "abc", "test-user", 42);
+        config = new Config("https://defectdojo.example.com", "abc", "test-user", 42);
         underTest = new UserProfileService(config);
         mockServer = MockRestServiceServer.createServer(underTest.getRestTemplate());
     }

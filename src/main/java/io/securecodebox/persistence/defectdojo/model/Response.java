@@ -11,7 +11,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class DefectDojoResponse<T> {
+public class Response<T> {
   @JsonProperty
   int count;
 

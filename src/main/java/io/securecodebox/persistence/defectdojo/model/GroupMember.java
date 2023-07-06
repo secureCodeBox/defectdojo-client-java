@@ -16,7 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DojoGroupMember extends DefectDojoModel {
+public class GroupMember extends BaseModel {
     @JsonProperty
     Long id;
 

@@ -7,7 +7,7 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.securecodebox.persistence.defectdojo.ScanType;
-import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
+import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Data;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public interface ImportScanService {
      * @param config must not be {@code null}
      * @return never {@code null}
      */
-    static ImportScanService createDefault(final DefectDojoConfig config) {
+    static ImportScanService createDefault(final Config config) {
         return new DefaultImportScanService(config);
     }
 

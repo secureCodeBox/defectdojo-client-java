@@ -5,12 +5,12 @@
 
 package io.securecodebox.persistence.defectdojo.exception;
 
-public class DefectDojoLoopException extends RuntimeException {
-  public DefectDojoLoopException(String message) {
+public class LoopException extends RuntimeException {
+  public LoopException(String message) {
     super(message);
   }
 
-  public DefectDojoLoopException(String message, Throwable cause) {
+  public LoopException(String message, Throwable cause) {
     super(message, cause);
   }
 }

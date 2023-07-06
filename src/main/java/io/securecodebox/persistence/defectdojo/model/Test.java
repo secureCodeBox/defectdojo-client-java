@@ -19,7 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Test extends DefectDojoModel {
+public class Test extends BaseModel {
   @JsonProperty
   Long id;
 

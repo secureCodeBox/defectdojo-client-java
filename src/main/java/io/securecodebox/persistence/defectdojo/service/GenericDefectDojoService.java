@@ -11,10 +11,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.cfg.CoercionAction;
 import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
-import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import io.securecodebox.persistence.defectdojo.exception.DefectDojoLoopException;
-import io.securecodebox.persistence.defectdojo.model.DefectDojoModel;
-import io.securecodebox.persistence.defectdojo.model.DefectDojoResponse;
+import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.exception.LoopException;
+import io.securecodebox.persistence.defectdojo.model.BaseModel;
+import io.securecodebox.persistence.defectdojo.model.Response;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -44,8 +44,8 @@ import java.util.*;
 import lombok.Getter;
 
 // FIXME: Should be package private bc implementation detail.
-abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
-    protected DefectDojoConfig defectDojoConfig;
+abstract public class GenericDefectDojoService<T extends BaseModel> {
+    protected Config config;
 
     protected ObjectMapper objectMapper;
     protected ObjectMapper searchStringMapper;
@@ -53,8 +53,8 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
     @Getter
     protected RestTemplate restTemplate;
 
-    public GenericDefectDojoService(DefectDojoConfig config) {
-        this.defectDojoConfig = config;
+    public GenericDefectDojoService(Config config) {
+        this.config = config;
 
         this.objectMapper = new ObjectMapper();
         this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -77,7 +77,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
      */
     private HttpHeaders getDefectDojoAuthorizationHeaders() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Token " + this.defectDojoConfig.getApiKey());
+        headers.set("Authorization", "Token " + this.config.getApiKey());
 
         String username = System.getProperty("http.proxyUser", "");
         String password = System.getProperty("http.proxyPassword", "");
@@ -131,14 +131,14 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
 
     protected abstract Class<T> getModelClass();
 
-    protected abstract DefectDojoResponse<T> deserializeList(String response) throws JsonProcessingException;
+    protected abstract Response<T> deserializeList(String response) throws JsonProcessingException;
 
     public T get(long id) {
         var restTemplate = this.getRestTemplate();
         HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
         ResponseEntity<T> response = restTemplate.exchange(
-                this.defectDojoConfig.getUrl() + "/api/v2/" + this.getUrlPath() + "/" + id,
+                this.config.getUrl() + "/api/v2/" + this.getUrlPath() + "/" + id,
                 HttpMethod.GET,
                 payload,
                 getModelClass()
@@ -147,7 +147,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
         return response.getBody();
     }
 
-    protected DefectDojoResponse<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) throws JsonProcessingException, URISyntaxException {
+    protected Response<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) throws JsonProcessingException, URISyntaxException {
         var restTemplate = this.getRestTemplate();
         HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
@@ -161,7 +161,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
             multiValueMap.set(entry.getKey(), String.valueOf(entry.getValue()));
         }
 
-        var url = new URI(this.defectDojoConfig.getUrl() + "/api/v2/" + this.getUrlPath() + "/");
+        var url = new URI(this.config.getUrl() + "/api/v2/" + this.getUrlPath() + "/");
         var uriBuilder = UriComponentsBuilder.fromUri(url).queryParams(multiValueMap);
 
         ResponseEntity<String> responseString = restTemplate.exchange(
@@ -184,8 +184,8 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
             objects.addAll(response.getResults());
 
             hasNext = response.getNext() != null;
-            if (page > this.defectDojoConfig.getMaxPageCountForGets()) {
-                throw new DefectDojoLoopException("Found too many response object. Quitting after " + (page - 1) + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
+            if (page > this.config.getMaxPageCountForGets()) {
+                throw new LoopException("Found too many response object. Quitting after " + (page - 1) + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
             }
         } while (hasNext);
 
@@ -219,7 +219,7 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
         var restTemplate = this.getRestTemplate();
         HttpEntity<T> payload = new HttpEntity<T>(object, getDefectDojoAuthorizationHeaders());
 
-        ResponseEntity<T> response = restTemplate.exchange(this.defectDojoConfig.getUrl() + "/api/v2/" + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
+        ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + "/api/v2/" + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
         return response.getBody();
     }
 
@@ -227,14 +227,14 @@ abstract public class GenericDefectDojoService<T extends DefectDojoModel> {
         var restTemplate = this.getRestTemplate();
         HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
-        restTemplate.exchange(this.defectDojoConfig.getUrl() + "/api/v2/" + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
+        restTemplate.exchange(this.config.getUrl() + "/api/v2/" + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
     }
 
     public T update(T object, long objectId) {
         var restTemplate = this.getRestTemplate();
         HttpEntity<T> payload = new HttpEntity<T>(object, getDefectDojoAuthorizationHeaders());
 
-        ResponseEntity<T> response = restTemplate.exchange(this.defectDojoConfig.getUrl() + "/api/v2/" + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
+        ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + "/api/v2/" + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
         return response.getBody();
     }
 }

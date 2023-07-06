@@ -17,7 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Endpoint extends DefectDojoModel {
+public class Endpoint extends BaseModel {
   @JsonProperty
   Long id;
 

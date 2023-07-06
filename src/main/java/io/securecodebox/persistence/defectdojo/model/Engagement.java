@@ -18,7 +18,7 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Engagement extends DefectDojoModel {
+public class Engagement extends BaseModel {
   @JsonProperty("branch_tag")
   public String branch;
 

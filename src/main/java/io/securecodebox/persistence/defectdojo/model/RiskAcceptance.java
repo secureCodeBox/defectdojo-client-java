@@ -18,7 +18,7 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RiskAcceptance extends DefectDojoModel {
+public class RiskAcceptance extends BaseModel {
   @JsonProperty
   Long id;
 
