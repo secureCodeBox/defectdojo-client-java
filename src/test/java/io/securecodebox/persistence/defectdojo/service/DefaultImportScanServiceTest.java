@@ -56,17 +56,6 @@ class DefaultImportScanServiceTest {
     }
 
     @Test
-    @Disabled("Fails due to network side effect")
-    void importScan_withoutOptionsShouldPassEmptyMap() {
-        final var spiedSut = spy(sut);
-
-        sut.importScan(new ScanFile("content"),42L, 43L, "1.1.2023", ScanType.AUDIT_JS_SCAN, 23L);
-
-        verify(spiedSut, times(1))
-            .importScan(new ScanFile("content"),42L, 43L, "1.1.2023", ScanType.AUDIT_JS_SCAN, 23L, new HashMap<>());
-    }
-
-    @Test
     @Disabled("Not implemented yet")
     void importScan_shouldPassImportScanAsEndpoint() {
     }
@@ -74,11 +63,6 @@ class DefaultImportScanServiceTest {
     @Test
     @Disabled("Not implemented yet")
     void importScan_shouldPassEngagementIdAsEngagement() {
-    }
-
-    @Test
-    @Disabled("Not implemented yet")
-    void reimportScan_withoutOptionsShouldPassEmptyMap() {
     }
 
     @Test
