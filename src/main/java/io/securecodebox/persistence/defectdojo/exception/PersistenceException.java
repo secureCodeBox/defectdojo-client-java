@@ -5,12 +5,12 @@
 
 package io.securecodebox.persistence.defectdojo.exception;
 
-public class DefectDojoPersistenceException extends RuntimeException {
-    public DefectDojoPersistenceException(String message) {
+public class PersistenceException extends RuntimeException {
+    public PersistenceException(String message) {
         super(message);
     }
 
-    public DefectDojoPersistenceException(String message, Throwable cause) {
+    public PersistenceException(String message, Throwable cause) {
         super(message, cause);
     }
 }

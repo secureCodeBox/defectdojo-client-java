@@ -1,7 +1,7 @@
 package io.securecodebox.persistence.defectdojo.service;
 
 import io.securecodebox.persistence.defectdojo.ScanType;
-import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
+import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Getter;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class ImportScanServiceTest {
 
     @Test
     void createDefault_passesConfig() {
-        final var config = new DefectDojoConfig(
+        final var config = new Config(
             "url",
             "apiKey",
             "username",

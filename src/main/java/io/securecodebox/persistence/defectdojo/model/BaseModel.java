@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode // FIXME: Implement hashCode/equals in inheritance is problematic (https://www.artima.com/articles/how-to-write-an-equality-method-in-java)
-abstract public class DefectDojoModel {
+// #FIXME: Should be package private because implementation detail
+abstract public class BaseModel {
   public abstract boolean equalsQueryString(Map<String, Object> queryParams);
 }

@@ -7,8 +7,8 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import io.securecodebox.persistence.defectdojo.model.DefectDojoResponse;
+import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.model.Response;
 import io.securecodebox.persistence.defectdojo.model.ToolType;
 
 public class ToolTypeService extends GenericDefectDojoService<ToolType> {
@@ -17,7 +17,7 @@ public class ToolTypeService extends GenericDefectDojoService<ToolType> {
   public static final String BUILD_SERVER_NAME = "Build Server";
   public static final String SECURITY_TEST_SERVER_NAME = "Security Test Orchestration Engine";
 
-  public ToolTypeService(DefectDojoConfig config) {
+  public ToolTypeService(Config config) {
     super(config);
   }
 
@@ -32,7 +32,7 @@ public class ToolTypeService extends GenericDefectDojoService<ToolType> {
   }
 
   @Override
-  protected DefectDojoResponse<ToolType> deserializeList(String response) throws JsonProcessingException {
+  protected Response<ToolType> deserializeList(String response) throws JsonProcessingException {
     return this.objectMapper.readValue(response, new TypeReference<>() {
     });
   }

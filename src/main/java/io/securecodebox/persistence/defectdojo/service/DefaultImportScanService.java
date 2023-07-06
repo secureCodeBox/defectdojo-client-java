@@ -6,8 +6,8 @@
 package io.securecodebox.persistence.defectdojo.service;
 
 import io.securecodebox.persistence.defectdojo.ScanType;
-import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import io.securecodebox.persistence.defectdojo.exception.DefectDojoPersistenceException;
+import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Getter;
 import lombok.NonNull;
@@ -56,7 +56,7 @@ class DefaultImportScanService implements ImportScanService {
      *
      * @param config not {@code null}
      */
-    DefaultImportScanService(final @NonNull DefectDojoConfig config) {
+    DefaultImportScanService(final @NonNull Config config) {
         super();
         this.defectDojoUrl = config.getUrl();
         this.defectDojoApiKey = config.getApiKey();
@@ -122,7 +122,7 @@ class DefaultImportScanService implements ImportScanService {
             final var payload = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
             return requester.exchange(generateApiUrl(endpoint), payload);
         } catch (HttpClientErrorException e) {
-            throw new DefectDojoPersistenceException("Failed to attach findings to engagement.");
+            throw new PersistenceException("Failed to attach findings to engagement.");
         }
     }
 

@@ -1,6 +1,6 @@
 package io.securecodebox.persistence.defectdojo.service;
 
-import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
+import io.securecodebox.persistence.defectdojo.config.Config;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests for {@link DefaultImportScanService}
  */
 class DefaultImportScanServiceTest {
-    private final DefectDojoConfig config = new DefectDojoConfig(
+    private final Config config = new Config(
         "http://localhost",
         "apiKey",
         "username",

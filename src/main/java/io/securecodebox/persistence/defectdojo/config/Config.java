@@ -14,7 +14,7 @@ import java.util.Optional;
 @Getter
 @ToString
 @AllArgsConstructor
-public class DefectDojoConfig {
+public class Config {
     private final String url;
 
     private final String apiKey;
@@ -31,11 +31,11 @@ public class DefectDojoConfig {
      */
     private final Long userId;
 
-    public DefectDojoConfig(String url, String apiKey, String username, int maxPageCountForGets) {
+    public Config(String url, String apiKey, String username, int maxPageCountForGets) {
         this(url, apiKey, username, maxPageCountForGets, null);
     }
 
-    public static DefectDojoConfig fromEnv() {
+    public static Config fromEnv() {
         String url = System.getenv("DEFECTDOJO_URL");
         String username = System.getenv("DEFECTDOJO_USERNAME");
         String apiKey = System.getenv("DEFECTDOJO_APIKEY");
@@ -45,6 +45,6 @@ public class DefectDojoConfig {
         if (System.getenv("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS") != null) {
             maxPageCountForGets = Integer.parseInt(System.getenv("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS"));
         }
-        return new DefectDojoConfig(url, apiKey, username, maxPageCountForGets, userId);
+        return new Config(url, apiKey, username, maxPageCountForGets, userId);
     }
 }

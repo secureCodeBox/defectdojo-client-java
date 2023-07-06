@@ -8,7 +8,7 @@ package io.securecodebox.persistence.defectdojo.model;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.securecodebox.persistence.defectdojo.exception.DefectDojoPersistenceException;
+import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Finding extends DefectDojoModel {
+public class Finding extends BaseModel {
     @JsonProperty
     Long id;
 
@@ -123,7 +123,7 @@ public class Finding extends DefectDojoModel {
             case Informational:
                 return "S4";
             default:
-                throw new DefectDojoPersistenceException("Unknown severity: '" + this.severity + "'");
+                throw new PersistenceException("Unknown severity: '" + this.severity + "'");
         }
     }
 

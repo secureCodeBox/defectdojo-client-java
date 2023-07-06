@@ -5,7 +5,8 @@
 package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
+import io.securecodebox.persistence.defectdojo.config.Config;
+
 import java.net.URISyntaxException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 // This test is sufficient for all services (except user profile) as all the code is generic
 class FindingServiceTest{
 
-    DefectDojoConfig config;
+    Config config;
     FindingService underTest;
     MockRestServiceServer mockServer;
 
@@ -130,7 +131,7 @@ class FindingServiceTest{
 
     @BeforeEach
     void setup() {
-        config = new DefectDojoConfig("https://defectdojo.example.com", "abc", "test-user", 42);
+        config = new Config("https://defectdojo.example.com", "abc", "test-user", 42);
         underTest = new FindingService(config);
         mockServer = MockRestServiceServer.createServer(underTest.getRestTemplate());
     }

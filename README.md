@@ -16,7 +16,7 @@ The client is supposed to be compatible with DefectDojo 1.10 and later, older ve
 
 ```java
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
+import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.service.ProductTypeService;
 
 import java.net.URISyntaxException;

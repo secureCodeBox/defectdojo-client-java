@@ -18,7 +18,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
-public class UserProfile extends DefectDojoModel{
+public class UserProfile extends BaseModel {
 
     @JsonProperty
     User user;

@@ -7,12 +7,12 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import io.securecodebox.persistence.defectdojo.model.DefectDojoResponse;
+import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.model.Response;
 import io.securecodebox.persistence.defectdojo.model.Endpoint;
 
 public class EndpointService extends GenericDefectDojoService<Endpoint> {
-  public EndpointService(DefectDojoConfig config) {
+  public EndpointService(Config config) {
     super(config);
   }
 
@@ -27,7 +27,7 @@ public class EndpointService extends GenericDefectDojoService<Endpoint> {
   }
 
   @Override
-  protected DefectDojoResponse<Endpoint> deserializeList(String response) throws JsonProcessingException {
+  protected Response<Endpoint> deserializeList(String response) throws JsonProcessingException {
     return this.objectMapper.readValue(response, new TypeReference<>() {
     });
   }
