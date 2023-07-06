@@ -2,12 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.securecodebox.persistence.defectdojo.models;
+package io.securecodebox.persistence.defectdojo.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -16,25 +17,29 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DojoGroupMember extends DefectDojoModel {
+public class DojoGroup extends DefectDojoModel {
     @JsonProperty
     Long id;
 
-    @JsonProperty("group_id")
-    Long group;
-
-    @JsonProperty("user_id")
-    Long user;
+    @JsonProperty
+    @NonNull
+    String name;
 
     @JsonProperty
-    Long role;
+    String description;
+
+    @JsonProperty
+    List<Long> users;
+
+    @JsonProperty("social_provider")
+    String socialProvider;
 
     @Override
     public boolean equalsQueryString(Map<String, Object> queryParams) {
         if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
             return true;
         }
-        if (queryParams.containsKey("group") && queryParams.get("group").equals(this.group)) {
+        if (queryParams.containsKey("name") && queryParams.get("name").equals(this.name)) {
             return true;
         }
         return false;

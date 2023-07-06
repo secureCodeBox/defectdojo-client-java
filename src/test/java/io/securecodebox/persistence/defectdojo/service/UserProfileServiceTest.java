@@ -6,8 +6,8 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import io.securecodebox.persistence.defectdojo.models.User;
-import io.securecodebox.persistence.defectdojo.models.UserProfile;
+import io.securecodebox.persistence.defectdojo.model.User;
+import io.securecodebox.persistence.defectdojo.model.UserProfile;
 
 import java.net.URISyntaxException;
 import java.util.Arrays;

@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.securecodebox.persistence.defectdojo.models;
+package io.securecodebox.persistence.defectdojo.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,29 +17,42 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class User extends DefectDojoModel {
+public class Endpoint extends DefectDojoModel {
   @JsonProperty
   Long id;
 
   @JsonProperty
-  @NonNull
-  String username;
+  String protocol;
 
-  @JsonProperty("first_name")
-  String firstName;
+  @JsonProperty
+  String host;
 
-  @JsonProperty("last_name")
-  String lastName;
+  @JsonProperty("fqdm")
+  String fullyQualifiedDomainName;
+
+  @JsonProperty
+  Long port;
+
+  @JsonProperty
+  String path;
+
+  @JsonProperty
+  String query;
+
+  @JsonProperty
+  String fragment;
+
+  @JsonProperty
+  Long product;
+
+  @JsonProperty
+  Boolean mitigated;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
     if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
       return true;
     }
-    if (queryParams.containsKey("username") && queryParams.get("username").equals(this.username)) {
-      return true;
-    }
-
     return false;
   }
 }

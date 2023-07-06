@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.securecodebox.persistence.defectdojo.exceptions;
+package io.securecodebox.persistence.defectdojo.exception;
 
 public class DefectDojoPersistenceException extends RuntimeException {
     public DefectDojoPersistenceException(String message) {
