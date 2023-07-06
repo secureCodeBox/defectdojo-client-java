@@ -2,20 +2,16 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import io.securecodebox.persistence.defectdojo.models.ScanFile;
+import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Getter;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 /**
  * Tests for {@link ImportScanService}.

@@ -1,24 +1,13 @@
 package io.securecodebox.persistence.defectdojo.service;
 
-import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import io.securecodebox.persistence.defectdojo.models.ScanFile;
-import io.securecodebox.persistence.defectdojo.service.DefaultImportScanService.MissingProxyAuthenticationConfig;
-import io.securecodebox.persistence.defectdojo.service.ImportScanService.ProxyConfigNames;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.LinkedMultiValueMap;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 /**
  * Tests for {@link DefaultImportScanService}

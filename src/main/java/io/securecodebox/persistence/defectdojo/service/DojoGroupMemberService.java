@@ -8,8 +8,8 @@ package io.securecodebox.persistence.defectdojo.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import io.securecodebox.persistence.defectdojo.models.DefectDojoResponse;
-import io.securecodebox.persistence.defectdojo.models.DojoGroupMember;
+import io.securecodebox.persistence.defectdojo.model.DefectDojoResponse;
+import io.securecodebox.persistence.defectdojo.model.DojoGroupMember;
 
 public class DojoGroupMemberService extends GenericDefectDojoService<DojoGroupMember> {
   public DojoGroupMemberService(DefectDojoConfig config) {

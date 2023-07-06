@@ -3,12 +3,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.securecodebox.persistence.defectdojo.models;
+package io.securecodebox.persistence.defectdojo.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.securecodebox.persistence.defectdojo.exceptions.DefectDojoPersistenceException;
+import io.securecodebox.persistence.defectdojo.exception.DefectDojoPersistenceException;
 import lombok.*;
 
 import java.time.LocalDateTime;

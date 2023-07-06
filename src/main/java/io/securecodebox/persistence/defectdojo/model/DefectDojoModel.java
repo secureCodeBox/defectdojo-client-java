@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.securecodebox.persistence.defectdojo.models;
+package io.securecodebox.persistence.defectdojo.model;
 
 import java.util.Map;
 import lombok.EqualsAndHashCode;

@@ -3,13 +3,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.securecodebox.persistence.defectdojo.models;
+package io.securecodebox.persistence.defectdojo.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.util.List;
 import java.util.Map;
 
 @Data
@@ -18,42 +17,30 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Endpoint extends DefectDojoModel {
+public class TestType extends DefectDojoModel {
   @JsonProperty
   Long id;
 
   @JsonProperty
-  String protocol;
+  @NonNull
+  String name;
 
-  @JsonProperty
-  String host;
+  @JsonProperty("static_tool")
+  Boolean staticTool;
 
-  @JsonProperty("fqdm")
-  String fullyQualifiedDomainName;
+  @JsonProperty("dynamic_tool")
+  Boolean dynamicTool;
 
-  @JsonProperty
-  Long port;
-
-  @JsonProperty
-  String path;
-
-  @JsonProperty
-  String query;
-
-  @JsonProperty
-  String fragment;
-
-  @JsonProperty
-  Long product;
-
-  @JsonProperty
-  Boolean mitigated;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
     if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
       return true;
     }
+    if (queryParams.containsKey("name") && queryParams.get("name").equals(this.name)) {
+      return true;
+    }
+
     return false;
   }
 }

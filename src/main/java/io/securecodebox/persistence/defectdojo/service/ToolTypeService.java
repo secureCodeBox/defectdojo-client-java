@@ -8,8 +8,8 @@ package io.securecodebox.persistence.defectdojo.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import io.securecodebox.persistence.defectdojo.models.DefectDojoResponse;
-import io.securecodebox.persistence.defectdojo.models.ToolType;
+import io.securecodebox.persistence.defectdojo.model.DefectDojoResponse;
+import io.securecodebox.persistence.defectdojo.model.ToolType;
 
 public class ToolTypeService extends GenericDefectDojoService<ToolType> {
 

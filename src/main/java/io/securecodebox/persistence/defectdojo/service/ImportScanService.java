@@ -8,7 +8,7 @@ package io.securecodebox.persistence.defectdojo.service;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.DefectDojoConfig;
-import io.securecodebox.persistence.defectdojo.models.ScanFile;
+import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Data;
 import lombok.Getter;
 
