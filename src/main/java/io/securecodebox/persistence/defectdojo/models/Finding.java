@@ -23,139 +23,139 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Finding extends DefectDojoModel {
-  @JsonProperty
-  Long id;
+    @JsonProperty
+    Long id;
 
-  @JsonProperty
-  @NonNull
-  String title;
+    @JsonProperty
+    @NonNull
+    String title;
 
-  @JsonProperty
-  @NonNull
-  String description;
+    @JsonProperty
+    @NonNull
+    String description;
 
-  @JsonProperty("found_by")
-  @NonNull
-  List<Long> foundBy;
+    @JsonProperty("found_by")
+    @NonNull
+    List<Long> foundBy;
 
-  @JsonProperty
-  @NonNull
-  Severity severity;
+    @JsonProperty
+    @NonNull
+    Severity severity;
 
-  @JsonProperty
-  @NonNull
-  Long test;
+    @JsonProperty
+    @NonNull
+    Long test;
 
-  @JsonProperty
-  String mitigation;
+    @JsonProperty
+    String mitigation;
 
-  @JsonProperty
-  String impact;
+    @JsonProperty
+    String impact;
 
-  @JsonProperty
-  @NonNull
-  @Builder.Default
-  Boolean active = true;
+    @JsonProperty
+    @NonNull
+    @Builder.Default
+    Boolean active = true;
 
-  @JsonProperty
-  @NonNull
-  @Builder.Default
-  Boolean verified = true;
+    @JsonProperty
+    @NonNull
+    @Builder.Default
+    Boolean verified = true;
 
-  @JsonProperty("risk_accepted")
-  @NonNull
-  @Builder.Default
-  Boolean riskAccepted = false;
+    @JsonProperty("risk_accepted")
+    @NonNull
+    @Builder.Default
+    Boolean riskAccepted = false;
 
-  @JsonProperty("out_of_scope")
-  @NonNull
-  @Builder.Default
-  Boolean outOfScope = false;
+    @JsonProperty("out_of_scope")
+    @NonNull
+    @Builder.Default
+    Boolean outOfScope = false;
 
-  @JsonProperty
-  @NonNull
-  @Builder.Default
-  Boolean duplicate = false;
+    @JsonProperty
+    @NonNull
+    @Builder.Default
+    Boolean duplicate = false;
 
-  @JsonProperty("duplicate_finding")
-  @Builder.Default
-  Long duplicateFinding = null;
+    @JsonProperty("duplicate_finding")
+    @Builder.Default
+    Long duplicateFinding = null;
 
-  @JsonProperty("false_p")
-  @NonNull
-  @Builder.Default
-  Boolean falsePositive = false;
+    @JsonProperty("false_p")
+    @NonNull
+    @Builder.Default
+    Boolean falsePositive = false;
 
-  @JsonProperty("component_name")
-  String componentName;
+    @JsonProperty("component_name")
+    String componentName;
 
-  @JsonProperty("component_version")
-  String componentVersion;
+    @JsonProperty("component_version")
+    String componentVersion;
 
-  @JsonProperty("file_path")
-  String filePath;  
-  
-  @JsonProperty
-  @NonNull
-  @Builder.Default
-  List<Long> endpoints = new LinkedList<>();
+    @JsonProperty("file_path")
+    String filePath;
 
-  @JsonProperty("created")
-  LocalDateTime createdAt;
+    @JsonProperty
+    @NonNull
+    @Builder.Default
+    List<Long> endpoints = new LinkedList<>();
 
-  @JsonProperty("mitigated")
-  LocalDateTime mitigatedAt;
+    @JsonProperty("created")
+    LocalDateTime createdAt;
 
-  @JsonProperty("accepted_risks")
-  List<RiskAcceptance> acceptedRisks;
+    @JsonProperty("mitigated")
+    LocalDateTime mitigatedAt;
 
-  @JsonProperty("numerical_severity")
-  public String getNumericalSeverity() {
-    switch (this.severity) {
-      case Critical:
-        return "S0";
-      case High:
-        return "S1";
-      case Medium:
-        return "S2";
-      case Low:
-        return "S3";
-      case Informational:
-        return "S4";
-      default:
-        throw new DefectDojoPersistenceException("Unknown severity: '" + this.severity + "'");
-    }
-  }
+    @JsonProperty("accepted_risks")
+    List<RiskAcceptance> acceptedRisks;
 
-  @Override
-  public boolean equalsQueryString(Map<String, Object> queryParams) {
-    return queryParams.containsKey("id") && queryParams.get("id").equals(this.id);
-  }
-
-  public enum Severity {
-    @JsonProperty("Critical")
-    Critical(5),
-    @JsonProperty("High")
-    High(4),
-    @JsonProperty("Medium")
-    Medium(3),
-    @JsonProperty("Low")
-    Low(2),
-    // Depending on the Scanner DefectDojo uses either Info or Informational
-    // E.g. Nmap uses Info, Zap uses Informational
-    @JsonProperty("Info")
-    @JsonAlias("Informational")
-    Informational(1),
-    ;
-
-    long severity;
-
-    Severity(long severity) {
-      this.severity = severity;
+    @JsonProperty("numerical_severity")
+    public String getNumericalSeverity() {
+        switch (this.severity) {
+            case Critical:
+                return "S0";
+            case High:
+                return "S1";
+            case Medium:
+                return "S2";
+            case Low:
+                return "S3";
+            case Informational:
+                return "S4";
+            default:
+                throw new DefectDojoPersistenceException("Unknown severity: '" + this.severity + "'");
+        }
     }
 
-    public long getNumericRepresentation() {
-      return severity;
+    @Override
+    public boolean equalsQueryString(Map<String, Object> queryParams) {
+        return queryParams.containsKey("id") && queryParams.get("id").equals(this.id);
     }
-  }
+
+    public enum Severity {
+        @JsonProperty("Critical")
+        Critical(5),
+        @JsonProperty("High")
+        High(4),
+        @JsonProperty("Medium")
+        Medium(3),
+        @JsonProperty("Low")
+        Low(2),
+        // Depending on the Scanner DefectDojo uses either Info or Informational
+        // E.g. Nmap uses Info, Zap uses Informational
+        @JsonProperty("Info")
+        @JsonAlias("Informational")
+        Informational(1),
+        ;
+
+        long severity;
+
+        Severity(long severity) {
+            this.severity = severity;
+        }
+
+        public long getNumericRepresentation() {
+            return severity;
+        }
+    }
 }
