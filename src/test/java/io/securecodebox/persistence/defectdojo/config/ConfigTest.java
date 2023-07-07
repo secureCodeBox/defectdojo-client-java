@@ -1,5 +1,6 @@
 package io.securecodebox.persistence.defectdojo.config;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,8 +24,8 @@ class ConfigTest {
 
     @Test
     void constructor_urlMustNotBeNull() {
-        final var thrown = assertThrows(NullPointerException.class, () ->{
-            new Config(null, "apiKey", "username", 1,null);
+        final var thrown = assertThrows(NullPointerException.class, () -> {
+            new Config(null, "apiKey", "username", 1, null);
         });
 
         assertThat(thrown.getMessage(), startsWith("url "));
@@ -32,8 +33,8 @@ class ConfigTest {
 
     @Test
     void constructor_apiKeyMustNotBeNull() {
-        final var thrown = assertThrows(NullPointerException.class, () ->{
-            new Config("url", null, "username", 1,null);
+        final var thrown = assertThrows(NullPointerException.class, () -> {
+            new Config("url", null, "username", 1, null);
         });
 
         assertThat(thrown.getMessage(), startsWith("apiKey "));
@@ -41,8 +42,8 @@ class ConfigTest {
 
     @Test
     void constructor_usernameMustNotBeNull() {
-        final var thrown = assertThrows(NullPointerException.class, () ->{
-            new Config("url", "apiKey", null, 1,null);
+        final var thrown = assertThrows(NullPointerException.class, () -> {
+            new Config("url", "apiKey", null, 1, null);
         });
 
         assertThat(thrown.getMessage(), startsWith("username "));
@@ -51,8 +52,8 @@ class ConfigTest {
     @ParameterizedTest
     @ValueSource(ints = {0, -1, -2, -23, -42, Integer.MIN_VALUE})
     void constructor_maxPageCountForGetsMustNotBeLessThanOne(final int number) {
-        final var thrown = assertThrows(IllegalArgumentException.class, () ->{
-            new Config("url", "apiKey", "username", number,null);
+        final var thrown = assertThrows(IllegalArgumentException.class, () -> {
+            new Config("url", "apiKey", "username", number, null);
         });
 
         assertThat(thrown.getMessage(), startsWith("maxPageCountForGets "));
@@ -75,5 +76,30 @@ class ConfigTest {
             () -> assertThat(sut.getUserId(), is(42L)),
             () -> assertThat(sut.getMaxPageCountForGets(), is(23))
         );
+    }
+
+    @Test
+    @Disabled("Not implemented yet!")
+    void fromEnv_throwsExceptionIfNoUrlSet() {
+    }
+
+    @Test
+    @Disabled("Not implemented yet!")
+    void fromEnv_throwsExceptionIfNoUserNameSet() {
+    }
+
+    @Test
+    @Disabled("Not implemented yet!")
+    void fromEnv_throwsExceptionIfNoApiKeySet() {
+    }
+
+    @Test
+    @Disabled("Not implemented yet!")
+    void fromEnv_throwsExceptionIfNoUserIdSet() {
+    }
+
+    @Test
+    @Disabled("Not implemented yet!")
+    void fromEnv_usesDefaultIfNoMaxPageCountForGetSet() {
     }
 }
