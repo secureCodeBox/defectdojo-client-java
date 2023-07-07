@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     implementation group: 'org.springframework', name: 'spring-web', version: '5.3.9'
-    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
     implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
