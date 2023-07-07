@@ -5,6 +5,7 @@
 plugins {
     id 'java'
     id "io.freefair.lombok" version "8.1.0"
+    id 'idea'
     id 'maven-publish'
     id 'jacoco'
     // https://github.com/ben-manes/gradle-versions-plugin
