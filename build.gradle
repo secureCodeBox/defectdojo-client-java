@@ -24,6 +24,7 @@ dependencies {
     testImplementation 'org.springframework:spring-test:5.3.23'
     testImplementation 'org.hamcrest:java-hamcrest:2.0.0.0'
     testImplementation 'org.mockito:mockito-core:3.+'
+    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.1'
 
     implementation group: 'org.springframework', name: 'spring-web', version: '5.3.9'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
