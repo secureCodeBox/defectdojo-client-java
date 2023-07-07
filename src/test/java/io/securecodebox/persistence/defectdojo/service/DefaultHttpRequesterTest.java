@@ -24,10 +24,9 @@ final class DefaultHttpRequesterTest {
     @BeforeEach
     void backupSystemProperties() {
         backup.clear();
-        backup.put(ImportScanService.ProxyConfigNames.HTTP_PROXY_HOST, System.getProperty(ImportScanService.ProxyConfigNames.HTTP_PROXY_HOST.getLiterat()));
-        backup.put(ImportScanService.ProxyConfigNames.HTTP_PROXY_PORT, System.getProperty(ImportScanService.ProxyConfigNames.HTTP_PROXY_PORT.getLiterat()));
-        backup.put(ImportScanService.ProxyConfigNames.HTTP_PROXY_USER, System.getProperty(ImportScanService.ProxyConfigNames.HTTP_PROXY_USER.getLiterat()));
-        backup.put(ImportScanService.ProxyConfigNames.HTTP_PROXY_PASSWORD, System.getProperty(ImportScanService.ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat()));
+        for (final var name : ImportScanService.ProxyConfigNames.values()) {
+            backup.put(name, System.getProperty(name.getLiterat()));
+        }
     }
 
     @AfterEach
