@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 @Data
@@ -40,19 +40,19 @@ public class RiskAcceptance extends BaseModel {
   String acceptedBy;
 
   @JsonProperty("expiration_date")
-  LocalDateTime expirationDate;
+  OffsetDateTime expirationDate;
 
   @JsonProperty("expiration_date_warned")
-  LocalDateTime expirationDateWarned;
+  OffsetDateTime expirationDateWarned;
 
   @JsonProperty("expiration_date_handled")
-  LocalDateTime expirationDateHandled;
+  OffsetDateTime expirationDateHandled;
 
   @JsonProperty("created")
-  LocalDateTime createdAt;
+  OffsetDateTime createdAt;
 
   @JsonProperty("updated")
-  LocalDateTime updatedAt;
+  OffsetDateTime updatedAt;
 
   @JsonProperty
   Long owner;

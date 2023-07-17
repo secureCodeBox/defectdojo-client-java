@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -101,10 +101,10 @@ public class Finding extends BaseModel {
     List<Long> endpoints = new LinkedList<>();
 
     @JsonProperty("created")
-    LocalDateTime createdAt;
+    OffsetDateTime createdAt;
 
     @JsonProperty("mitigated")
-    LocalDateTime mitigatedAt;
+    OffsetDateTime mitigatedAt;
 
     @JsonProperty("accepted_risks")
     List<RiskAcceptance> acceptedRisks;
