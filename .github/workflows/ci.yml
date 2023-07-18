@@ -7,7 +7,10 @@
 
 name: Publish to Maven Central
 
-on: push
+on:
+  push:
+    branches:
+      - 'main'
 
 jobs:
   build:
