@@ -8,6 +8,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'jacoco'
+    id 'signing'
     // https://github.com/ben-manes/gradle-versions-plugin
     // Run: ./gradlew dependencyUpdates -Drevision=release
     id "com.github.ben-manes.versions" version "0.47.0"
@@ -19,6 +20,11 @@ sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 dependencies {
@@ -101,4 +107,22 @@ test {
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
+}
+
+// https://docs.gradle.org/current/userguide/signing_plugin.html
+signing {
+    String signingKey = System.getenv("SIGNING_KEY")
+    String signingPassword = System.getenv("SIGNING_PASSWORD")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.jar
+}
+
+// https://github.com/johnrengelman/shadow/issues/718
+tasks.withType(Zip).configureEach { task ->
+    task.doLast {
+        ant.checksum algorithm: 'md5', file: it.archivePath // required by sonatype
+        ant.checksum algorithm: 'sha1', file: it.archivePath // required by sonatype
+        ant.checksum algorithm: 'sha-256', file: it.archivePath, fileext: '.sha256'
+        ant.checksum algorithm: 'sha-512', file: it.archivePath, fileext: '.sha512'
+    }
 }
