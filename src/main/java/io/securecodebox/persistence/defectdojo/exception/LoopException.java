@@ -4,7 +4,7 @@
 
 package io.securecodebox.persistence.defectdojo.exception;
 
-public class LoopException extends RuntimeException {
+public final class LoopException extends RuntimeException {
   public LoopException(String message) {
     super(message);
   }

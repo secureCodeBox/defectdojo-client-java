@@ -4,7 +4,7 @@
 
 package io.securecodebox.persistence.defectdojo.exception;
 
-public class PersistenceException extends RuntimeException {
+public final class PersistenceException extends RuntimeException {
     public PersistenceException(String message) {
         super(message);
     }
