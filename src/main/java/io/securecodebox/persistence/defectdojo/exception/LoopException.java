@@ -1,5 +1,4 @@
-// Copyright 2015-2021 iteratec GmbH
-// SPDX-FileCopyrightText: 2023 iteratec GmbH
+// SPDX-FileCopyrightText: the secureCodeBox authors
 //
 // SPDX-License-Identifier: Apache-2.0
 
