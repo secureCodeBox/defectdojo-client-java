@@ -4,6 +4,7 @@
 
 package io.securecodebox.persistence.defectdojo.config;
 
+import io.securecodebox.persistence.defectdojo.exception.ConfigException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,27 +84,71 @@ class ConfigTest {
     }
 
     @Test
-    @Disabled("Not implemented yet!")
     void fromEnv_throwsExceptionIfNoUrlSet() {
+        environmentVariables.set("DEFECTDOJO_USERNAME", "username")
+            .set("DEFECTDOJO_APIKEY", "apikey")
+            .set("DEFECTDOJO_USER_ID", "42");
+
+        final var thrown = assertThrows(ConfigException.class, Config::fromEnv);
+
+        assertThat(thrown.getMessage(), is("Missing environment variable 'DEFECTDOJO_URL'!"));
     }
 
     @Test
-    @Disabled("Not implemented yet!")
     void fromEnv_throwsExceptionIfNoUserNameSet() {
+        environmentVariables.set("DEFECTDOJO_URL", "url")
+            .set("DEFECTDOJO_APIKEY", "apikey")
+            .set("DEFECTDOJO_USER_ID", "42");
+
+        final var thrown = assertThrows(ConfigException.class, Config::fromEnv);
+
+        assertThat(thrown.getMessage(), is("Missing environment variable 'DEFECTDOJO_USERNAME'!"));
     }
 
     @Test
-    @Disabled("Not implemented yet!")
     void fromEnv_throwsExceptionIfNoApiKeySet() {
+        environmentVariables.set("DEFECTDOJO_URL", "url")
+            .set("DEFECTDOJO_USERNAME", "username")
+            .set("DEFECTDOJO_USER_ID", "42");
+
+        final var thrown = assertThrows(ConfigException.class, Config::fromEnv);
+
+        assertThat(thrown.getMessage(), is("Missing environment variable 'DEFECTDOJO_APIKEY'!"));
     }
 
     @Test
-    @Disabled("Not implemented yet!")
-    void fromEnv_throwsExceptionIfNoUserIdSet() {
+    void fromEnv_throwsExceptionIfUserIdIsNotParsableToLong() {
+        environmentVariables.set("DEFECTDOJO_URL", "url")
+            .set("DEFECTDOJO_USERNAME", "username")
+            .set("DEFECTDOJO_APIKEY", "apikey")
+            .set("DEFECTDOJO_USER_ID", "foo");
+
+        final var thrown = assertThrows(ConfigException.class, Config::fromEnv);
+
+        assertThat(thrown.getMessage(), is("Given user id for environment variable 'DEFECTDOJO_USER_ID' is not a valid id! Given was 'foo'."));
     }
 
     @Test
-    @Disabled("Not implemented yet!")
     void fromEnv_usesDefaultIfNoMaxPageCountForGetSet() {
+        environmentVariables.set("DEFECTDOJO_URL", "url")
+            .set("DEFECTDOJO_USERNAME", "username")
+            .set("DEFECTDOJO_APIKEY", "apikey")
+            .set("DEFECTDOJO_USER_ID", "42");
+
+        final var sut = Config.fromEnv();
+        assertThat(sut.getMaxPageCountForGets(), is(Config.DEFAULT_MAX_PAGE_COUNT_FOR_GETS));
+    }
+
+    @Test
+    void fromEnv_throwsExceptionIfMaxPageCountForGetIsNotParseableToInteger() {
+        environmentVariables.set("DEFECTDOJO_URL", "url")
+            .set("DEFECTDOJO_USERNAME", "username")
+            .set("DEFECTDOJO_APIKEY", "apikey")
+            .set("DEFECTDOJO_USER_ID", "42")
+            .set("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS", "foo");
+
+        final var thrown = assertThrows(ConfigException.class, Config::fromEnv);
+
+        assertThat(thrown.getMessage(), is("Given value for environment variable 'DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS' is not a valid number! Given was 'foo'."));
     }
 }
