@@ -40,7 +40,7 @@ import java.util.Map;
 /*
  * https://defectdojo.security.iteratec.dev/api/v2/oa3/swagger-ui/#operations-tag-import-scan
  */
-class DefaultImportScanService implements ImportScanService {
+public class DefaultImportScanService implements ImportScanService {
     private static final List<HttpMessageConverter<?>> HTTP_MESSAGE_CONVERTERS = List.of(
         new FormHttpMessageConverter(),
         new ResourceHttpMessageConverter(),
@@ -56,7 +56,7 @@ class DefaultImportScanService implements ImportScanService {
      *
      * @param config not {@code null}
      */
-    DefaultImportScanService(final @NonNull Config config) {
+    public DefaultImportScanService(final @NonNull Config config) {
         super();
         this.defectDojoUrl = config.getUrl();
         this.defectDojoApiKey = config.getApiKey();
