@@ -4,6 +4,7 @@
 
 package io.securecodebox.persistence.defectdojo.config;
 
+import io.securecodebox.persistence.defectdojo.exception.ConfigException;
 import lombok.*;
 
 import java.util.Optional;
@@ -18,7 +19,7 @@ public final class Config {
     /**
      * Default for {@link #maxPageCountForGets}
      */
-    private static final int DEFAULT_MAX_PAGE_COUNT_FOR_GETS = 100;
+    static final int DEFAULT_MAX_PAGE_COUNT_FOR_GETS = 100;
     /**
      * URL of the host which serves the DefectDojo API.
      * <p>
@@ -116,21 +117,51 @@ public final class Config {
      * @return never {@code null}
      */
     public static Config fromEnv() {
-        final var url = System.getenv(EnvVars.DEFECTDOJO_URL.literal);
-        final var username = System.getenv(EnvVars.DEFECTDOJO_USERNAME.literal);
-        final var apiKey = System.getenv(EnvVars.DEFECTDOJO_APIKEY.literal);
-        final var userId = Optional.ofNullable(System.getenv(EnvVars.DEFECTDOJO_USER_ID.literal))
-            .map(Long::parseLong).orElse(null);
+        final var url = findRequiredEnvVar(EnvVars.DEFECTDOJO_URL);
+        final var username = findRequiredEnvVar(EnvVars.DEFECTDOJO_USERNAME);
+        final var apiKey = findRequiredEnvVar(EnvVars.DEFECTDOJO_APIKEY);
+        final Long userId;
+
+        try {
+            userId = Optional.ofNullable(findEnvVar(EnvVars.DEFECTDOJO_USER_ID))
+                .map(Long::parseLong).orElse(null);
+        } catch (final NumberFormatException e) {
+            throw new ConfigException(
+                String.format("Given user id for environment variable '%s' is not a valid id! Given was '%s'.", EnvVars.DEFECTDOJO_USER_ID.literal, findEnvVar(EnvVars.DEFECTDOJO_USER_ID)),
+                e);
+        }
 
         final int maxPageCountForGets;
 
-        if (System.getenv(EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS.literal) != null) {
-            maxPageCountForGets = Integer.parseInt(System.getenv(EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS.literal));
+        if (hasEnvVar(EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS)) {
+            try {
+                maxPageCountForGets = Integer.parseInt(findEnvVar(EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS));
+            } catch (final NumberFormatException e) {
+                throw new ConfigException(String.format("Given value for environment variable '%s' is not a valid number! Given was '%s'.", EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS.literal, findEnvVar(EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS)),
+                    e);
+            }
         } else {
             maxPageCountForGets = DEFAULT_MAX_PAGE_COUNT_FOR_GETS;
         }
 
         return new Config(url, apiKey, username, maxPageCountForGets, userId);
+    }
+
+    private static boolean hasEnvVar(final @NonNull EnvVars name) {
+        return findEnvVar(name) != null;
+    }
+
+    private static String findEnvVar(final @NonNull EnvVars name) {
+        return System.getenv(name.literal);
+    }
+
+    private static String findRequiredEnvVar(final @NonNull EnvVars name) {
+        final var envVar = System.getenv(name.literal);
+
+        if (envVar == null) {
+            throw new ConfigException(String.format("Missing environment variable '%s'!", name.literal));
+        }
+        return envVar;
     }
 
     /**
