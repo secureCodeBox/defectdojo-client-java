@@ -45,56 +45,55 @@ dependencies {
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.2'
 }
 
-publishing {
-    publications {
-        register("jar", MavenPublication) {
-            from(components["java"])
-            pom {
-                name = 'DefectDojo Client Java'
-                description = 'Java Client to interact with the DefectDojo API.'
-                url = 'https://github.com/secureCodeBox/defectdojo-client-java'
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'jannik.hollenbach'
-                        name = 'Jannik Hollenbach'
-                        email = 'jannik.hollenbach@iteratec.com'
-                    }
-                    developer {
-                        id = 'robert.seedorff'
-                        name = 'Robert Seedorff'
-                        email = 'robert.seedorff@iteratec.com'
-                    }
-                    developer {
-                        id = 'johannes.zahn'
-                        name = 'Johannes Zahn'
-                        email = 'johannes.zahn@iteratec.com'
-                    }
-                }
-                scm {
-                    connection = 'scm:git@github.com:secureCodeBox/defectdojo-client-java.git'
-                    developerConnection = 'scm:git@github.com:secureCodeBox/defectdojo-client-java.git'
-                    url = 'https://github.com/secureCodeBox/defectdojo-client-java'
-                }
+repositories {
+    repositories {
+        maven {
+            // change URLs to point to your repos, e.g. http://my.org/repo
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials{
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
             }
         }
     }
-    repositories {
-        repositories {
-            maven {
-                // change URLs to point to your repos, e.g. http://my.org/repo
-                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-                credentials{
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
+}
+
+publishing {
+    publications.register("jar", MavenPublication) {
+        from components.java
+        pom {
+            name = 'DefectDojo Client Java'
+            description = 'Java Client to interact with the DefectDojo API.'
+            url = 'https://github.com/secureCodeBox/defectdojo-client-java'
+            licenses {
+                license {
+                    name = 'The Apache License, Version 2.0'
+                    url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                 }
+            }
+            developers {
+                developer {
+                    id = 'jannik.hollenbach'
+                    name = 'Jannik Hollenbach'
+                    email = 'jannik.hollenbach@iteratec.com'
+                }
+                developer {
+                    id = 'robert.seedorff'
+                    name = 'Robert Seedorff'
+                    email = 'robert.seedorff@iteratec.com'
+                }
+                developer {
+                    id = 'johannes.zahn'
+                    name = 'Johannes Zahn'
+                    email = 'johannes.zahn@iteratec.com'
+                }
+            }
+            scm {
+                connection = 'scm:git@github.com:secureCodeBox/defectdojo-client-java.git'
+                developerConnection = 'scm:git@github.com:secureCodeBox/defectdojo-client-java.git'
+                url = 'https://github.com/secureCodeBox/defectdojo-client-java'
             }
         }
     }
