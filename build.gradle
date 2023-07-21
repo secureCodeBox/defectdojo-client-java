@@ -45,21 +45,6 @@ dependencies {
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.2'
 }
 
-repositories {
-    repositories {
-        maven {
-            // change URLs to point to your repos, e.g. http://my.org/repo
-            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            credentials{
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
-            }
-        }
-    }
-}
-
 publishing {
     publications.register("jar", MavenPublication) {
         from components.java
@@ -94,6 +79,17 @@ publishing {
                 connection = 'scm:git@github.com:secureCodeBox/defectdojo-client-java.git'
                 developerConnection = 'scm:git@github.com:secureCodeBox/defectdojo-client-java.git'
                 url = 'https://github.com/secureCodeBox/defectdojo-client-java'
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
             }
         }
     }
