@@ -112,10 +112,12 @@ jacocoTestReport {
 
 // https://docs.gradle.org/current/userguide/signing_plugin.html
 signing {
-    String signingKey = System.getenv("SIGNING_KEY")
-    String signingPassword = System.getenv("SIGNING_PASSWORD")
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign publishing.publications.jar
+    if (!version.endsWith('SNAPSHOT')) {  // only sign non-snapshot versions
+        String signingKey = System.getenv("SIGNING_KEY")
+        String signingPassword = System.getenv("SIGNING_PASSWORD")
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign publishing.publications.jar
+    }
 }
 
 // https://github.com/johnrengelman/shadow/issues/718
