@@ -73,10 +73,16 @@ publishing {
                     id = 'johannes.zahn'
                     name = 'Johannes Zahn'
                     email = 'johannes.zahn@iteratec.com'
+                }
                 developer {
                     id = 'sven.strittmatter'
                     name = 'Sven Strittmatter'
                     email = 'sven.strittmatter@iteratec.com'
+                }
+                developer {
+                    id = 'heiko.kiesel'
+                    name = 'Heiko Kiesel'
+                    email = 'heiko.kiesel@iteratec.com'
                 }
             }
             scm {
