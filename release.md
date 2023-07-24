@@ -2,7 +2,33 @@
 
 Here we describe all the ceremonial stuff necessary to publish a Java library to Maven Central.
 
-## GPG Guide for Maven Release Signing
+
+## Credentials
+
+Publishing to Maven Central requires authentication in the form of a username-password or an User Token (as username and password).
+We use User Tokens [2] for authentication, which are stored in our password manager.
+
+### Local (on device)
+
+The `MAVEN_USERNAME` and `MAVEN_PASSWORD` environment variable needs to be set on the device.
+
+### GitHub Actions
+
+In the GitHub Secrets [1], we need to add two secrets called `MAVEN_USERNAME` and `MAVEN_PASSWORD` (Github enforces a leading `SECRET_TOKEN`).
+They can be accessed in a yaml file with `${{ secrets.MAVEN_USERNAME }}` and `${{ secrets.MAVEN_PASSWORD }}`.
+We pass both these secrets in the `env` block.
+
+For example:
+
+```yaml
+- name: Publish to Maven Central
+  run: ./gradlew publish
+  env:
+    MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+    MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+```
+
+## GPG Guide for Maven Signing
 
 This guide is based on [Working with PGP Signatures](https://central.sonatype.org/publish/requirements/gpg/) and [OpenPGP Best Practices](https://riseup.net/ru/security/message-security/openpgp/gpg-best-practices).
 
@@ -24,7 +50,7 @@ gpg --full-generate-key
 
 ### Import the private key
 
-Download private key from 1Password and import it locally
+Download private key from password manager and import it locally
 
 ```shell
 gpg --import private.key
@@ -38,7 +64,7 @@ gpg --import private.key
 gpg --armor --export-secret-keys 40AA7D29EB6DE0667D7E723ADE4725604A739BAF
 ```
 
-#### For 1Password
+#### For Password Manager
 
 ```shell
 gpg -o private.key --export-secret-key 40AA7D29EB6DE0667D7E723ADE4725604A739BAF
@@ -46,14 +72,17 @@ gpg -o private.key --export-secret-key 40AA7D29EB6DE0667D7E723ADE4725604A739BAF
 
 ### Expiration
 
-It is recommended to use an expiration date less than two years. We use an interval of **two years**. This means that we need to extend the expiration date every two years! 
+It is recommended to use an expiration date less than two years.
+We use an interval of **two years**.
+This means that we need to extend the expiration date every two years!
+To remember, we added an appointment to the team calendar.
 
 #### How to extend the expiration date?
 
-1. Download the private key file `private.key` from 1Password
+1. Download the private key file `private.key` from password manager
 2. Import it locally:  `gpg --import private.key`
 3. Select the key : `gpg --edit-key 40AA7D29EB6DE0667D7E723ADE4725604A739BAF`
-4. Now select the subkey and set the expire date (use `2y` for two years):
+4. Now select the Subkey and set the expire date (use `2y` for two years):
 ```shell
 gpg> key 1
 gpg> expire
@@ -66,5 +95,7 @@ gpg>  save
 
 ## TODOs
 
-- How to remember the expirationd date over time & with changing developers?
 - Do we need to import the public key in sonatype?
+
+[1]: https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/GitHub-Actions-Secrets-Example-Token-Tutorial
+[2]: https://help.sonatype.com/iqserver/managing/user-management/user-tokens
