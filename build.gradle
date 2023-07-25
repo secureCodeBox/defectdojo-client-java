@@ -116,6 +116,11 @@ jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
 }
 
+// Enforce running tests before publishing
+tasks.withType(PublishToMavenRepository).configureEach {task ->
+    task.dependsOn test
+}
+
 // https://docs.gradle.org/current/userguide/signing_plugin.html
 signing {
     if (!version.endsWith('SNAPSHOT')) {  // only sign non-snapshot versions
