@@ -64,6 +64,22 @@ gpg --import private.key
 gpg --armor --export-secret-keys 40AA7D29EB6DE0667D7E723ADE4725604A739BAF
 ```
 
+In the GitHub Secrets [1], add the output of this command to the `SIGNING_KEY` secret.
+Additionally, you must add the corresponding password in as `SIGNING_PASSWORD`.
+Both can be accessed in a yaml file with `${{ secrets.SIGNING_KEY }}` and `${{ secrets.SIGNING_PASSWORD }}`.
+We pass both these secrets in the `env` block-
+
+For example:
+
+```yaml
+- name: Publish to Maven Central
+  run: ./gradlew publish
+  env:
+    SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+    SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+    ...
+```
+
 #### For Password Manager
 
 ```shell
