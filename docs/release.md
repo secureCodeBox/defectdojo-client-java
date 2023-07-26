@@ -1,6 +1,49 @@
 # Release Documentation
 
-Here we describe all the ceremonial stuff necessary to publish a Java library to Maven Central.
+Here we describe all the ceremonial stuff necessary to publish a Java library to [Maven Central](https://central.sonatype.com/).
+
+## How to Perform a Release
+
+The release process consists of two main tasks:
+
+1. Build the release on GitHub
+2. Release the published artifacts on Maven Central.
+
+### Build the Release on GitHub
+
+1. Go to the [release page](https://github.com/secureCodeBox/defectdojo-client-java/releases) and click "Draft a new release".
+2. Create a tag for the release (e.g. "1.0.0", for testing you can add a pre-release identifier like "1.0.0-alpha").
+   1. Click "Choose tag".
+   2. Type in tag name (e.g. "1.0.0").
+   3. Click "Create new tag..."
+3. Click "Generate release notes"
+4. Select either 
+    - "Set as a pre-release" if you have a pre-release identifier in the version (e.g. "1.0.0-alpha").
+    - or else "Set as the latest release"
+5. Click "Publish release"
+
+### Release the published artifacts on Maven Central.
+
+Hint: You need to hit the "Refresh" button from time to ime, to see changes.
+
+1. Login to the [Nexus Repository Manager](https://oss.sonatype.org/).
+2. On the left site navigate to "Staging Repositories"
+3. You will see an entry for each unpublished release (usually there is only one):<br>
+![](./release_staging_1.png)
+4. Select the release (in the "Content" tab you can verify the files contained in the release):<br>   
+![](./release_staging_2.png)
+5. Close the repository (this triggers the validation of [requirements][ossrh-requirements]):<br>
+![](./release_staging_3.png)
+6. You can see if all validation rules passed in the "Activity" tab:<br>
+![](./release_staging_4.png)
+7. Then either click "Release" or "Drop":
+   - Release: This will publish and sync the artifact to Maven Central. (This can't be undone, there is no way to delete a published artifact!). After syncing the staging repo is dropped automatically.
+   - Drop: Does not publish the artifact. Use this if something is broken and ypu want to publish a new release with the same version.
+8. After some time (see below) you can find it on Maven Central: <https://central.sonatype.com/artifact/io.securecodebox/defectdojo-client/>
+
+After the first release a [bot created the Maven Central sync][ossrh-jira-issue]:
+
+> Central sync is activated for io.securecodebox. After you successfully release, your component will be available to the public on Central https://repo1.maven.org/maven2/, typically within 30 minutes, though updates to https://search.maven.org can take up to four hours.
 
 ## Credentials
 
@@ -103,3 +146,5 @@ gpg>  save
 [user-token]:           https://help.sonatype.com/iqserver/managing/user-management/user-tokens
 [pgp-signatures]:       https://central.sonatype.org/publish/requirements/gpg/
 [pgp-best-practices]:   https://riseup.net/ru/security/message-security/openpgp/gpg-best-practices
+[ossrh-jira-issue]:     https://issues.sonatype.org/browse/OSSRH-40107
+[ossrh-requirements]:   https://central.sonatype.org/publish/requirements/#supply-javadoc-and-sources
