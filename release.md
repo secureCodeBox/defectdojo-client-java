@@ -61,7 +61,7 @@ gpg --import private.key
 #### For GitHub Actions
 
 ```shell
-gpg --armor --export-secret-keys 40AA7D29EB6DE0667D7E723ADE4725604A739BAF
+gpg --armor --export-secret-keys $KEYID
 ```
 
 In the GitHub Secrets [1], add the output of this command to the `SIGNING_KEY` secret.
@@ -83,7 +83,7 @@ For example:
 #### For Password Manager
 
 ```shell
-gpg -o private.key --export-secret-key 40AA7D29EB6DE0667D7E723ADE4725604A739BAF
+gpg -o private.key --export-secret-key $KEYID
 ```
 
 ### Expiration
@@ -97,8 +97,8 @@ To remember, we added an appointment to the team calendar.
 
 1. Download the private key file `private.key` from password manager
 2. Import it locally:  `gpg --import private.key`
-3. Select the key : `gpg --edit-key 40AA7D29EB6DE0667D7E723ADE4725604A739BAF`
-4. Now select the Subkey and set the expire date (use `2y` for two years):
+3. Select the key : `gpg --edit-key $KEYID`
+4. Now select the subkey and set the expire date (use `2y` for two years):
 ```shell
 gpg> key 1
 gpg> expire
