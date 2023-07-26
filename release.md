@@ -88,10 +88,7 @@ gpg -o private.key --export-secret-key $KEYID
 
 ### Expiration
 
-It is recommended to use an expiration date less than two years.
-We use an interval of **two years**.
-This means that we need to extend the expiration date every two years!
-To remember, we added an appointment to the team calendar.
+It is recommended to use an expiration date less than two years. We use an interval of **two years**. This means that we need to extend the expiration date every two years! We use an appointment of the secureCodeBox team calendar which to remind us.
 
 #### How to extend the expiration date?
 
@@ -108,10 +105,6 @@ gpg> expire
 gpg>  save
 ```
 6. Update the private key in out password manager and GitHub Secrets
-
-## TODOs
-
-- Do we need to import the public key in sonatype?
 
 [1]: https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/GitHub-Actions-Secrets-Example-Token-Tutorial
 [2]: https://help.sonatype.com/iqserver/managing/user-management/user-tokens
