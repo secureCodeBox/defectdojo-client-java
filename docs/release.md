@@ -131,9 +131,8 @@ It is recommended to use an expiration date less than two years. We use an inter
 1. Download the private key file `private.key` from password manager
 2. Import it locally:  `gpg --import private.key`
 3. Select the key : `gpg --edit-key $KEYID`
-4. Now select the subkey and set the expiry date (use `2y` for two years):
+4. Now set the expiry date (use `2y` for two years):
 ```shell
-gpg> key 1
 gpg> expire
 ```
 5. Save it:
