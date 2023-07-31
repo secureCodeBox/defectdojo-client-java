@@ -25,7 +25,9 @@ jobs:
         uses: gradle/wrapper-validation-action@v1.1.0
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2.7.0
-      - name: Bump version
+      - name: Mark next version
+        run: ./gradlew markNextVersion -Prelease.version=${{ github.event.release.tag_name }}
+      - name: Release
         run: ./gradlew release
       - name: Publish to Maven Central
         run: ./gradlew publish
