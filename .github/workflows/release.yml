@@ -47,9 +47,7 @@ jobs:
       # currentVersion command gets this value, which we store in the "version" variable for following jobs.
       - name: Get current version
         id: version
-        run: echo "::set-output name=version::$(./gradlew -q -Prelease.quiet currentVersion)"
-
-      # TODO: Create Github release
+        run: echo "version=$(./gradlew -q -Prelease.quiet currentVersion)" >> "$VERSION"
 
   maven:
     runs-on: ubuntu-22.04
@@ -60,7 +58,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: refs/tags/${{ needs.github.outputs.version }}
+          ref: refs/tags/${{ needs.github.outputs.VERSION }}
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
