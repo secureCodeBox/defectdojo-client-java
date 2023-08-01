@@ -8,6 +8,26 @@ SPDX-License-Identifier: Apache-2.0
 
 Java Client to interact with the DefectDojo API.
 
+## Dependency Information
+
+You can find the latest version on [Maven Central](https://central.sonatype.com/artifact/io.securecodebox/defectdojo-client/).
+
+### Maven
+
+```xml
+<dependency>
+    <groupId>io.securecodebox</groupId>
+    <artifactId>defectdojo-client</artifactId>
+    <version>1.0.0.-beta2</version>
+</dependency>
+```
+
+### Gradle
+
+```groovy
+implementation group: 'io.securecodebox', name: 'defectdojo-client', version: '1.0.0.-beta2'
+```
+
 ## Supported DefectDojo Versions
 
 The client is supposed to be compatible with DefectDojo 1.10 and later, older version of DefectDojo might still work, but are not officially supported.
