@@ -51,6 +51,8 @@ jobs:
 
       # The previous "Release new version" step increases the version. We need this version for the publishing job. The
       # currentVersion command gets this value, which we store in the "version" variable for following jobs.
+      # The $GITHUB_OUTPUT is a github-magic "file", it is accessible with needs.github.outputs.[variable-name], in our
+      # case: needs.github.outputs.version
       - name: Store version
         id: version
         run: echo "VERSION=$(./gradlew -q -Prelease.quiet currentVersion)" >> "$GITHUB_OUTPUT"
