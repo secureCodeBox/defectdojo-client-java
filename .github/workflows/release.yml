@@ -23,7 +23,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3 # TODO: with... bot?
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Due to https://axion-release-plugin.readthedocs.io/en/latest/configuration/ci_servers/#github-actions
 
       - name: "Fetch git tags" # Required for axion-release-plugin
         run: git fetch --tags
@@ -65,8 +65,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
-          ref: refs/tags/${{ needs.github.outputs.VERSION }}
+          fetch-depth: 0 # Due to https://axion-release-plugin.readthedocs.io/en/latest/configuration/ci_servers/#github-actions
+          ref: refs/tags/${{ needs.github.outputs.VERSION }} # Checkout the new created tag
 
       - name: "Fetch git tags" # Required for axion-release-plugin
         run: git fetch --tags
