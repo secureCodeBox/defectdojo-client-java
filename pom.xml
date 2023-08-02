@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.securecodebox</groupId>
+    <artifactId>defectdojo-client</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>DefectDojo Client Java</name>
+    <description>
+        This library helps with interacting with the REST API of DefectDojo.
+    </description>
+    <url>https://github.com/secureCodeBox/defectdojo-client-java</url>
+
+    <organization>
+        <name>secureCodeBox</name>
+        <url>https://www.securecodebox.io/</url>
+    </organization>
+
+    <prerequisites>
+        <maven>${maven.version}</maven>
+    </prerequisites>
+
+    <scm>
+        <connection>scm:git:git://github.com/secureCodeBox/defectdojo-client-java.git</connection>
+        <developerConnection>scm:git:git@github.com/secureCodeBox/defectdojo-client-java.git</developerConnection>
+        <url>https://github.com/secureCodeBox/defectdojo-client-java.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>jannik.hollenbach</id>
+            <name>Jannik Hollenbach</name>
+            <email>jannik.hollenbach@iteratec.com</email>
+        </developer>
+        <developer>
+            <id>robert.seedorff</id>
+            <name>Robert Seedorff</name>
+            <email>robert.seedorff@iteratec.com</email>
+        </developer>
+        <developer>
+            <id>johannes.zahn</id>
+            <name>Johannes Zahn</name>
+            <email>johannes.zahn@iteratec.com</email>
+        </developer>
+        <developer>
+            <id>sven.strittmatter</id>
+            <name>Sven Strittmatter</name>
+            <email>sven.strittmatter@iteratec.com</email>
+        </developer>
+        <developer>
+            <id>heiko.kiesel</id>
+            <name>Heiko Kiesel</name>
+            <email>heiko.kiesel@iteratec.com</email>
+        </developer>
+    </developers>
+
+    <properties>
+        <maven.version>3.5.0</maven.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.version.source>17</project.build.version.source>
+        <project.build.version.target>17</project.build.version.target>
+        <sonar.jacoco.reportPaths>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPaths>
+
+        <!-- Dependnecy versions: -->
+        <com.fasterxml.jackson.version>2.15.2</com.fasterxml.jackson.version>
+        <org.springframework.version>5.3.28</org.springframework.version>
+        <org.mockito.version>5.4.0</org.mockito.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.10.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Production dependencies: -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.14</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${com.fasterxml.jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${com.fasterxml.jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${com.fasterxml.jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${com.fasterxml.jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Test dependencies: -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>java-hamcrest</artifactId>
+            <version>2.0.0.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${org.mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${org.mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.org.webcompere</groupId>
+            <artifactId>system-stubs-jupiter</artifactId>
+            <version>2.0.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier</artifactId>
+            <version>3.15</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                    <configuration>
+                        <source>${project.build.version.source}</source>
+                        <target>${project.build.version.target}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <showWarnings>true</showWarnings>
+                        <showDeprecation>true</showDeprecation>
+                        <compilerArgument>-Xlint:unchecked</compilerArgument>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.5.0</version>
+                    <configuration>
+                        <bottom>
+                            Copyright &amp;copy; {currentYear} the secureCodeBox Authors. All Rights Reserved.
+                        </bottom>
+
+                        <doctitle>${project.name} - ${project.version}</doctitle>
+                        <windowtitle>${project.name} - ${project.version}</windowtitle>
+                        <show>private</show>
+                        <charset>${project.build.sourceEncoding}</charset>
+                        <docencoding>${project.build.sourceEncoding}</docencoding>
+                        <source>${project.build.version.source}</source>
+
+                        <links>
+                            <link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
+                        </links>
+                        <failOnError>false</failOnError>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.3.0</version>
+                    <executions>
+                        <execution>
+                            <id>enforce</id>
+
+                            <configuration>
+                                <rules>
+                                    <dependencyConvergence />
+                                    <requirePluginVersions />
+                                    <requireJavaVersion>
+                                        <version>${project.build.version.target}</version>
+                                    </requireJavaVersion>
+                                    <requireMavenVersion>
+                                        <version>${maven.version}</version>
+                                    </requireMavenVersion>
+                                </rules>
+                            </configuration>
+
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.1</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.3.0</version>
+                    <executions>
+                        <execution>
+                            <!-- https://maven.apache.org/plugin-developers/cookbook/attach-source-javadoc-artifacts.html -->
+                            <id>attach-sources</id>
+
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.10</version>
+                    <executions>
+                        <execution>
+                            <id>pre-unit-test</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                            <phase>process-test-classes</phase>
+                            <configuration>
+                                <!-- Sets the path to the file which contains the execution data. -->
+                                <destFile>${sonar.jacoco.reportPath}</destFile>
+                            </configuration>
+                        </execution>
+
+                        <execution>
+                            <id>report</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.1.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
