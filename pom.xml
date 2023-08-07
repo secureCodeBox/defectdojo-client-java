@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.securecodebox</groupId>
@@ -13,6 +12,13 @@
     </description>
     <url>https://github.com/secureCodeBox/defectdojo-client-java</url>
 
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
     <organization>
         <name>secureCodeBox</name>
         <url>https://www.securecodebox.io/</url>
@@ -23,8 +29,8 @@
     </prerequisites>
 
     <scm>
-        <connection>scm:git:git://github.com/secureCodeBox/defectdojo-client-java.git</connection>
-        <developerConnection>scm:git:git@github.com/secureCodeBox/defectdojo-client-java.git</developerConnection>
+        <connection>scm:git:https://github.com/secureCodeBox/defectdojo-client-java.git</connection>
+        <developerConnection>scm:git:https://github.com/secureCodeBox/defectdojo-client-java.git</developerConnection>
         <url>https://github.com/secureCodeBox/defectdojo-client-java.git</url>
         <tag>HEAD</tag>
     </scm>
@@ -65,7 +71,7 @@
         <project.build.version.target>17</project.build.version.target>
         <sonar.jacoco.reportPaths>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPaths>
 
-        <!-- Dependnecy versions: -->
+        <!-- Dependency versions: -->
         <com.fasterxml.jackson.version>2.15.2</com.fasterxml.jackson.version>
         <org.springframework.version>5.3.28</org.springframework.version>
         <org.mockito.version>5.4.0</org.mockito.version>
@@ -166,6 +172,48 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- This is required to make sure the plugin does not stop asking for -->
+                                    <!-- user input on the passphrase -->
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -183,25 +231,17 @@
                 </plugin>
 
                 <plugin>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.5.0</version>
-                    <configuration>
-                        <bottom>
-                            Copyright &amp;copy; {currentYear} the secureCodeBox Authors. All Rights Reserved.
-                        </bottom>
-
-                        <doctitle>${project.name} - ${project.version}</doctitle>
-                        <windowtitle>${project.name} - ${project.version}</windowtitle>
-                        <show>private</show>
-                        <charset>${project.build.sourceEncoding}</charset>
-                        <docencoding>${project.build.sourceEncoding}</docencoding>
-                        <source>${project.build.version.source}</source>
-
-                        <links>
-                            <link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
-                        </links>
-                        <failOnError>false</failOnError>
-                    </configuration>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.3.0</version>
+                    <executions>
+                        <execution>
+                            <!-- https://central.sonatype.org/publish/publish-maven/#javadoc-and-sources-attachments -->
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
 
                 <plugin>
@@ -234,26 +274,11 @@
                 <plugin>
                     <artifactId>maven-release-plugin</artifactId>
                     <version>3.0.1</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.3.0</version>
-                    <executions>
-                        <execution>
-                            <!-- https://maven.apache.org/plugin-developers/cookbook/attach-source-javadoc-artifacts.html -->
-                            <id>attach-sources</id>
-
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
+                    <configuration>
+                        <checkModificationExcludes>
+                            <checkModificationExclude>mvnw</checkModificationExclude> <!-- skip wrapper -->
+                        </checkModificationExcludes>
+                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -287,21 +312,72 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.1.2</version>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.13</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.5.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <bottom>
+                            Copyright &amp;copy; {currentYear} the secureCodeBox Authors. All Rights Reserved.
+                        </bottom>
+
+                        <doctitle>${project.name} - ${project.version}</doctitle>
+                        <windowtitle>${project.name} - ${project.version}</windowtitle>
+                        <show>private</show>
+                        <charset>${project.build.sourceEncoding}</charset>
+                        <docencoding>${project.build.sourceEncoding}</docencoding>
+                        <source>${project.build.version.source}</source>
+
+                        <links>
+                            <link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
+                        </links>
+                        <failOnError>false</failOnError>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
         <plugins>
             <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+
+            <plugin>
                 <artifactId>maven-source-plugin</artifactId>
             </plugin>
 
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
+                <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
 
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
