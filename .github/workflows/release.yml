@@ -52,10 +52,6 @@ jobs:
           gpg-private-key: ${{ secrets.SIGNING_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
-      - name: Apply wrapper permissions
-        run: |
-          chmod +x mvnw
-
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v5
         with:
@@ -70,7 +66,7 @@ jobs:
       # CASE: Version set
       - name: "[Custom version] Release & Publish"
         if: github.event.inputs.customversion != '' # input "customversion" not empty
-        run: ./mvnw -B release:prepare release:perform -DreleaseVersion=${{ github.event.inputs.customversion }} -DdevelopmentVersion=${{ github.event.inputs.nextversion }} -P release
+        run: mvn -B release:prepare release:perform -DreleaseVersion=${{ github.event.inputs.customversion }} -DdevelopmentVersion=${{ github.event.inputs.nextversion }} -P release
         env:
           GITHUB_TOKEN: ${{ secrets.SCB_BOT_USER_TOKEN }}
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
@@ -80,7 +76,7 @@ jobs:
         # CASE: NO Version set
       - name: "[Auto version] Release & Publish"
         if: github.event.inputs.customversion == '' # input "customversion" empty
-        run: ./mvnw -B release:prepare release:perform -DdevelopmentVersion=${{ github.event.inputs.nextversion }} -P release
+        run: mvn -B release:prepare release:perform -DdevelopmentVersion=${{ github.event.inputs.nextversion }} -P release
         env:
           GITHUB_TOKEN: ${{ secrets.SCB_BOT_USER_TOKEN }}
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
