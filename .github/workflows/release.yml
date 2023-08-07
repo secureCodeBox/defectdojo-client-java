@@ -2,9 +2,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# This workflow will publish a Java project with Gradle
-# For maven build see: https://github.com/marketplace/actions/gradle-build-action
-# For maven publishing see: https://docs.github.com/en/actions/publishing-packages/publishing-java-packages-with-maven
+# This workflow will publish a Java project with Maven
+# For Maven Release plugin see: https://maven.apache.org/maven-release/maven-release-plugin/
+# For GitHub release see: https://github.com/marketplace/actions/gh-release
 
 name: Publish Release
 
@@ -91,8 +91,7 @@ jobs:
       - name: "Get previous tag"
         id: previous_tag
         uses: WyriHaximus/github-action-get-previous-tag@v1
-      
-      # See https://github.com/marketplace/actions/gh-release
+
       - name: "Create GitHub Release"
         uses: softprops/action-gh-release@v1
         with:

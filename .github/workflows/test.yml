@@ -2,8 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# This workflow will test a Java project with Gradle
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+# This workflow will test a Java project with Maven
+# See https://github.com/jonashackt/github-actions-release-maven
 
 name: Java Tests
 on: [pull_request, push, workflow_dispatch]
@@ -23,4 +23,4 @@ jobs:
           distribution: temurin
 
       - name: Build with Maven
-        run: mvn --B --update-snapshots verify
+        run: mvn -U -B verify # -U: force updates for dependencies, -B: no user input
