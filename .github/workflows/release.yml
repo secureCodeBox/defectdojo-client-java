@@ -13,11 +13,11 @@ on:
   workflow_dispatch:
     inputs:
       customversion:
-        description: 'Custom version (optional)'
+        description: 'Custom version, e.g., 1.0.0-beta (optional)'
         required: false
         default: ''
       nextversion:
-        description: 'Next version (optional)'
+        description: 'Next development version, e.g., 1.0.0-SNAPSHOT (optional)'
         required: false
         default: ''
 
