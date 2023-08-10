@@ -89,10 +89,12 @@ jobs:
           MVN_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
           echo "MVN_VERSION=$MVN_VERSION" >> $GITHUB_OUTPUT
 
-        # Replaced all version occurrences in README.md (e.g., 1.0.0, 1.0.0-SNAPSHOT, and 1.0.0-beta3)
+        # Replaced all version occurrences in README.md in the form: <version>1.0.0</version> or version: '1.0.0'
+        # A version can be 1.0.0, 1.0.0-SNAPSHOT, or 1.0.0-beta4
       - name: "Change README"
         run: |
-          sed -i -e 's/[0-9].[0-9].[0-9]\(-[A-z0-9]*\)*/${{ steps.extract-version.outputs.MVN_VERSION }}/g' README.md
+          sed -i -e "s@\(<version>\)\([0-9].[0-9].[0-9]\(-[A-z0-9]*\)*\)\(</version>\)@\1${{ steps.extract-version.outputs.MVN_VERSION }}\4@g" README.md
+          sed -i -e "s@\(version: '\)\([0-9].[0-9].[0-9]\(-[A-z0-9]*\)*\)\('\)@\1${{ steps.extract-version.outputs.MVN_VERSION }}\4@g" README.md
           git add README.md
           git commit -S -m "Update version in README"
           git push
