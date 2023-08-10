@@ -82,7 +82,23 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
-      
+
+      - name: "Extract maven version" # required for following change readme step
+        id: extract-version
+        run: |
+          MVN_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+          echo "MVN_VERSION=$MVN_VERSION" >> $GITHUB_ENV
+
+        # Replaced all version occurrences in README.md (e.g., 1.0.0, 1.0.0-SNAPSHOT, and 1.0.0-beta3)
+      - name: "Change README"
+        run: |
+          sed -i -e 's/[0-9].[0-9].[0-9]\(-[A-z0-9]*\)*/${{ steps.extract-version.outputs.MVN_VERSION }}/g' README.md
+          git add README.md
+          git commit -S -m "Update version in README"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.SCB_BOT_USER_TOKEN }}
+
       # Required for creation of GitHub release
       - name: "Get previous tag"
         id: previous_tag
