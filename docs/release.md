@@ -4,10 +4,9 @@ Here we describe all the ceremonial stuff necessary to publish a Java library to
 
 ## How to Perform a Release
 
-The release process consists of two main tasks:
+The release process consists of one main tasks:
 
 1. Build the release on GitHub
-2. Release the published artifacts on Maven Central.
 
 ### Build the Release on GitHub
 
@@ -21,25 +20,6 @@ The release process consists of two main tasks:
     - "Set as a pre-release" if you have a pre-release identifier in the version (e.g. "1.0.0-alpha").
     - or else "Set as the latest release"
 5. Click "Publish release"
-
-### Release the published artifacts on Maven Central.
-
-Hint: You need to hit the "Refresh" button from time to ime, to see changes.
-
-1. Login to the [Nexus Repository Manager](https://oss.sonatype.org/).
-2. On the left site navigate to "Staging Repositories"
-3. You will see an entry for each unpublished release (usually there is only one):<br>
-![](./release_staging_1.png)
-4. Select the release (in the "Content" tab you can verify the files contained in the release):<br>   
-![](./release_staging_2.png)
-5. Close the repository (this triggers the validation of [requirements][ossrh-requirements]):<br>
-![](./release_staging_3.png)
-6. You can see if all validation rules passed in the "Activity" tab:<br>
-![](./release_staging_4.png)
-7. Then either click "Release" or "Drop":
-   - Release: This will publish and sync the artifact to Maven Central. (This can't be undone, there is no way to delete a published artifact!). After syncing the staging repo is dropped automatically.
-   - Drop: Does not publish the artifact. Use this if something is broken and ypu want to publish a new release with the same version.
-8. After some time (see below) you can find it on Maven Central: <https://central.sonatype.com/artifact/io.securecodebox/defectdojo-client/>
 
 After the first release a [bot created the Maven Central sync][ossrh-jira-issue]:
 
