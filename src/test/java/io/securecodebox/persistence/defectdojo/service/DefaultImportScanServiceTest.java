@@ -20,9 +20,7 @@ class DefaultImportScanServiceTest {
     private final Config config = new Config(
         "http://localhost",
         "apiKey",
-        "username",
-        23,
-        42L
+        23
     );
     private final DefaultImportScanService sut = new DefaultImportScanService(config);
 
