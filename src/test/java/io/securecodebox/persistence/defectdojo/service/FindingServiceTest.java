@@ -131,7 +131,7 @@ class FindingServiceTest{
 
     @BeforeEach
     void setup() {
-        config = new Config("https://defectdojo.example.com", "abc", "test-user", 42);
+        config = new Config("https://defectdojo.example.com", "abc", 42);
         underTest = new FindingService(config);
         mockServer = MockRestServiceServer.createServer(underTest.getRestTemplate());
     }

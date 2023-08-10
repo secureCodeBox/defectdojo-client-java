@@ -36,9 +36,7 @@ class ImportScanServiceTest {
         final var config = new Config(
             "url",
             "apiKey",
-            "username",
-            23,
-            42L
+            23
         );
 
         final var sut = (DefaultImportScanService) ImportScanService.createDefault(config);

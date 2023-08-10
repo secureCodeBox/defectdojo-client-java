@@ -48,7 +48,7 @@ public class UserProfileServiceTest {
     
     @BeforeEach
     void setup() {
-        config = new Config("https://defectdojo.example.com", "abc", "test-user", 42);
+        config = new Config("https://defectdojo.example.com", "abc", 42);
         underTest = new UserProfileService(config);
         mockServer = MockRestServiceServer.createServer(underTest.getRestTemplate());
     }
