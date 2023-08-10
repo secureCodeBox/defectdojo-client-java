@@ -4,22 +4,42 @@ Here we describe all the ceremonial stuff necessary to publish a Java library to
 
 ## How to Perform a Release
 
-The release process consists of one main tasks:
+The whole release process is automated by a [GitHub action workflow](https://github.com/secureCodeBox/defectdojo-client-java/actions) which utilizes the [Maven release plugin](https://maven.apache.org/maven-release/maven-release-plugin/). Since we need the possibility to set custom versions (e.g. 2.0.0-beta) we can not use a simple one-push-button solution. Instead, we utilize en event triggered workflow to achieve this. The release process is as following:  
 
-1. Build the release on GitHub
+First go to the "Actions" tab and select the "Publish Release" workflow:
 
-### Build the Release on GitHub
+![](release_01_select-workflow.png)
 
-1. Go to the [release page](https://github.com/secureCodeBox/defectdojo-client-java/releases) and click "Draft a new release".
-2. Create a tag for the release (e.g. "1.0.0", for testing you can add a pre-release identifier like "1.0.0-alpha").
-   1. Click "Choose tag".
-   2. Type in tag name (e.g. "1.0.0").
-   3. Click "Create new tag..."
-3. Click "Generate release notes"
-4. Select either 
-    - "Set as a pre-release" if you have a pre-release identifier in the version (e.g. "1.0.0-alpha").
-    - or else "Set as the latest release"
-5. Click "Publish release"
+Then click the "Run workflow" button:
+
+![](release_02_run-workflow.png)
+
+For an ordinary release simply click the green "Run workflow" button and leave the optional text input fields blank:
+
+![](release_03_trigger-workflow.png)
+
+Now a "Publish Release" workflow run should appear in the list of runs:
+
+![](release_04_running-workflow.png)
+
+## Custom Release Version
+
+Typically, a release by Maven simply means:
+
+- Remove the "-SNAPSHOT" qualifier from the version in the `pom.xml`. E.g. "1.0.0-SNAPSHOT" will become "1.0.0".
+- Build everything, make a commit with this version and tag this version.
+- Upload the resulting artifacts to [Sonatype Nexus](https://oss.sonatype.org/) and stage them.
+- Increment to next development version in `pom.xml`. In this example "1.0.1-SNAPSHOT".
+- Build everything and make a commit.
+
+In the case you want to publish a custom release, e.g. a "1.0.2-beta", it is necessary to pass it to Maven. For this purpose we introduced the two optional text inputs:
+
+1. _Custom version_: Here you add the version with a custom qualifier. E.g. for the development version "1.0.2-SNAPSHOT" and a beta release, it is "1.0.2-beta".
+2. _Next development version_: Since Maven simply increments the last number of the semantic version and appends "-SNAPSHOT", automatic increment is not sufficient here because it will end in something like "1.0.2-beta-SNAPSHOT". So you must specify the next development version by hand. In this example still "1.0.2-SNAPSHOT". 
+
+![](release_05_custom-version.png)
+
+### Additional Information About the Release Process
 
 After the first release a [bot created the Maven Central sync][ossrh-jira-issue]:
 

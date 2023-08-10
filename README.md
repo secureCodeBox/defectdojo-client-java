@@ -36,6 +36,10 @@ To run a local build clone this repo and just invoke the following command in th
 mvn clean install
 ```
 
+## Release
+
+The release process is [documented](docs/release.md) in a separate file.
+
 ## Supported DefectDojo Versions
 
 The client is supposed to be compatible with DefectDojo 1.10 and later, older version of DefectDojo might still work, but are not officially supported.
