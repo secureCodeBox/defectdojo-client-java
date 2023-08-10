@@ -87,7 +87,7 @@ jobs:
         id: extract-version
         run: |
           MVN_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
-          echo "MVN_VERSION=$MVN_VERSION" >> $GITHUB_ENV
+          echo "MVN_VERSION=$MVN_VERSION" >> $GITHUB_OUTPUT
 
         # Replaced all version occurrences in README.md (e.g., 1.0.0, 1.0.0-SNAPSHOT, and 1.0.0-beta3)
       - name: "Change README"
