@@ -50,7 +50,7 @@ class ImportScanServiceTest {
     void importScan_withoutOptionsShouldPassEmptyMap() {
         assertThat(sut.getOptions(), is(nullValue()));
 
-        sut.importScan(new ScanFile("content"),42L, 43L, "1.1.2023", ScanType.AUDIT_JS_SCAN, 23L);
+        sut.importScan(new ScanFile("content"), 42L, 43L, "1.1.2023", ScanType.AUDIT_JS_SCAN, 23L);
 
         assertThat(sut.getOptions(), equalTo(Collections.EMPTY_MAP));
     }
@@ -59,7 +59,7 @@ class ImportScanServiceTest {
     void importScan_withoutOptionsShouldPassModifiableMap() {
         assertThat(sut.getOptions(), is(nullValue()));
 
-        sut.importScan(new ScanFile("content"),42L, 43L, "1.1.2023", ScanType.AUDIT_JS_SCAN, 23L);
+        sut.importScan(new ScanFile("content"), 42L, 43L, "1.1.2023", ScanType.AUDIT_JS_SCAN, 23L);
         sut.getOptions().put("foo", "bar");
 
         assertThat(sut.getOptions(), hasEntry("foo", "bar"));
@@ -69,7 +69,7 @@ class ImportScanServiceTest {
     void reimportScan_withoutOptionsShouldPassEmptyMap() {
         assertThat(sut.getOptions(), is(nullValue()));
 
-        sut.reimportScan(new ScanFile("content"),42L, 43L, "1.1.2023", ScanType.AUDIT_JS_SCAN, 23L);
+        sut.reimportScan(new ScanFile("content"), 42L, 43L, "1.1.2023", ScanType.AUDIT_JS_SCAN, 23L);
 
         assertThat(sut.getOptions(), equalTo(Collections.EMPTY_MAP));
     }
@@ -78,7 +78,7 @@ class ImportScanServiceTest {
     void reimportScan_withoutOptionsShouldPassModifiableMap() {
         assertThat(sut.getOptions(), is(nullValue()));
 
-        sut.reimportScan(new ScanFile("content"),42L, 43L, "1.1.2023", ScanType.AUDIT_JS_SCAN, 23L);
+        sut.reimportScan(new ScanFile("content"), 42L, 43L, "1.1.2023", ScanType.AUDIT_JS_SCAN, 23L);
         sut.getOptions().put("foo", "bar");
 
         assertThat(sut.getOptions(), hasEntry("foo", "bar"));
