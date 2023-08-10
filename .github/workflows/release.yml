@@ -39,6 +39,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.SCB_BOT_USER_TOKEN }} # here because https://www.paulmowat.co.uk/blog/resolve-github-action-gh006-protected-branch-update-failed
           fetch-depth: 0 # required by previous_tag
 
       - name: Set up JDK 17
