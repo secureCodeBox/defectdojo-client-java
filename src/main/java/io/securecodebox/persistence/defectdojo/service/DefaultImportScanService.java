@@ -114,7 +114,6 @@ class DefaultImportScanService implements ImportScanService {
                 }
             };
 
-            // FIXME: #36 Why do we add the whole byte array resource here as object? Is not simply the file name sufficient here? Then we could use <String, String>
             // We send the whole file content, so DefectDojo can parse the finding by itself.
             body.add("file", contentsAsResource);
 
