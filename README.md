@@ -10,23 +10,7 @@ Java Client to interact with the DefectDojo API.
 
 ## Dependency Information
 
-You can find the latest version on [Maven Central](https://central.sonatype.com/artifact/io.securecodebox/defectdojo-client/).
-
-### Maven
-
-```xml
-<dependency>
-    <groupId>io.securecodebox</groupId>
-    <artifactId>defectdojo-client</artifactId>
-    <version>1.0.1</version>
-</dependency>
-```
-
-### Gradle
-
-```groovy
-implementation group: 'io.securecodebox', name: 'defectdojo-client', version: '1.0.1'
-```
+You can find the latest version and dependency infos on [Maven Central](https://central.sonatype.com/artifact/io.securecodebox/defectdojo-client/).
 
 ## Development
 
