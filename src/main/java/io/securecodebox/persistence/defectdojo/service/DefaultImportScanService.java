@@ -85,7 +85,7 @@ class DefaultImportScanService implements ImportScanService {
         // 2. the raw scan result as file
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        // FIXME: Why do we use a multi value map here? Do we need multiple values for any given key?
+        // FIXME: #36 Why do we use a multi value map here? Do we need multiple values for any given key?
         final var body = new LinkedMultiValueMap<String, Object>();
 
         body.add("lead", Long.toString(lead));
@@ -100,7 +100,7 @@ class DefaultImportScanService implements ImportScanService {
             body.remove(optionName);
         }
 
-        // FIXME: Workaround due to type incompatibility of MultiValueMap<String, String> and MultiValueMap<String, Object>.
+        // FIXME: #36 Workaround due to type incompatibility of MultiValueMap<String, String> and MultiValueMap<String, Object>.
         for (final var option : options.entrySet()) {
             body.add(option.getKey(), option.getValue());
         }
@@ -114,7 +114,7 @@ class DefaultImportScanService implements ImportScanService {
                 }
             };
 
-            // FIXME: Why do we add the whole byte array resource here as object? Is not simply the file name sufficient here? Then we could use <String, String>
+            // FIXME: #36 Why do we add the whole byte array resource here as object? Is not simply the file name sufficient here? Then we could use <String, String>
             // We send the whole file content, so DefectDojo can parse the finding by itself.
             body.add("file", contentsAsResource);
 
