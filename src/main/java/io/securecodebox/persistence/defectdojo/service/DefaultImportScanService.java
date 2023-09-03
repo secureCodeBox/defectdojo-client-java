@@ -44,6 +44,7 @@ class DefaultImportScanService implements ImportScanService {
         new FormHttpMessageConverter(),
         new ResourceHttpMessageConverter(),
         new MappingJackson2HttpMessageConverter());
+    @Deprecated
     private final SystemPropertyFinder properties = new SystemPropertyFinder();
     @Getter
     private final String defectDojoUrl;
@@ -230,6 +231,7 @@ class DefaultImportScanService implements ImportScanService {
         return factory;
     }
 
+    @Deprecated
     private static class SystemPropertyFinder {
         private boolean hasProperty(@NonNull final ProxyConfigNames name) {
             return System.getProperty(name.getLiterat()) != null;
@@ -244,6 +246,7 @@ class DefaultImportScanService implements ImportScanService {
         }
     }
 
+    @Deprecated
     final static class MissingProxyAuthenticationConfig extends RuntimeException {
         MissingProxyAuthenticationConfig(ProxyConfigNames name) {
             super(String.format("Expected System property '%s' not set!", name.getLiterat()));

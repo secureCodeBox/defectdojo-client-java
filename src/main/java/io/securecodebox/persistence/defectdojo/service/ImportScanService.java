@@ -62,6 +62,7 @@ public interface ImportScanService {
      * or none of them!
      * </p>
      */
+    @Deprecated
     enum ProxyConfigNames {
         HTTP_PROXY_HOST("http.proxyHost"),
         HTTP_PROXY_PORT("http.proxyPort"),

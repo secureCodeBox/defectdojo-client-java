@@ -107,6 +107,7 @@ class DefaultImportScanServiceTest {
     }
 
     @Test
+    @Deprecated
     void createRequestFactoryWithProxyAuthConfig_throesExceptionIfUserNotSet() {
         System.clearProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat());
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
@@ -121,6 +122,7 @@ class DefaultImportScanServiceTest {
     }
 
     @Test
+    @Deprecated
     void createRequestFactoryWithProxyAuthConfig_throesExceptionIfPasswordNotSet() {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
         System.clearProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat());
@@ -135,6 +137,7 @@ class DefaultImportScanServiceTest {
     }
 
     @Test
+    @Deprecated
     void createRequestFactoryWithProxyAuthConfig_throesExceptionIfHostNotSet() {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
@@ -149,6 +152,7 @@ class DefaultImportScanServiceTest {
     }
 
     @Test
+    @Deprecated
     void createRequestFactoryWithProxyAuthConfig_throesExceptionIfPortNotSet() {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
@@ -163,6 +167,7 @@ class DefaultImportScanServiceTest {
     }
 
     @Test
+    @Deprecated
     void createRequestFactoryWithProxyAuthConfig_throesExceptionIfPortIsNotInteger() {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
