@@ -68,12 +68,4 @@ public final class ProxyConfigFactory {
         }
     }
 
-    /**
-     * This exception indicates a missing proxy config value
-     */
-    final static class MissingProxyConfigValue extends RuntimeException {
-        MissingProxyConfigValue(ProxyConfigNames name) {
-            super(String.format("Expected System property '%s' not set!", name.getLiterat()));
-        }
-    }
 }
