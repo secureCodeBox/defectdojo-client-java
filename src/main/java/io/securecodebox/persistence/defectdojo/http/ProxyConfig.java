@@ -13,11 +13,11 @@ import lombok.Value;
  */
 @Value
 @Builder
-class ProxyConfig {
+public class ProxyConfig {
     /**
      * Null pattern object.
      */
-    static final ProxyConfig NULL = ProxyConfig.builder().build();
+    public static final ProxyConfig NULL = ProxyConfig.builder().build();
     private static final String DEFAULT_STRING = "";
     private static final int DEFAULT_INT = 0;
 
@@ -62,7 +62,7 @@ class ProxyConfig {
      *
      * @return {@code true} if all values are set else {@code false}
      */
-    boolean isComplete() {
+    public boolean isComplete() {
         if (getUser().equals(DEFAULT_STRING)) {
             return false;
         }

@@ -14,10 +14,10 @@ import lombok.NonNull;
  * port numbers.
  * </p>
  */
-final class ProxyConfigFactory {
+public final class ProxyConfigFactory {
     private final SystemPropertyFinder properties = new SystemPropertyFinder();
 
-    ProxyConfig create() {
+    public ProxyConfig create() {
         final var builder = ProxyConfig.builder();
 
         if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_USER)) {
@@ -66,7 +66,7 @@ final class ProxyConfigFactory {
      * </p>
      */
     @Getter
-    enum ProxyConfigNames {
+    public enum ProxyConfigNames {
         /**
          * System property name for the proxy username
          */
