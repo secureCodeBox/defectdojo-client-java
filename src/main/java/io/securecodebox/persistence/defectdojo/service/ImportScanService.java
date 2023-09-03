@@ -7,9 +7,11 @@ package io.securecodebox.persistence.defectdojo.service;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
+import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Data;
-import lombok.Getter;
+import lombok.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,18 @@ public interface ImportScanService {
      * @return never {@code null}
      */
     static ImportScanService createDefault(final Config config) {
-        return new DefaultImportScanService(config);
+        return createDefault(config, new ProxyConfigFactory().create());
+    }
+
+    /**
+     * Factory method to create new instance of service default implementation
+     *
+     * @param config      must not be {@code null}
+     * @param proxyConfig must not be {@code null}
+     * @return never {@code null}
+     */
+    static ImportScanService createDefault(@NonNull final Config config, @NonNull final ProxyConfig proxyConfig) {
+        return new DefaultImportScanService(config, proxyConfig);
     }
 
     default ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
@@ -50,30 +63,5 @@ public interface ImportScanService {
 
         @JsonProperty("test")
         protected long testId;
-    }
-
-    /**
-     * These properties can be configured by passing them to the running Java process w/ flag {@literal -D}
-     * <p>
-     * Example: {@literal java -Dhttp.proxyHost=... -D... -jar ...}
-     * </p>
-     * <p>
-     * <strong>Important</strong>: All four parameters are mandatory. You must set them all
-     * or none of them!
-     * </p>
-     */
-    @Deprecated
-    enum ProxyConfigNames {
-        HTTP_PROXY_HOST("http.proxyHost"),
-        HTTP_PROXY_PORT("http.proxyPort"),
-        HTTP_PROXY_USER("http.proxyUser"),
-        HTTP_PROXY_PASSWORD("http.proxyPassword");
-
-        @Getter
-        private final String literat;
-
-        ProxyConfigNames(String literat) {
-            this.literat = literat;
-        }
     }
 }

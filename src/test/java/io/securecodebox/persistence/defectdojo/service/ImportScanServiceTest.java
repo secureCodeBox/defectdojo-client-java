@@ -6,6 +6,7 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Getter;
 import org.junit.jupiter.api.Test;
@@ -25,9 +26,16 @@ class ImportScanServiceTest {
     private final ImportScanServiceStub sut = new ImportScanServiceStub();
 
     @Test
-    void createDefault_throwsExceptionIfNullPassedIn() {
+    void createDefault_throwsExceptionIfNullPassedInAsConfig() {
         assertThrows(NullPointerException.class, () -> {
-            ImportScanService.createDefault(null);
+            ImportScanService.createDefault(null, ProxyConfig.NULL);
+        });
+    }
+
+    @Test
+    void createDefault_throwsExceptionIfNullPassedInAsProxyConfig() {
+        assertThrows(NullPointerException.class, () -> {
+            ImportScanService.createDefault(Config.NULL, null);
         });
     }
 
@@ -39,7 +47,7 @@ class ImportScanServiceTest {
             23
         );
 
-        final var sut = (DefaultImportScanService) ImportScanService.createDefault(config);
+        final var sut = (DefaultImportScanService) ImportScanService.createDefault(config, ProxyConfig.NULL);
 
         assertAll(
             () -> assertThat(sut.getDefectDojoUrl(), is(config.getUrl())),

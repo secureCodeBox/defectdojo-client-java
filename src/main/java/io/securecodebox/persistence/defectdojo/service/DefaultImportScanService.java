@@ -7,6 +7,7 @@ package io.securecodebox.persistence.defectdojo.service;
 import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
+import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Getter;
 import lombok.NonNull;
@@ -44,22 +45,23 @@ class DefaultImportScanService implements ImportScanService {
         new FormHttpMessageConverter(),
         new ResourceHttpMessageConverter(),
         new MappingJackson2HttpMessageConverter());
-    @Deprecated
-    private final SystemPropertyFinder properties = new SystemPropertyFinder();
     @Getter
     private final String defectDojoUrl;
     @Getter
     private final String defectDojoApiKey;
+    private final ProxyConfig proxyConfig;
 
     /**
      * Dedicated constructor.
      *
-     * @param config not {@code null}
+     * @param config      not {@code null}
+     * @param proxyConfig not {@code null}
      */
-    DefaultImportScanService(final @NonNull Config config) {
+    DefaultImportScanService(final @NonNull Config config, @NonNull ProxyConfig proxyConfig) {
         super();
         this.defectDojoUrl = config.getUrl();
         this.defectDojoApiKey = config.getApiKey();
+        this.proxyConfig = proxyConfig;
     }
 
     @Override
@@ -163,8 +165,7 @@ class DefaultImportScanService implements ImportScanService {
     }
 
     boolean shouldConfigureProxySettings() {
-        return properties.hasProperty(ProxyConfigNames.HTTP_PROXY_USER)
-            && properties.hasProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD);
+        return proxyConfig.isComplete();
     }
 
     /**
@@ -184,72 +185,22 @@ class DefaultImportScanService implements ImportScanService {
      * @return never {@code null}
      */
     ClientHttpRequestFactory createRequestFactoryWithProxyAuthConfig() {
-        if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_USER)) {
-            throw new MissingProxyAuthenticationConfig(ProxyConfigNames.HTTP_PROXY_USER);
-        }
-
-        if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD)) {
-            throw new MissingProxyAuthenticationConfig(ProxyConfigNames.HTTP_PROXY_PASSWORD);
-        }
-
-        if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_HOST)) {
-            throw new MissingProxyAuthenticationConfig(ProxyConfigNames.HTTP_PROXY_HOST);
-        }
-
-        if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_PORT)) {
-            throw new MissingProxyAuthenticationConfig(ProxyConfigNames.HTTP_PROXY_PORT);
-        }
-
-        final var proxyHost = properties.getProperty(ProxyConfigNames.HTTP_PROXY_HOST);
-        final int proxyPort;
-        try {
-            proxyPort = Integer.parseInt(properties.getProperty(ProxyConfigNames.HTTP_PROXY_PORT));
-        } catch (final NumberFormatException e) {
-            throw new IllegalArgumentException(
-                String.format("Given port for proxy authentication configuration (property '%s') is not a valid number! Given value wa '%s'.",
-                    ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(),
-                    System.getProperty("http.proxyPort")),
-                e);
-        }
-
         final var credentials = new BasicCredentialsProvider();
         credentials.setCredentials(
-            new AuthScope(proxyHost, proxyPort),
+            new AuthScope(proxyConfig.getHost(), proxyConfig.getPort()),
             new UsernamePasswordCredentials(
-                properties.getProperty(ProxyConfigNames.HTTP_PROXY_USER),
-                properties.getProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD))
+                proxyConfig.getUser(),
+                proxyConfig.getPassword())
         );
 
         final var clientBuilder = HttpClientBuilder.create();
         clientBuilder.useSystemProperties();
-        clientBuilder.setProxy(new HttpHost(proxyHost, proxyPort));
+        clientBuilder.setProxy(new HttpHost(proxyConfig.getHost(), proxyConfig.getPort()));
         clientBuilder.setDefaultCredentialsProvider(credentials);
         clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
 
         final var factory = new HttpComponentsClientHttpRequestFactory();
         factory.setHttpClient(clientBuilder.build());
         return factory;
-    }
-
-    @Deprecated
-    private static class SystemPropertyFinder {
-        private boolean hasProperty(@NonNull final ProxyConfigNames name) {
-            return System.getProperty(name.getLiterat()) != null;
-        }
-
-        private boolean notHasProperty(@NonNull final ProxyConfigNames name) {
-            return !hasProperty(name);
-        }
-
-        private String getProperty(@NonNull final ProxyConfigNames name) {
-            return System.getProperty(name.getLiterat());
-        }
-    }
-
-    @Deprecated
-    final static class MissingProxyAuthenticationConfig extends RuntimeException {
-        MissingProxyAuthenticationConfig(ProxyConfigNames name) {
-            super(String.format("Expected System property '%s' not set!", name.getLiterat()));
-        }
     }
 }

@@ -5,16 +5,10 @@
 package io.securecodebox.persistence.defectdojo.service;
 
 import io.securecodebox.persistence.defectdojo.config.Config;
-import io.securecodebox.persistence.defectdojo.service.DefaultImportScanService.MissingProxyAuthenticationConfig;
-import io.securecodebox.persistence.defectdojo.service.ImportScanService.ProxyConfigNames;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -30,38 +24,19 @@ class DefaultImportScanServiceTest {
         "apiKey",
         23
     );
-    private final DefaultImportScanService sut = new DefaultImportScanService(config);
-    /**
-     * Since System.getProperty() is an side effect we need to back up and restore it to isolate test cases.
-     */
-    private final Map<ProxyConfigNames, String> backup = new HashMap<>();
-
-    @BeforeEach
-    void backupSystemProperties() {
-        backup.clear();
-        backup.put(ProxyConfigNames.HTTP_PROXY_HOST, System.getProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat()));
-        backup.put(ProxyConfigNames.HTTP_PROXY_PORT, System.getProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat()));
-        backup.put(ProxyConfigNames.HTTP_PROXY_USER, System.getProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat()));
-        backup.put(ProxyConfigNames.HTTP_PROXY_PASSWORD, System.getProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat()));
-    }
-
-    @AfterEach
-    void restoreSystemProperties() {
-        for (final var entry : backup.entrySet()) {
-            final var name = entry.getKey().getLiterat();
-
-            if (null == entry.getValue()) {
-                System.clearProperty(name);
-            } else {
-                System.setProperty(name, entry.getValue());
-            }
-        }
-    }
+    private final DefaultImportScanService sut = new DefaultImportScanService(config, ProxyConfig.NULL);
 
     @Test
     void constructorShouldThrowExceptionOnNullConfig() {
         assertThrows(NullPointerException.class, () -> {
-            new DefaultImportScanService(null);
+            new DefaultImportScanService(null, ProxyConfig.NULL);
+        });
+    }
+
+    @Test
+    void constructorShouldThrowExceptionOnNullProxyConfig() {
+        assertThrows(NullPointerException.class, () -> {
+            new DefaultImportScanService(Config.NULL, null);
         });
     }
 
@@ -75,112 +50,25 @@ class DefaultImportScanServiceTest {
     }
 
     @Test
-    void shouldConfigureProxySettings_falseIfNeitherUserNorPasswordIsSet() {
-        System.clearProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat());
-        System.clearProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat());
+    void shouldConfigureProxySettings_trueIfProxyConfigIsComplete() {
+        final var proxyConfig = ProxyConfig.builder()
+            .user("user")
+            .password("pw")
+            .host("host")
+            .port(42)
+            .build();
+        final var innerSut = new DefaultImportScanService(config, proxyConfig);
 
-        assertThat(sut.shouldConfigureProxySettings(), is(false));
+        assertThat(innerSut.shouldConfigureProxySettings(), is(true));
     }
 
     @Test
-    void shouldConfigureProxySettings_falseIfUserSetButPasswordNot() {
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
-        System.clearProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat());
+    void shouldConfigureProxySettings_falseIfProxyConfigIsIncomplete() {
+        final var proxyConfig = ProxyConfig.builder()
+            .build();
+        final var innerSut = new DefaultImportScanService(config, proxyConfig);
 
-        assertThat(sut.shouldConfigureProxySettings(), is(false));
-    }
-
-    @Test
-    void shouldConfigureProxySettings_falseIfPasswordSetButUserNot() {
-        System.clearProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat());
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
-
-        assertThat(sut.shouldConfigureProxySettings(), is(false));
-    }
-
-    @Test
-    void shouldConfigureProxySettings_trueIfUserAndPasswordSet() {
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
-
-        assertThat(sut.shouldConfigureProxySettings(), is(true));
-    }
-
-    @Test
-    @Deprecated
-    void createRequestFactoryWithProxyAuthConfig_throesExceptionIfUserNotSet() {
-        System.clearProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat());
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
-
-        final var thrown = assertThrows(
-            MissingProxyAuthenticationConfig.class,
-            sut::createRequestFactoryWithProxyAuthConfig);
-
-        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyUser' not set!"));
-    }
-
-    @Test
-    @Deprecated
-    void createRequestFactoryWithProxyAuthConfig_throesExceptionIfPasswordNotSet() {
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
-        System.clearProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat());
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
-
-        final var thrown = assertThrows(
-            MissingProxyAuthenticationConfig.class,
-            sut::createRequestFactoryWithProxyAuthConfig);
-
-        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyPassword' not set!"));
-    }
-
-    @Test
-    @Deprecated
-    void createRequestFactoryWithProxyAuthConfig_throesExceptionIfHostNotSet() {
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
-        System.clearProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat());
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
-
-        final var thrown = assertThrows(
-            MissingProxyAuthenticationConfig.class,
-            sut::createRequestFactoryWithProxyAuthConfig);
-
-        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyHost' not set!"));
-    }
-
-    @Test
-    @Deprecated
-    void createRequestFactoryWithProxyAuthConfig_throesExceptionIfPortNotSet() {
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
-        System.clearProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat());
-
-        final var thrown = assertThrows(
-            MissingProxyAuthenticationConfig.class,
-            sut::createRequestFactoryWithProxyAuthConfig);
-
-        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyPort' not set!"));
-    }
-
-    @Test
-    @Deprecated
-    void createRequestFactoryWithProxyAuthConfig_throesExceptionIfPortIsNotInteger() {
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "FUBAR");
-
-        final var thrown = assertThrows(
-            IllegalArgumentException.class,
-            sut::createRequestFactoryWithProxyAuthConfig);
-
-        assertThat(
-            thrown.getMessage(),
-            is("Given port for proxy authentication configuration (property 'http.proxyPort') is not a valid number! Given value wa 'FUBAR'."));
+        assertThat(innerSut.shouldConfigureProxySettings(), is(false));
     }
 
     @Test

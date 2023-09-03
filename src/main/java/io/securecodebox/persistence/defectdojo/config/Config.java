@@ -20,6 +20,10 @@ public final class Config {
      * Default for {@link #maxPageCountForGets}
      */
     static final int DEFAULT_MAX_PAGE_COUNT_FOR_GETS = 100;
+    /**
+     * Null pattern object.
+     */
+    public static final Config NULL = new Config("", "", DEFAULT_MAX_PAGE_COUNT_FOR_GETS);
 
     /**
      * URL of the host which serves the DefectDojo API.
