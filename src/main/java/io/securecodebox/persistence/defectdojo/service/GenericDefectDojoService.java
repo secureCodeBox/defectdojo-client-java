@@ -14,21 +14,13 @@ import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.exception.LoopException;
 import io.securecodebox.persistence.defectdojo.http.Foo;
 import io.securecodebox.persistence.defectdojo.model.BaseModel;
-import io.securecodebox.persistence.defectdojo.model.Response;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
-import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.ProxyAuthenticationStrategy;
+import io.securecodebox.persistence.defectdojo.model.Response;
+import lombok.Getter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -39,9 +31,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import lombok.Getter;
 
 // FIXME: Should be package private bc implementation detail.
 abstract public class GenericDefectDojoService<T extends BaseModel> {
@@ -80,31 +70,7 @@ abstract public class GenericDefectDojoService<T extends BaseModel> {
     }
 
     private RestTemplate setupRestTemplate() {
-        RestTemplate restTemplate;
-
-        if (System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null) {
-            // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
-            CredentialsProvider credsProvider = new BasicCredentialsProvider();
-            credsProvider.setCredentials(
-                    new AuthScope(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))),
-                    new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"))
-            );
-            HttpClientBuilder clientBuilder = HttpClientBuilder.create();
-
-            clientBuilder.useSystemProperties();
-            clientBuilder.setProxy(new HttpHost(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))));
-            clientBuilder.setDefaultCredentialsProvider(credsProvider);
-            clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
-
-            CloseableHttpClient client = clientBuilder.build();
-
-            HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-            factory.setHttpClient(client);
-            restTemplate = new RestTemplate(factory);
-        } else {
-            restTemplate = new RestTemplate();
-        }
-
+        RestTemplate restTemplate = new Foo(config).setupRestTemplate();
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setObjectMapper(this.objectMapper);
         restTemplate.setMessageConverters(List.of(
