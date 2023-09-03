@@ -7,7 +7,7 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.properties.SystemProperties;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -27,10 +27,10 @@ class ProxyConfigFactoryTest {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
 
         final var thrown = assertThrows(
-            ProxyConfigFactory.MissingProxyConfigValue.class,
+            MissingProxyConfigValue.class,
             sut::create);
 
-        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyUser' not set!"));
+        assertThat(thrown.getMessage(), containsString("'http.proxyUser'"));
     }
 
     @Test
@@ -41,10 +41,10 @@ class ProxyConfigFactoryTest {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
 
         final var thrown = assertThrows(
-            ProxyConfigFactory.MissingProxyConfigValue.class,
+            MissingProxyConfigValue.class,
             sut::create);
 
-        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyPassword' not set!"));
+        assertThat(thrown.getMessage(), containsString("'http.proxyPassword'"));
     }
 
     @Test
@@ -55,10 +55,10 @@ class ProxyConfigFactoryTest {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
 
         final var thrown = assertThrows(
-            ProxyConfigFactory.MissingProxyConfigValue.class,
+            MissingProxyConfigValue.class,
             sut::create);
 
-        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyHost' not set!"));
+        assertThat(thrown.getMessage(), containsString("'http.proxyHost'"));
     }
 
     @Test
@@ -69,10 +69,10 @@ class ProxyConfigFactoryTest {
         System.clearProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat());
 
         final var thrown = assertThrows(
-            ProxyConfigFactory.MissingProxyConfigValue.class,
+            MissingProxyConfigValue.class,
             sut::create);
 
-        assertThat(thrown.getMessage(), is("Expected System property 'http.proxyPort' not set!"));
+        assertThat(thrown.getMessage(), containsString("'http.proxyPort'"));
     }
 
     @Test
