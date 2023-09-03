@@ -21,10 +21,10 @@ class ProxyConfigFactoryTest {
 
     @Test
     void create_throesExceptionIfUserNotSet() {
-        System.clearProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_USER.getLiterat());
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
+        System.clearProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat());
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
 
         final var thrown = assertThrows(
             ProxyConfigFactory.MissingProxyConfigValue.class,
@@ -35,10 +35,10 @@ class ProxyConfigFactoryTest {
 
     @Test
     void create_throesExceptionIfPasswordNotSet() {
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
-        System.clearProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat());
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
+        System.clearProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat());
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
 
         final var thrown = assertThrows(
             ProxyConfigFactory.MissingProxyConfigValue.class,
@@ -49,10 +49,10 @@ class ProxyConfigFactoryTest {
 
     @Test
     void create_throesExceptionIfHostNotSet() {
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
-        System.clearProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_HOST.getLiterat());
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
+        System.clearProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat());
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
 
         final var thrown = assertThrows(
             ProxyConfigFactory.MissingProxyConfigValue.class,
@@ -63,10 +63,10 @@ class ProxyConfigFactoryTest {
 
     @Test
     void create_throesExceptionIfPortNotSet() {
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
-        System.clearProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_PORT.getLiterat());
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
+        System.clearProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat());
 
         final var thrown = assertThrows(
             ProxyConfigFactory.MissingProxyConfigValue.class,
@@ -77,10 +77,10 @@ class ProxyConfigFactoryTest {
 
     @Test
     void create_throesExceptionIfPortIsNotInteger() {
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
-        System.setProperty(ProxyConfigFactory.ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "FUBAR");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "FUBAR");
 
         final var thrown = assertThrows(
             IllegalArgumentException.class,
