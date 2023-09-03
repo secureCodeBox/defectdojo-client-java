@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.cfg.CoercionAction;
 import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.exception.LoopException;
+import io.securecodebox.persistence.defectdojo.http.Foo;
 import io.securecodebox.persistence.defectdojo.model.BaseModel;
 import io.securecodebox.persistence.defectdojo.model.Response;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
@@ -75,18 +76,7 @@ abstract public class GenericDefectDojoService<T extends BaseModel> {
      * @return The DefectDojo Authentication Header
      */
     private HttpHeaders getDefectDojoAuthorizationHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Token " + this.config.getApiKey());
-
-        String username = System.getProperty("http.proxyUser", "");
-        String password = System.getProperty("http.proxyPassword", "");
-
-        if (!username.isEmpty() || !password.isEmpty()) {
-            System.out.println("Setting Proxy Auth Header...");
-            headers.set(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString((username + ':' + password).getBytes(StandardCharsets.UTF_8)));
-        }
-
-        return headers;
+        return new Foo(config).getDefectDojoAuthorizationHeaders();
     }
 
     private RestTemplate setupRestTemplate() {
