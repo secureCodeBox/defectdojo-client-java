@@ -74,7 +74,9 @@ public class ImportScanService2 {
         return new Foo(config).getDefectDojoAuthorizationHeaders();
     }
 
-    protected RestTemplate getRestTemplate() {
+    protected RestTemplate setupRestTemplate() {
+        RestTemplate restTemplate;
+
         if (System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null) {
             // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
             CredentialsProvider credsProvider = new BasicCredentialsProvider();
@@ -93,17 +95,19 @@ public class ImportScanService2 {
 
             HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
             factory.setHttpClient(client);
-            return new RestTemplate(factory);
+            restTemplate = new RestTemplate(factory);
         } else {
-            return new RestTemplate();
+            restTemplate = new RestTemplate();
         }
+
+        return restTemplate;
     }
 
     /**
      * Before version 1.5.4. testName (in DefectDojo _test_type_) must be defectDojoScanName, afterwards, you can have somethings else
      */
     protected ImportScanResponse createFindings(ScanFile scanFile, String endpoint, long lead, String currentDate, ScanType scanType, long testType, MultiValueMap<String, Object> options) {
-        var restTemplate = this.getRestTemplate();
+        var restTemplate = this.setupRestTemplate();
         HttpHeaders headers = getDefectDojoAuthorizationHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         restTemplate.setMessageConverters(List.of(
