@@ -69,6 +69,17 @@ class FooTest {
     }
 
     @Test
+    void createCredentialsProvider() {
+        final var result = sut.createCredentialsProvider();
+        final var credentials = result.getCredentials(sut.createAuthScope());
+
+        assertAll(
+                () -> assertThat(credentials.getUserPrincipal().getName(), is(proxyConfig.getUser())),
+                () -> assertThat(credentials.getPassword(), is(proxyConfig.getPassword()))
+        );
+    }
+
+    @Test
     void createAuthScope() {
         final var result = sut.createAuthScope();
 
