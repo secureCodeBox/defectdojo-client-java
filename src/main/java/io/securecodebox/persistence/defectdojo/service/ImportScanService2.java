@@ -9,6 +9,7 @@ import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.http.Foo;
+import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Data;
 import org.springframework.core.io.ByteArrayResource;
@@ -49,11 +50,11 @@ public class ImportScanService2 {
      * @return The DefectDojo Authentication Header
      */
     private HttpHeaders getDefectDojoAuthorizationHeaders() {
-        return new Foo(config).getDefectDojoAuthorizationHeaders();
+        return new Foo(config, new ProxyConfigFactory().create()).generateAuthorizationHeaders();
     }
 
     protected RestTemplate setupRestTemplate() {
-        return new Foo(config).setupRestTemplate();
+        return new Foo(config, new ProxyConfigFactory().create()).setupRestTemplate();
     }
 
     /**

@@ -26,25 +26,35 @@ import java.util.Base64;
  */
 public final class Foo {
     private final Config config;
+    private final ProxyConfig proxyConfig;
 
-    public Foo(@NonNull final Config config) {
+    public Foo(@NonNull final Config config, @NonNull final ProxyConfig proxyConfig) {
         super();
         this.config = config;
+        this.proxyConfig = proxyConfig;
     }
 
-    public HttpHeaders getDefectDojoAuthorizationHeaders() {
+    /**
+     * This method generates appropriate authorization headers
+     *
+     * @return never {@code null}
+     */
+    public HttpHeaders generateAuthorizationHeaders() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Token " + this.config.getApiKey());
+        headers.set(HttpHeaders.AUTHORIZATION, "Token " + this.config.getApiKey());
 
-        String username = System.getProperty("http.proxyUser", "");
-        String password = System.getProperty("http.proxyPassword", "");
-
-        if (!username.isEmpty() || !password.isEmpty()) {
+        if (proxyConfig.isComplete()) {
+            // FIXME: System.out logging is a real bad code smell. Standard loging should be used.
             System.out.println("Setting Proxy Auth Header...");
-            headers.set(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString((username + ':' + password).getBytes(StandardCharsets.UTF_8)));
+            headers.set(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + encodeProxyCredentials(proxyConfig));
         }
 
         return headers;
+    }
+
+    static String encodeProxyCredentials(@NonNull final ProxyConfig cfg) {
+        final var credential = String.format("%s:%s", cfg.getUser(), cfg.getPassword());
+        return Base64.getEncoder().encodeToString(credential.getBytes(StandardCharsets.UTF_8));
     }
 
     public RestTemplate setupRestTemplate() {

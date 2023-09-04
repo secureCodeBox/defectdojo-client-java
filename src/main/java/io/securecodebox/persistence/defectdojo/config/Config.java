@@ -53,6 +53,16 @@ public final class Config {
     private final int maxPageCountForGets;
 
     /**
+     * Convenience constructor which sets {@link #DEFAULT_MAX_PAGE_COUNT_FOR_GETS}
+     *
+     * @param url    not {@code null}
+     * @param apiKey not {@code null}
+     */
+    public Config(final @NonNull String url, final @NonNull String apiKey) {
+        this(url, apiKey, DEFAULT_MAX_PAGE_COUNT_FOR_GETS);
+    }
+
+    /**
      * Dedicated constructor
      *
      * @param url                 not {@code null}
