@@ -57,7 +57,7 @@ public final class Foo {
         return Base64.getEncoder().encodeToString(credential.getBytes(StandardCharsets.UTF_8));
     }
 
-    public RestTemplate setupRestTemplate() {
+    public RestTemplate createRestTemplate() {
         RestTemplate restTemplate;
 
         if (System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null) {
