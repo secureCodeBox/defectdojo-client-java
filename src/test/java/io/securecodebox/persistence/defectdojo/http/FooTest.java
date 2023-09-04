@@ -6,6 +6,7 @@ package io.securecodebox.persistence.defectdojo.http;
 
 import io.securecodebox.persistence.defectdojo.config.Config;
 import lombok.NonNull;
+import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.junit.jupiter.api.Disabled;
@@ -22,11 +23,11 @@ import static org.hamcrest.Matchers.*;
 class FooTest {
     private final Config config = new Config("url", "apikey");
     private final ProxyConfig proxyConfig = ProxyConfig.builder()
-        .user("user")
-        .password("pw")
-        .host("host")
-        .port(42)
-        .build();
+            .user("user")
+            .password("pw")
+            .host("host")
+            .port(42)
+            .build();
     private final Foo sut = new Foo(config, proxyConfig);
 
     @Test
@@ -34,12 +35,12 @@ class FooTest {
         final var innerSut = new Foo(config, ProxyConfig.NULL);
 
         assertAll(
-            () -> assertThat(
-                innerSut.generateAuthorizationHeaders().get(HttpHeaders.AUTHORIZATION),
-                contains("Token apikey")),
-            () -> assertThat(
-                innerSut.generateAuthorizationHeaders().get(HttpHeaders.PROXY_AUTHORIZATION),
-                not(contains("Basic dXNlcjpwdw==")))
+                () -> assertThat(
+                        innerSut.generateAuthorizationHeaders().get(HttpHeaders.AUTHORIZATION),
+                        contains("Token apikey")),
+                () -> assertThat(
+                        innerSut.generateAuthorizationHeaders().get(HttpHeaders.PROXY_AUTHORIZATION),
+                        not(contains("Basic dXNlcjpwdw==")))
         );
     }
 
@@ -48,21 +49,21 @@ class FooTest {
         final var innerSut = new Foo(config, proxyConfig);
 
         assertAll(
-            () -> assertThat(
-                innerSut.generateAuthorizationHeaders().get(HttpHeaders.AUTHORIZATION),
-                contains("Token apikey")),
-            () -> assertThat(
-                innerSut.generateAuthorizationHeaders().get(HttpHeaders.PROXY_AUTHORIZATION),
-                contains("Basic dXNlcjpwdw=="))
+                () -> assertThat(
+                        innerSut.generateAuthorizationHeaders().get(HttpHeaders.AUTHORIZATION),
+                        contains("Token apikey")),
+                () -> assertThat(
+                        innerSut.generateAuthorizationHeaders().get(HttpHeaders.PROXY_AUTHORIZATION),
+                        contains("Basic dXNlcjpwdw=="))
         );
     }
 
     @Test
     void encodeProxyCredentials() {
         final var proxyConfig = ProxyConfig.builder()
-            .user("bärtram")
-            .password("gohze8Ae")
-            .build();
+                .user("bärtram")
+                .password("gohze8Ae")
+                .build();
 
         assertThat(Foo.encodeProxyCredentials(proxyConfig), is("YsOkcnRyYW06Z29oemU4QWU="));
     }
@@ -72,8 +73,8 @@ class FooTest {
         final var result = sut.createAuthScope();
 
         assertAll(
-            () -> assertThat(result.getHost(), is(proxyConfig.getHost())),
-            () -> assertThat(result.getPort(), is(proxyConfig.getPort()))
+                () -> assertThat(result.getHost(), is(proxyConfig.getHost())),
+                () -> assertThat(result.getPort(), is(proxyConfig.getPort()))
         );
     }
 
@@ -82,8 +83,10 @@ class FooTest {
         final var result = sut.createCredentials();
 
         assertAll(
-            () -> assertThat(result.getUserPrincipal().getName(), is(proxyConfig.getUser())),
-            () -> assertThat(result.getPassword(), is(proxyConfig.getPassword()))
+                () -> assertThat(result.getUserPrincipal().getName(), is(proxyConfig.getUser())),
+                () -> assertThat(result.getPassword(), is(proxyConfig.getPassword()))
+        );
+    }
 
     @Test
     void createHttpHost() {
