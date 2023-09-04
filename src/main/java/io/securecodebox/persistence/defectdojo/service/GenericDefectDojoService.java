@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.exception.LoopException;
 import io.securecodebox.persistence.defectdojo.http.Foo;
+import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.BaseModel;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
 import io.securecodebox.persistence.defectdojo.model.Response;
@@ -66,11 +67,11 @@ abstract public class GenericDefectDojoService<T extends BaseModel> {
      * @return The DefectDojo Authentication Header
      */
     private HttpHeaders getDefectDojoAuthorizationHeaders() {
-        return new Foo(config).getDefectDojoAuthorizationHeaders();
+        return new Foo(config, new ProxyConfigFactory().create()).generateAuthorizationHeaders();
     }
 
     private RestTemplate setupRestTemplate() {
-        RestTemplate restTemplate = new Foo(config).setupRestTemplate();
+        RestTemplate restTemplate = new Foo(config, new ProxyConfigFactory().create()).setupRestTemplate();
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setObjectMapper(this.objectMapper);
         restTemplate.setMessageConverters(List.of(
