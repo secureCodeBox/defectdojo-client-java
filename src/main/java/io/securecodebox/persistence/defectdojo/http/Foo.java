@@ -8,6 +8,7 @@ import io.securecodebox.persistence.defectdojo.config.Config;
 import lombok.NonNull;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -63,7 +64,7 @@ public final class Foo {
             final var credentials = new BasicCredentialsProvider();
             credentials.setCredentials(
                 createAuthScope(),
-                new UsernamePasswordCredentials(proxyConfig.getUser(), proxyConfig.getPassword())
+                createCredentials()
             );
 
             final var builder = HttpClientBuilder.create();
@@ -82,5 +83,9 @@ public final class Foo {
 
     AuthScope createAuthScope() {
         return new AuthScope(proxyConfig.getHost(), proxyConfig.getPort());
+    }
+
+    Credentials createCredentials() {
+        return new UsernamePasswordCredentials(proxyConfig.getUser(), proxyConfig.getPassword());
     }
 }

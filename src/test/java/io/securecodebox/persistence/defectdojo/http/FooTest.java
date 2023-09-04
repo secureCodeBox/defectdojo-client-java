@@ -7,6 +7,7 @@ package io.securecodebox.persistence.defectdojo.http;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import lombok.NonNull;
 import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -73,6 +74,16 @@ class FooTest {
         assertAll(
             () -> assertThat(result.getHost(), is(proxyConfig.getHost())),
             () -> assertThat(result.getPort(), is(proxyConfig.getPort()))
+        );
+    }
+
+    @Test
+    void createCredentials() {
+        final var result = sut.createCredentials();
+
+        assertAll(
+            () -> assertThat(result.getUserPrincipal().getName(), is(proxyConfig.getUser())),
+            () -> assertThat(result.getPassword(), is(proxyConfig.getPassword()))
         );
     }
 }
