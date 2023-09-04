@@ -99,7 +99,7 @@ public final class Config {
                 maxPageCountForGets = Integer.parseInt(findEnvVar(EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS));
             } catch (final NumberFormatException e) {
                 throw new ConfigException(String.format("Given value for environment variable '%s' is not a valid number! Given was '%s'.", EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS.literal, findEnvVar(EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS)),
-                    e);
+                        e);
             }
         } else {
             maxPageCountForGets = DEFAULT_MAX_PAGE_COUNT_FOR_GETS;

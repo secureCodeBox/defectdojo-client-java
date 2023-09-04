@@ -62,10 +62,7 @@ public final class Foo {
         if (proxyConfig.isComplete()) {
             // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
             final var credentials = new BasicCredentialsProvider();
-            credentials.setCredentials(
-                createAuthScope(),
-                createCredentials()
-            );
+            credentials.setCredentials(createAuthScope(), createCredentials());
 
             final var builder = HttpClientBuilder.create();
             builder.useSystemProperties();

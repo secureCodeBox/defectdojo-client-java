@@ -40,7 +40,7 @@ abstract public class GenericDefectDojoService<T extends BaseModel> {
 
     protected ObjectMapper objectMapper;
     protected ObjectMapper searchStringMapper;
-    
+
     @Getter
     protected RestTemplate restTemplate;
 
@@ -56,7 +56,7 @@ abstract public class GenericDefectDojoService<T extends BaseModel> {
         this.searchStringMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         this.searchStringMapper.coercionConfigFor(Engagement.Status.class).setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
         this.searchStringMapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
-        
+
         this.restTemplate = this.setupRestTemplate();
     }
 

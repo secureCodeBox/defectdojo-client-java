@@ -118,7 +118,7 @@ public class ImportScanService2 {
     }
 
     //overloading with optional parameter
-     public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, LinkedMultiValueMap<String, Object> additionalValues) {
+    public ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, LinkedMultiValueMap<String, Object> additionalValues) {
         additionalValues.add("engagement", Long.toString(engagementId));
 
         return this.createFindings(scanFile, "import-scan", lead, currentDate, scanType, testType, additionalValues);

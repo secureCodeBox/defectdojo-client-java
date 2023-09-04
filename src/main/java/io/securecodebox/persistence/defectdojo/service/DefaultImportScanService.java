@@ -42,9 +42,9 @@ import java.util.Map;
  */
 class DefaultImportScanService implements ImportScanService {
     private static final List<HttpMessageConverter<?>> HTTP_MESSAGE_CONVERTERS = List.of(
-        new FormHttpMessageConverter(),
-        new ResourceHttpMessageConverter(),
-        new MappingJackson2HttpMessageConverter());
+            new FormHttpMessageConverter(),
+            new ResourceHttpMessageConverter(),
+            new MappingJackson2HttpMessageConverter());
     @Getter
     private final String defectDojoUrl;
     @Getter
@@ -130,11 +130,11 @@ class DefaultImportScanService implements ImportScanService {
     ImportScanResponse exchangeRequest(String endpoint, HttpEntity<?> payload) {
         final var restTemplate = this.createRestTemplate();
         return restTemplate.exchange(
-                generateApiUrl(endpoint),
-                HttpMethod.POST,
-                payload,
-                ImportScanResponse.class)
-            .getBody();
+                        generateApiUrl(endpoint),
+                        HttpMethod.POST,
+                        payload,
+                        ImportScanResponse.class)
+                .getBody();
     }
 
     String generateApiUrl(final String endpoint) {
@@ -187,10 +187,10 @@ class DefaultImportScanService implements ImportScanService {
     ClientHttpRequestFactory createRequestFactoryWithProxyAuthConfig() {
         final var credentials = new BasicCredentialsProvider();
         credentials.setCredentials(
-            new AuthScope(proxyConfig.getHost(), proxyConfig.getPort()),
-            new UsernamePasswordCredentials(
-                proxyConfig.getUser(),
-                proxyConfig.getPassword())
+                new AuthScope(proxyConfig.getHost(), proxyConfig.getPort()),
+                new UsernamePasswordCredentials(
+                        proxyConfig.getUser(),
+                        proxyConfig.getPassword())
         );
 
         final var clientBuilder = HttpClientBuilder.create();
