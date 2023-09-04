@@ -84,6 +84,14 @@ class FooTest {
         assertAll(
             () -> assertThat(result.getUserPrincipal().getName(), is(proxyConfig.getUser())),
             () -> assertThat(result.getPassword(), is(proxyConfig.getPassword()))
+
+    @Test
+    void createHttpHost() {
+        final var result = sut.createHttpHost();
+
+        assertAll(
+                () -> assertThat(result.getHostName(), is(proxyConfig.getHost())),
+                () -> assertThat(result.getPort(), is(proxyConfig.getPort()))
         );
     }
 }

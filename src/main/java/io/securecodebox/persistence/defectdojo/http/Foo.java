@@ -69,7 +69,7 @@ public final class Foo {
 
             final var builder = HttpClientBuilder.create();
             builder.useSystemProperties();
-            builder.setProxy(new HttpHost(proxyConfig.getHost(), proxyConfig.getPort()));
+            builder.setProxy(createHttpHost());
             builder.setDefaultCredentialsProvider(credentials);
             builder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
 
@@ -87,5 +87,9 @@ public final class Foo {
 
     Credentials createCredentials() {
         return new UsernamePasswordCredentials(proxyConfig.getUser(), proxyConfig.getPassword());
+    }
+
+    HttpHost createHttpHost() {
+        return new HttpHost(proxyConfig.getHost(), proxyConfig.getPort());
     }
 }
