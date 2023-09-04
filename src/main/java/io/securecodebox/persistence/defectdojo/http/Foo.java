@@ -62,7 +62,7 @@ public final class Foo {
             // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
             final var credentials = new BasicCredentialsProvider();
             credentials.setCredentials(
-                new AuthScope(proxyConfig.getHost(), proxyConfig.getPort()),
+                createAuthScope(),
                 new UsernamePasswordCredentials(proxyConfig.getUser(), proxyConfig.getPassword())
             );
 
@@ -79,5 +79,8 @@ public final class Foo {
 
         return new RestTemplate();
     }
+
+    AuthScope createAuthScope() {
+        return new AuthScope(proxyConfig.getHost(), proxyConfig.getPort());
     }
 }
