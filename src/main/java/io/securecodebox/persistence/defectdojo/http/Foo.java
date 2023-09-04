@@ -58,31 +58,26 @@ public final class Foo {
     }
 
     public RestTemplate createRestTemplate() {
-        RestTemplate restTemplate;
-
-        if (System.getProperty("http.proxyUser") != null && System.getProperty("http.proxyPassword") != null) {
+        if (proxyConfig.isComplete()) {
             // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
-            CredentialsProvider credsProvider = new BasicCredentialsProvider();
-            credsProvider.setCredentials(
-                new AuthScope(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))),
-                new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"))
+            final var credentials = new BasicCredentialsProvider();
+            credentials.setCredentials(
+                new AuthScope(proxyConfig.getHost(), proxyConfig.getPort()),
+                new UsernamePasswordCredentials(proxyConfig.getUser(), proxyConfig.getPassword())
             );
-            HttpClientBuilder clientBuilder = HttpClientBuilder.create();
 
-            clientBuilder.useSystemProperties();
-            clientBuilder.setProxy(new HttpHost(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))));
-            clientBuilder.setDefaultCredentialsProvider(credsProvider);
-            clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+            final var builder = HttpClientBuilder.create();
+            builder.useSystemProperties();
+            builder.setProxy(new HttpHost(proxyConfig.getHost(), proxyConfig.getPort()));
+            builder.setDefaultCredentialsProvider(credentials);
+            builder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
 
-            CloseableHttpClient client = clientBuilder.build();
-
-            HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-            factory.setHttpClient(client);
-            restTemplate = new RestTemplate(factory);
-        } else {
-            restTemplate = new RestTemplate();
+            final var factory = new HttpComponentsClientHttpRequestFactory();
+            factory.setHttpClient(builder.build());
+            return new RestTemplate(factory);
         }
 
-        return restTemplate;
+        return new RestTemplate();
+    }
     }
 }
