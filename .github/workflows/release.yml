@@ -24,6 +24,7 @@ on:
 jobs:
   publish-release:
     runs-on: ubuntu-22.04
+    if: github.repository == 'secureCodeBox/defectdojo-client-java'
     permissions:
       contents: write # needed for release creation
     steps:
