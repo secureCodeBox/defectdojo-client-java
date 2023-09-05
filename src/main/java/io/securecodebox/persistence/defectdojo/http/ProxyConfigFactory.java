@@ -18,22 +18,39 @@ import lombok.NonNull;
  * </p>
  */
 public final class ProxyConfigFactory {
+    static final ProxyConfig DEFAULT_CONFIG = ProxyConfig.NULL;
     private final SystemPropertyFinder properties = new SystemPropertyFinder();
 
+    /**
+     * Creates a configuration based on {@link ProxyConfigNames environment variables}
+     * <p>
+     * We assume a complete proxy configuration only if {@link ProxyConfigNames#HTTP_PROXY_USER user} and
+     * {@link ProxyConfigNames#HTTP_PROXY_PASSWORD password} is configured. Unless an
+     * {@link #DEFAULT_CONFIG} configuration will be returned.
+     * </p>
+     * <p>
+     * Throws {@link MissingProxyConfigValue}, if not all configuration values are present.
+     * </p>
+     *
+     * @return never {@code null}
+     */
     public ProxyConfig create() {
-        final var builder = ProxyConfig.builder();
-
-        if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_USER)) {
-            throw new MissingProxyConfigValue(ProxyConfigNames.HTTP_PROXY_USER);
+        if (shouldCreateFromProperties()) {
+            return createFromProperties();
         }
 
-        builder.user(properties.getProperty(ProxyConfigNames.HTTP_PROXY_USER));
+        return DEFAULT_CONFIG;
+    }
 
-        if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD)) {
-            throw new MissingProxyConfigValue(ProxyConfigNames.HTTP_PROXY_PASSWORD);
-        }
+    private boolean shouldCreateFromProperties() {
+        return properties.hasProperty(ProxyConfigNames.HTTP_PROXY_USER) &&
+                properties.hasProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD);
+    }
 
-        builder.password(properties.getProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD));
+    private ProxyConfig createFromProperties() {
+        final var builder = ProxyConfig.builder()
+                .user(properties.getProperty(ProxyConfigNames.HTTP_PROXY_USER))
+                .password(properties.getProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD));
 
         if (properties.notHasProperty(ProxyConfigNames.HTTP_PROXY_HOST)) {
             throw new MissingProxyConfigValue(ProxyConfigNames.HTTP_PROXY_HOST);
@@ -49,10 +66,10 @@ public final class ProxyConfigFactory {
             builder.port(Integer.parseInt(properties.getProperty(ProxyConfigNames.HTTP_PROXY_PORT)));
         } catch (final NumberFormatException e) {
             throw new IllegalArgumentException(
-                String.format("Given port for proxy authentication configuration (property '%s') is not a valid number! Given value wa '%s'.",
-                    ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(),
-                    System.getProperty("http.proxyPort")),
-                e);
+                    String.format("Given port for proxy authentication configuration (property '%s') is not a valid number! Given value wa '%s'.",
+                            ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(),
+                            System.getProperty("http.proxyPort")),
+                    e);
         }
 
         return builder.build();

@@ -24,74 +24,82 @@ class ProxyConfigFactoryTest {
     private final ProxyConfigFactory sut = new ProxyConfigFactory();
 
     @Test
-    void create_throesExceptionIfUserNotSet() {
-        System.clearProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat());
+    void create_returnsDefaultIfUserAndPasswordNotPresent() {
+        assertThat(sut.create(), is(ProxyConfigFactory.DEFAULT_CONFIG));
+    }
+
+    @Test
+    void create_returnsDefaultIfUserNotPresent() {
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
+
+        assertThat(sut.create(), is(ProxyConfigFactory.DEFAULT_CONFIG));
+    }
+
+    @Test
+    void create_returnsDefaultIfPasswordNotPresent() {
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
+
+        assertThat(sut.create(), is(ProxyConfigFactory.DEFAULT_CONFIG));
+    }
+
+    @Test
+    void create_returnsCompleteConfigIfAllPropertiesArePresent() {
+        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
 
-        final var thrown = assertThrows(
-            MissingProxyConfigValue.class,
-            sut::create);
+        final var expected = ProxyConfig.builder()
+                .user("user")
+                .password("password")
+                .host("host")
+                .port(4242)
+                .build();
 
-        assertThat(thrown.getMessage(), containsString("'http.proxyUser'"));
+        assertThat(sut.create(), is(expected));
     }
 
     @Test
-    void create_throesExceptionIfPasswordNotSet() {
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
-        System.clearProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat());
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
-        System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
-
-        final var thrown = assertThrows(
-            MissingProxyConfigValue.class,
-            sut::create);
-
-        assertThat(thrown.getMessage(), containsString("'http.proxyPassword'"));
-    }
-
-    @Test
-    void create_throesExceptionIfHostNotSet() {
+    void create_throwsExceptionIfHostNotSet() {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
         System.clearProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat());
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "4242");
 
         final var thrown = assertThrows(
-            MissingProxyConfigValue.class,
-            sut::create);
+                MissingProxyConfigValue.class,
+                sut::create);
 
         assertThat(thrown.getMessage(), containsString("'http.proxyHost'"));
     }
 
     @Test
-    void create_throesExceptionIfPortNotSet() {
+    void create_throwsExceptionIfPortNotSet() {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
         System.clearProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat());
 
         final var thrown = assertThrows(
-            MissingProxyConfigValue.class,
-            sut::create);
+                MissingProxyConfigValue.class,
+                sut::create);
 
         assertThat(thrown.getMessage(), containsString("'http.proxyPort'"));
     }
 
     @Test
-    void create_throesExceptionIfPortIsNotInteger() {
+    void create_throwsExceptionIfPortIsNotInteger() {
         System.setProperty(ProxyConfigNames.HTTP_PROXY_USER.getLiterat(), "user");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PASSWORD.getLiterat(), "password");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_HOST.getLiterat(), "host");
         System.setProperty(ProxyConfigNames.HTTP_PROXY_PORT.getLiterat(), "FUBAR");
 
         final var thrown = assertThrows(
-            IllegalArgumentException.class,
-            sut::create);
+                IllegalArgumentException.class,
+                sut::create);
 
         assertThat(
-            thrown.getMessage(),
-            is("Given port for proxy authentication configuration (property 'http.proxyPort') is not a valid number! Given value wa 'FUBAR'."));
+                thrown.getMessage(),
+                is("Given port for proxy authentication configuration (property 'http.proxyPort') is not a valid number! Given value wa 'FUBAR'."));
     }
 }
