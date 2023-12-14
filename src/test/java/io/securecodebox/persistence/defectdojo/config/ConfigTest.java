@@ -30,7 +30,7 @@ class ConfigTest {
     @Test
     void constructor_urlMustNotBeNull() {
         final var thrown = assertThrows(NullPointerException.class, () -> {
-            new Config(null, "apiKey", 1);
+            new Config(null, "apiKey", 1, 1);
         });
 
         assertThat(thrown.getMessage(), startsWith("url "));
@@ -39,17 +39,27 @@ class ConfigTest {
     @Test
     void constructor_apiKeyMustNotBeNull() {
         final var thrown = assertThrows(NullPointerException.class, () -> {
-            new Config("url", null, 1);
+            new Config("url", null, 1, 1);
         });
 
         assertThat(thrown.getMessage(), startsWith("apiKey "));
     }
 
     @ParameterizedTest
+    @ValueSource(ints = {-1, -2, -23, -42, Integer.MIN_VALUE})
+    void constructor_refetchWaitSecondsMustNotBeLessThanZero(final int number) {
+        final var thrown = assertThrows(IllegalArgumentException.class, () -> {
+            new Config("url", "apiKey", number, 1);
+        });
+
+        assertThat(thrown.getMessage(), startsWith("refetchWaitSeconds "));
+    }
+
+    @ParameterizedTest
     @ValueSource(ints = {0, -1, -2, -23, -42, Integer.MIN_VALUE})
     void constructor_maxPageCountForGetsMustNotBeLessThanOne(final int number) {
         final var thrown = assertThrows(IllegalArgumentException.class, () -> {
-            new Config("url", "apiKey", number);
+            new Config("url", "apiKey", 60, number);
         });
 
         assertThat(thrown.getMessage(), startsWith("maxPageCountForGets "));
@@ -60,6 +70,7 @@ class ConfigTest {
         environmentVariables
             .set("DEFECTDOJO_URL", "url")
             .set("DEFECTDOJO_APIKEY", "apikey")
+            .set("DEFECTDOJO_REFETCH_WAIT_SECONDS", "60")
             .set("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS", "23");
 
         final var sut = Config.fromEnv();
@@ -67,6 +78,7 @@ class ConfigTest {
         assertAll(
             () -> assertThat(sut.getUrl(), is("url")),
             () -> assertThat(sut.getApiKey(), is("apikey")),
+            () -> assertThat(sut.getRefetchWaitSeconds(), is(60)),
             () -> assertThat(sut.getMaxPageCountForGets(), is(23))
         );
     }
@@ -89,6 +101,29 @@ class ConfigTest {
         final var thrown = assertThrows(ConfigException.class, Config::fromEnv);
 
         assertThat(thrown.getMessage(), is("Missing environment variable 'DEFECTDOJO_APIKEY'!"));
+    }
+
+    @Test
+    void fromEnv_usesDefaultIfNoRefetchWaitSecondsSet() {
+        environmentVariables
+            .set("DEFECTDOJO_URL", "url")
+            .set("DEFECTDOJO_APIKEY", "apikey")
+            .set("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS", 1);
+
+        final var sut = Config.fromEnv();
+        assertThat(sut.getRefetchWaitSeconds(), is(Config.DEFAULT_REFETCH_WAIT_SECONDS));
+    }
+
+    @Test
+    void fromEnv_throwsExceptionIfRefetchWaitSecondsIsNotParseableToInteger() {
+        environmentVariables
+            .set("DEFECTDOJO_URL", "url")
+            .set("DEFECTDOJO_APIKEY", "apikey")
+            .set("DEFECTDOJO_REFETCH_WAIT_SECONDS", "foo");
+
+        final var thrown = assertThrows(ConfigException.class, Config::fromEnv);
+
+        assertThat(thrown.getMessage(), is("Given value for environment variable 'DEFECTDOJO_REFETCH_WAIT_SECONDS' is not a valid number! Given was 'foo'."));
     }
 
     @Test

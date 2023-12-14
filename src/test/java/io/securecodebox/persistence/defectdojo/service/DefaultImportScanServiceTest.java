@@ -22,6 +22,7 @@ class DefaultImportScanServiceTest {
     private final Config config = new Config(
         "http://localhost",
         "apiKey",
+        60,
         23
     );
     private final DefaultImportScanService sut = new DefaultImportScanService(config, ProxyConfig.NULL);

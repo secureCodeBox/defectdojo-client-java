@@ -44,6 +44,7 @@ class ImportScanServiceTest {
         final var config = new Config(
             "url",
             "apiKey",
+            60,
             23
         );
 
