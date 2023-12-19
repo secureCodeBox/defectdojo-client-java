@@ -29,7 +29,7 @@ public final class Config {
     /**
      * Null pattern object.
      */
-    public static final Config NULL = new Config("", "", DEFAULT_REFETCH_WAIT_SECONDS, DEFAULT_MAX_PAGE_COUNT_FOR_GETS);
+    public static final Config NULL = new Config("", "", DEFAULT_MAX_PAGE_COUNT_FOR_GETS, DEFAULT_REFETCH_WAIT_SECONDS);
 
     /**
      * URL of the host which serves the DefectDojo API.
@@ -68,13 +68,13 @@ public final class Config {
     private final int maxPageCountForGets;
 
     /**
-     * Convenience constructor which sets {@link #DEFAULT_REFETCH_WAIT_SECONDS} and {@link #DEFAULT_MAX_PAGE_COUNT_FOR_GETS}
+     * Convenience constructor which sets {@link #DEFAULT_MAX_PAGE_COUNT_FOR_GETS} and {@link #DEFAULT_REFETCH_WAIT_SECONDS}
      *
      * @param url    not {@code null}
      * @param apiKey not {@code null}
      */
     public Config(final @NonNull String url, final @NonNull String apiKey) {
-        this(url, apiKey, DEFAULT_REFETCH_WAIT_SECONDS, DEFAULT_MAX_PAGE_COUNT_FOR_GETS);
+        this(url, apiKey, DEFAULT_MAX_PAGE_COUNT_FOR_GETS, DEFAULT_REFETCH_WAIT_SECONDS);
     }
 
     /**
@@ -82,15 +82,15 @@ public final class Config {
      *
      * @param url                 not {@code null}
      * @param apiKey              not {@code null}
-     * @param refetchWaitSeconds  not less than 0
      * @param maxPageCountForGets not less than 1
+     * @param refetchWaitSeconds  not less than 0
      */
-    public Config(final @NonNull String url, final @NonNull String apiKey, final int refetchWaitSeconds, final int maxPageCountForGets) {
+    public Config(final @NonNull String url, final @NonNull String apiKey, final int maxPageCountForGets, final int refetchWaitSeconds) {
         super();
         this.url = url;
         this.apiKey = apiKey;
-        this.refetchWaitSeconds = validateIsNotNegative(refetchWaitSeconds, "refetchWaitSeconds");
         this.maxPageCountForGets = validateIsGreaterZero(maxPageCountForGets, "maxPageCountForGets");
+        this.refetchWaitSeconds = validateIsNotNegative(refetchWaitSeconds, "refetchWaitSeconds");
     }
 
     private static int validateIsNotNegative(final int number, final String name) {
@@ -117,19 +117,8 @@ public final class Config {
     public static Config fromEnv() {
         final var url = findRequiredEnvVar(EnvVars.DEFECTDOJO_URL);
         final var apiKey = findRequiredEnvVar(EnvVars.DEFECTDOJO_APIKEY);
-        final int refetchWaitSeconds;
         final int maxPageCountForGets;
-
-        if (hasEnvVar(EnvVars.DEFECTDOJO_REFETCH_WAIT_SECONDS)) {
-            try {
-                refetchWaitSeconds = Integer.parseInt(findEnvVar(EnvVars.DEFECTDOJO_REFETCH_WAIT_SECONDS));
-            } catch (final NumberFormatException e) {
-                throw new ConfigException(String.format("Given value for environment variable '%s' is not a valid number! Given was '%s'.", EnvVars.DEFECTDOJO_REFETCH_WAIT_SECONDS.literal, findEnvVar(EnvVars.DEFECTDOJO_REFETCH_WAIT_SECONDS)),
-                        e);
-            }
-        } else {
-            refetchWaitSeconds = DEFAULT_REFETCH_WAIT_SECONDS;
-        }
+        final int refetchWaitSeconds;
 
         if (hasEnvVar(EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS)) {
             try {
@@ -142,7 +131,18 @@ public final class Config {
             maxPageCountForGets = DEFAULT_MAX_PAGE_COUNT_FOR_GETS;
         }
 
-        return new Config(url, apiKey, refetchWaitSeconds, maxPageCountForGets);
+        if (hasEnvVar(EnvVars.DEFECTDOJO_REFETCH_WAIT_SECONDS)) {
+            try {
+                refetchWaitSeconds = Integer.parseInt(findEnvVar(EnvVars.DEFECTDOJO_REFETCH_WAIT_SECONDS));
+            } catch (final NumberFormatException e) {
+                throw new ConfigException(String.format("Given value for environment variable '%s' is not a valid number! Given was '%s'.", EnvVars.DEFECTDOJO_REFETCH_WAIT_SECONDS.literal, findEnvVar(EnvVars.DEFECTDOJO_REFETCH_WAIT_SECONDS)),
+                        e);
+            }
+        } else {
+            refetchWaitSeconds = DEFAULT_REFETCH_WAIT_SECONDS;
+        }
+
+        return new Config(url, apiKey, maxPageCountForGets, refetchWaitSeconds);
     }
 
     private static boolean hasEnvVar(final @NonNull EnvVars name) {
@@ -168,8 +168,8 @@ public final class Config {
     public enum EnvVars {
         DEFECTDOJO_URL("DEFECTDOJO_URL"),
         DEFECTDOJO_APIKEY("DEFECTDOJO_APIKEY"),
-        DEFECTDOJO_REFETCH_WAIT_SECONDS("DEFECTDOJO_REFETCH_WAIT_SECONDS"),
-        DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS");
+        DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS"),
+        DEFECTDOJO_REFETCH_WAIT_SECONDS("DEFECTDOJO_REFETCH_WAIT_SECONDS");
         /**
          * Literal name of configuration environment name
          * <p>

@@ -44,8 +44,8 @@ class ImportScanServiceTest {
         final var config = new Config(
             "url",
             "apiKey",
-            60,
-            23
+            23,
+            60
         );
 
         final var sut = (DefaultImportScanService) ImportScanService.createDefault(config, ProxyConfig.NULL);
