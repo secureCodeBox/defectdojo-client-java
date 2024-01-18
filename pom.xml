@@ -72,7 +72,7 @@
         <sonar.jacoco.reportPaths>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPaths>
 
         <!-- Dependency versions: -->
-        <com.fasterxml.jackson.version>2.15.2</com.fasterxml.jackson.version>
+        <com.fasterxml.jackson.version>2.16.1</com.fasterxml.jackson.version>
         <org.springframework.version>5.3.28</org.springframework.version>
         <org.mockito.version>5.4.0</org.mockito.version>
     </properties>
