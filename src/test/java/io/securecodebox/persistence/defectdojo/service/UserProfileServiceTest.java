@@ -25,14 +25,14 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 // This test is special because the defectdojo api does not return a list, 
 // but the generic code assumes every endpoint returns a list
-public class UserProfileServiceTest {
+class UserProfileServiceTest {
 
-    Config config;
-    UserProfileService underTest;
-    MockRestServiceServer mockServer;
+    private Config config;
+    private UserProfileService underTest;
+    private MockRestServiceServer mockServer;
 
     // This string does not contain every field of the api response as those are not implemented
-    String apiResponse = """
+    private String apiResponse = """
         {
           "user": {
             "id": 0,
