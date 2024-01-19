@@ -39,159 +39,159 @@ public abstract class GenericDefectDojoService<T extends Model> {
   private static final String API_PREFIX = "/api/v2/";
   protected Config config;
 
-    protected ObjectMapper objectMapper;
-    protected ObjectMapper searchStringMapper;
+  protected ObjectMapper objectMapper;
+  protected ObjectMapper searchStringMapper;
 
-    @Getter
-    protected RestTemplate restTemplate;
+  @Getter
+  protected RestTemplate restTemplate;
 
-    public GenericDefectDojoService(Config config) {
-        this.config = config;
+  public GenericDefectDojoService(Config config) {
+    this.config = config;
 
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        this.objectMapper.coercionConfigFor(Engagement.Status.class).setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
-        this.objectMapper.findAndRegisterModules();
+    this.objectMapper = new ObjectMapper();
+    this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    this.objectMapper.coercionConfigFor(Engagement.Status.class).setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
+    this.objectMapper.findAndRegisterModules();
 
-        this.searchStringMapper = new ObjectMapper();
-        this.searchStringMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        this.searchStringMapper.coercionConfigFor(Engagement.Status.class).setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
-        this.searchStringMapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+    this.searchStringMapper = new ObjectMapper();
+    this.searchStringMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    this.searchStringMapper.coercionConfigFor(Engagement.Status.class).setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
+    this.searchStringMapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 
-        this.restTemplate = this.setupRestTemplate();
+    this.restTemplate = this.setupRestTemplate();
+  }
+
+
+  protected long DEFECT_DOJO_OBJET_LIMIT = 100L;
+
+  /**
+   * @return The DefectDojo Authentication Header
+   */
+  private HttpHeaders getDefectDojoAuthorizationHeaders() {
+    return new Foo(config, new ProxyConfigFactory().create()).generateAuthorizationHeaders();
+  }
+
+  private RestTemplate setupRestTemplate() {
+    RestTemplate restTemplate = new Foo(config, new ProxyConfigFactory().create()).createRestTemplate();
+    MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+    converter.setObjectMapper(this.objectMapper);
+    restTemplate.setMessageConverters(List.of(
+      new FormHttpMessageConverter(),
+      new ResourceHttpMessageConverter(),
+      new StringHttpMessageConverter(),
+      converter
+    ));
+    return restTemplate;
+  }
+
+  protected abstract String getUrlPath();
+
+  protected abstract Class<T> getModelClass();
+
+  protected abstract Response<T> deserializeList(String response) throws JsonProcessingException;
+
+  public T get(long id) {
+    var restTemplate = this.getRestTemplate();
+    HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
+
+    ResponseEntity<T> response = restTemplate.exchange(
+      this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/" + id,
+      HttpMethod.GET,
+      payload,
+      getModelClass()
+    );
+
+    return response.getBody();
+  }
+
+  protected Response<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) throws JsonProcessingException, URISyntaxException {
+    var restTemplate = this.getRestTemplate();
+    HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
+
+    var mutableQueryParams = new HashMap<String, Object>(queryParams);
+
+    mutableQueryParams.put("limit", String.valueOf(limit));
+    mutableQueryParams.put("offset", String.valueOf(offset));
+
+    var multiValueMap = new LinkedMultiValueMap<String, String>();
+    for (var entry : mutableQueryParams.entrySet()) {
+      multiValueMap.set(entry.getKey(), String.valueOf(entry.getValue()));
     }
 
+    var url = new URI(this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/");
+    var uriBuilder = UriComponentsBuilder.fromUri(url).queryParams(multiValueMap);
 
-    protected long DEFECT_DOJO_OBJET_LIMIT = 100L;
+    ResponseEntity<String> responseString = restTemplate.exchange(
+      uriBuilder.build(mutableQueryParams),
+      HttpMethod.GET,
+      payload,
+      String.class
+    );
 
-    /**
-     * @return The DefectDojo Authentication Header
-     */
-    private HttpHeaders getDefectDojoAuthorizationHeaders() {
-        return new Foo(config, new ProxyConfigFactory().create()).generateAuthorizationHeaders();
-    }
+    return deserializeList(responseString.getBody());
+  }
 
-    private RestTemplate setupRestTemplate() {
-        RestTemplate restTemplate = new Foo(config, new ProxyConfigFactory().create()).createRestTemplate();
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(this.objectMapper);
-        restTemplate.setMessageConverters(List.of(
-                new FormHttpMessageConverter(),
-                new ResourceHttpMessageConverter(),
-                new StringHttpMessageConverter(),
-                converter
-        ));
-        return restTemplate;
-    }
+  public List<T> search(Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
+    List<T> objects = new LinkedList<>();
 
-    protected abstract String getUrlPath();
+    boolean hasNext = false;
+    long page = 0;
+    do {
+      var response = internalSearch(queryParams, DEFECT_DOJO_OBJET_LIMIT, DEFECT_DOJO_OBJET_LIMIT * page++);
+      objects.addAll(response.getResults());
 
-    protected abstract Class<T> getModelClass();
+      hasNext = response.getNext() != null;
+      if (page > this.config.getMaxPageCountForGets()) {
+        throw new LoopException("Found too many response object. Quitting after " + (page - 1) + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
+      }
+    } while (hasNext);
 
-    protected abstract Response<T> deserializeList(String response) throws JsonProcessingException;
+    return objects;
+  }
 
-    public T get(long id) {
-        var restTemplate = this.getRestTemplate();
-        HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
+  public List<T> search() throws URISyntaxException, JsonProcessingException {
+    return search(new LinkedHashMap<>());
+  }
 
-        ResponseEntity<T> response = restTemplate.exchange(
-                this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/" + id,
-                HttpMethod.GET,
-                payload,
-                getModelClass()
-        );
+  @SuppressWarnings("unchecked")
+  public Optional<T> searchUnique(T searchObject) throws URISyntaxException, JsonProcessingException {
+    Map<String, Object> queryParams = searchStringMapper.convertValue(searchObject, Map.class);
 
-        return response.getBody();
-    }
+    var objects = search(queryParams);
 
-    protected Response<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) throws JsonProcessingException, URISyntaxException {
-        var restTemplate = this.getRestTemplate();
-        HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
+    return objects.stream()
+      .filter(object -> object != null && object.equalsQueryString(queryParams))
+      .findFirst();
+  }
 
-        var mutableQueryParams = new HashMap<String, Object>(queryParams);
+  public Optional<T> searchUnique(Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
+    var objects = search(queryParams);
 
-        mutableQueryParams.put("limit", String.valueOf(limit));
-        mutableQueryParams.put("offset", String.valueOf(offset));
+    return objects.stream()
+      .filter(object -> object.equalsQueryString(queryParams))
+      .findFirst();
+  }
 
-        var multiValueMap = new LinkedMultiValueMap<String, String>();
-        for (var entry : mutableQueryParams.entrySet()) {
-            multiValueMap.set(entry.getKey(), String.valueOf(entry.getValue()));
-        }
+  public T create(T object) {
+    var restTemplate = this.getRestTemplate();
+    HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
-        var url = new URI(this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/");
-        var uriBuilder = UriComponentsBuilder.fromUri(url).queryParams(multiValueMap);
+    ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
+    return response.getBody();
+  }
 
-        ResponseEntity<String> responseString = restTemplate.exchange(
-                uriBuilder.build(mutableQueryParams),
-                HttpMethod.GET,
-                payload,
-                String.class
-        );
+  public void delete(long id) {
+    var restTemplate = this.getRestTemplate();
+    HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
-        return deserializeList(responseString.getBody());
-    }
+    restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
+  }
 
-    public List<T> search(Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
-        List<T> objects = new LinkedList<>();
+  public T update(T object, long objectId) {
+    var restTemplate = this.getRestTemplate();
+    HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
-        boolean hasNext = false;
-        long page = 0;
-        do {
-            var response = internalSearch(queryParams, DEFECT_DOJO_OBJET_LIMIT, DEFECT_DOJO_OBJET_LIMIT * page++);
-            objects.addAll(response.getResults());
-
-            hasNext = response.getNext() != null;
-            if (page > this.config.getMaxPageCountForGets()) {
-                throw new LoopException("Found too many response object. Quitting after " + (page - 1) + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
-            }
-        } while (hasNext);
-
-        return objects;
-    }
-
-    public List<T> search() throws URISyntaxException, JsonProcessingException {
-        return search(new LinkedHashMap<>());
-    }
-
-    @SuppressWarnings("unchecked")
-    public Optional<T> searchUnique(T searchObject) throws URISyntaxException, JsonProcessingException {
-        Map<String, Object> queryParams = searchStringMapper.convertValue(searchObject, Map.class);
-
-        var objects = search(queryParams);
-
-        return objects.stream()
-                .filter(object -> object != null && object.equalsQueryString(queryParams))
-                .findFirst();
-    }
-
-    public Optional<T> searchUnique(Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
-        var objects = search(queryParams);
-
-        return objects.stream()
-                .filter(object -> object.equalsQueryString(queryParams))
-                .findFirst();
-    }
-
-    public T create(T object) {
-        var restTemplate = this.getRestTemplate();
-        HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
-
-        ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
-        return response.getBody();
-    }
-
-    public void delete(long id) {
-        var restTemplate = this.getRestTemplate();
-        HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
-
-        restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
-    }
-
-    public T update(T object, long objectId) {
-        var restTemplate = this.getRestTemplate();
-        HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
-
-        ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
-        return response.getBody();
-    }
+    ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
+    return response.getBody();
+  }
 }
