@@ -14,8 +14,8 @@ import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.exception.LoopException;
 import io.securecodebox.persistence.defectdojo.http.Foo;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
-import io.securecodebox.persistence.defectdojo.model.BaseModel;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
+import io.securecodebox.persistence.defectdojo.model.Model;
 import io.securecodebox.persistence.defectdojo.model.Response;
 import lombok.Getter;
 import org.springframework.http.HttpEntity;
@@ -35,7 +35,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 // FIXME: Should be package private bc implementation detail.
-abstract public class GenericDefectDojoService<T extends BaseModel> {
+public abstract class GenericDefectDojoService<T extends Model> {
     protected Config config;
 
     protected ObjectMapper objectMapper;
