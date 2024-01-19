@@ -58,9 +58,6 @@ public class RiskAcceptance extends BaseModel {
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
-    if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
-      return true;
-    }
-    return false;
+      return queryParams.containsKey("id") && queryParams.get("id").equals(this.id);
   }
 }
