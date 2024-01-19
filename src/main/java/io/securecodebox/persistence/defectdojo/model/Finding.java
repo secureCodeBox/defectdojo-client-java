@@ -111,15 +111,15 @@ public class Finding extends BaseModel {
     @JsonProperty("numerical_severity")
     public String getNumericalSeverity() {
         switch (this.severity) {
-            case Critical:
+            case CRITICAL:
                 return "S0";
-            case High:
+            case HIGH:
                 return "S1";
-            case Medium:
+            case MEDIUM:
                 return "S2";
-            case Low:
+            case LOW:
                 return "S3";
-            case Informational:
+            case INFORMATIONAL:
                 return "S4";
             default:
                 throw new PersistenceException("Unknown severity: '" + this.severity + "'");
@@ -133,19 +133,18 @@ public class Finding extends BaseModel {
 
     public enum Severity {
         @JsonProperty("Critical")
-        Critical(5),
+        CRITICAL(5),
         @JsonProperty("High")
-        High(4),
+        HIGH(4),
         @JsonProperty("Medium")
-        Medium(3),
+        MEDIUM(3),
         @JsonProperty("Low")
-        Low(2),
+        LOW(2),
         // Depending on the Scanner DefectDojo uses either Info or Informational
         // E.g. Nmap uses Info, Zap uses Informational
         @JsonProperty("Info")
         @JsonAlias("Informational")
-        Informational(1),
-        ;
+        INFORMATIONAL(1);
 
         long severity;
 
