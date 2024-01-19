@@ -34,16 +34,10 @@ import java.util.List;
 public class ImportScanService2 {
 
     private final Config config;
-    @Deprecated
-    protected String defectDojoUrl;
-    @Deprecated
-    protected String defectDojoApiKey;
 
     public ImportScanService2(Config config) {
         super();
         this.config = config;
-        this.defectDojoUrl = config.getUrl();
-        this.defectDojoApiKey = config.getApiKey();
     }
 
     /**
@@ -96,7 +90,7 @@ public class ImportScanService2 {
 
             var payload = new HttpEntity<>(mvn, headers);
 
-            return restTemplate.exchange(defectDojoUrl + "/api/v2/" + endpoint + "/", HttpMethod.POST, payload, ImportScanResponse.class).getBody();
+            return restTemplate.exchange(config.getUrl() + "/api/v2/" + endpoint + "/", HttpMethod.POST, payload, ImportScanResponse.class).getBody();
         } catch (HttpClientErrorException e) {
             throw new PersistenceException("Failed to attach findings to engagement.");
         }
