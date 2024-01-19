@@ -159,7 +159,7 @@ public abstract class GenericDefectDojoService<T extends Model> {
         var objects = search(queryParams);
 
         return objects.stream()
-                .filter((object) -> object != null && object.equalsQueryString(queryParams))
+                .filter(object -> object != null && object.equalsQueryString(queryParams))
                 .findFirst();
     }
 
@@ -167,13 +167,13 @@ public abstract class GenericDefectDojoService<T extends Model> {
         var objects = search(queryParams);
 
         return objects.stream()
-                .filter((object) -> object.equalsQueryString(queryParams))
+                .filter(object -> object.equalsQueryString(queryParams))
                 .findFirst();
     }
 
     public T create(T object) {
         var restTemplate = this.getRestTemplate();
-        HttpEntity<T> payload = new HttpEntity<T>(object, getDefectDojoAuthorizationHeaders());
+        HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
         ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + "/api/v2/" + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
         return response.getBody();
@@ -188,7 +188,7 @@ public abstract class GenericDefectDojoService<T extends Model> {
 
     public T update(T object, long objectId) {
         var restTemplate = this.getRestTemplate();
-        HttpEntity<T> payload = new HttpEntity<T>(object, getDefectDojoAuthorizationHeaders());
+        HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
         ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + "/api/v2/" + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
         return response.getBody();
