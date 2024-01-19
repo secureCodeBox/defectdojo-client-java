@@ -13,7 +13,6 @@ import io.securecodebox.persistence.defectdojo.model.Finding;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class FindingService extends GenericDefectDojoService<Finding> {
   public FindingService(Config config) {
