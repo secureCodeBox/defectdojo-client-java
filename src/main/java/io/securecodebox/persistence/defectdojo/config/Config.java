@@ -7,8 +7,6 @@ package io.securecodebox.persistence.defectdojo.config;
 import io.securecodebox.persistence.defectdojo.exception.ConfigException;
 import lombok.*;
 
-import java.util.Optional;
-
 /**
  * Configures the DefectDojo client
  */
