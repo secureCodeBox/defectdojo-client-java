@@ -28,3 +28,4 @@ Committing with `git commit -s` will add the sign-off at the end of the commit m
 - Simon Hülkenberg <simon.huelkenberg@iteratec.com>
 - Sven Strittmatter <sven.strittmatter@iteratec.com>
 - Timo Pagel <github@timo-pagel.de>
+- Heiko Kiesel <heiko.kiesel@iteratec.com>
