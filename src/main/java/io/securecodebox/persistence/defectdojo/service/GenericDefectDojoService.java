@@ -37,6 +37,7 @@ import java.util.*;
 // FIXME: Should be package private bc implementation detail.
 public abstract class GenericDefectDojoService<T extends Model> {
   private static final String API_PREFIX = "/api/v2/";
+  private static final long DEFECT_DOJO_OBJET_LIMIT = 100L;
   protected Config config;
 
   protected ObjectMapper objectMapper;
@@ -62,7 +63,6 @@ public abstract class GenericDefectDojoService<T extends Model> {
   }
 
 
-  protected long DEFECT_DOJO_OBJET_LIMIT = 100L;
 
   /**
    * @return The DefectDojo Authentication Header
