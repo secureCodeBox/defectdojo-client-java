@@ -37,14 +37,24 @@ public class FindingService extends GenericDefectDojoService<Finding> {
   }
 
   public List<Finding> getUnhandledFindingsForProduct(long productId, Finding.Severity minimumSeverity) throws URISyntaxException, JsonProcessingException {
-    return this.search(Map.of("test__engagement__product", Long.toString(productId), "active", Boolean.toString(true))).stream().filter((finding -> {
-      return finding.getSeverity().getNumericRepresentation() >= minimumSeverity.getNumericRepresentation();
-    })).collect(Collectors.toList());
+    final Map<String, Object> queryParams = Map.of(
+      "test__engagement__product", Long.toString(productId),
+      "active", Boolean.toString(true));
+
+    return this.search(queryParams)
+      .stream()
+      .filter((finding -> finding.getSeverity().getNumericRepresentation() >= minimumSeverity.getNumericRepresentation()))
+      .toList();
   }
 
   public List<Finding> getUnhandledFindingsForEngagement(long engagementId, Finding.Severity minimumSeverity) throws URISyntaxException, JsonProcessingException {
-    return this.search(Map.of("test__engagement", Long.toString(engagementId), "active", Boolean.toString(true))).stream().filter((finding -> {
-      return finding.getSeverity().getNumericRepresentation() >= minimumSeverity.getNumericRepresentation();
-    })).collect(Collectors.toList());
+    final Map<String, Object> queryParams = Map.of(
+      "test__engagement", Long.toString(engagementId),
+      "active", Boolean.toString(true));
+
+    return this.search(queryParams)
+      .stream()
+      .filter((finding -> finding.getSeverity().getNumericRepresentation() >= minimumSeverity.getNumericRepresentation()))
+      .toList();
   }
 }
