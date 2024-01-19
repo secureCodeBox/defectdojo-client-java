@@ -36,7 +36,8 @@ import java.util.*;
 
 // FIXME: Should be package private bc implementation detail.
 public abstract class GenericDefectDojoService<T extends Model> {
-    protected Config config;
+  private static final String API_PREFIX = "/api/v2/";
+  protected Config config;
 
     protected ObjectMapper objectMapper;
     protected ObjectMapper searchStringMapper;
@@ -94,7 +95,7 @@ public abstract class GenericDefectDojoService<T extends Model> {
         HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
         ResponseEntity<T> response = restTemplate.exchange(
-                this.config.getUrl() + "/api/v2/" + this.getUrlPath() + "/" + id,
+                this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/" + id,
                 HttpMethod.GET,
                 payload,
                 getModelClass()
@@ -117,7 +118,7 @@ public abstract class GenericDefectDojoService<T extends Model> {
             multiValueMap.set(entry.getKey(), String.valueOf(entry.getValue()));
         }
 
-        var url = new URI(this.config.getUrl() + "/api/v2/" + this.getUrlPath() + "/");
+        var url = new URI(this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/");
         var uriBuilder = UriComponentsBuilder.fromUri(url).queryParams(multiValueMap);
 
         ResponseEntity<String> responseString = restTemplate.exchange(
@@ -175,7 +176,7 @@ public abstract class GenericDefectDojoService<T extends Model> {
         var restTemplate = this.getRestTemplate();
         HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
-        ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + "/api/v2/" + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
+        ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
         return response.getBody();
     }
 
@@ -183,14 +184,14 @@ public abstract class GenericDefectDojoService<T extends Model> {
         var restTemplate = this.getRestTemplate();
         HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
-        restTemplate.exchange(this.config.getUrl() + "/api/v2/" + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
+        restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
     }
 
     public T update(T object, long objectId) {
         var restTemplate = this.getRestTemplate();
         HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
-        ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + "/api/v2/" + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
+        ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
         return response.getBody();
     }
 }
