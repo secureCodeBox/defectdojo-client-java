@@ -146,7 +146,7 @@ public class Finding extends BaseModel {
         @JsonAlias("Informational")
         INFORMATIONAL(1);
 
-        long severity;
+        final long severity;
 
         Severity(long severity) {
             this.severity = severity;
