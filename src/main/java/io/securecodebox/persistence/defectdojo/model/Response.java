@@ -10,16 +10,16 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Response<T> {
+public final class Response<T> {
   @JsonProperty
-  int count;
+  private int count;
 
   @JsonProperty
-  String next;
+  private String next;
 
   @JsonProperty
-  String previous;
+  private String previous;
 
   @JsonProperty
-  List<T> results;
+  private List<T> results;
 }

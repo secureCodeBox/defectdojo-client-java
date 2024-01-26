@@ -14,21 +14,21 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TestType extends BaseModel {
+public final class TestType implements Model {
   @JsonProperty
-  Long id;
+  private Long id;// FIXME: Use native type here.
 
   @JsonProperty
   @NonNull
-  String name;
+  private String name;
 
   @JsonProperty("static_tool")
-  Boolean staticTool;
+  private Boolean staticTool;// FIXME: Use native type here.
 
   @JsonProperty("dynamic_tool")
-  Boolean dynamicTool;
+  private Boolean dynamicTool;// FIXME: Use native type here.
 
 
   @Override

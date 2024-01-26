@@ -14,20 +14,20 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GroupMember extends BaseModel {
+public final class GroupMember implements Model {
     @JsonProperty
-    Long id;
+    private Long id;// FIXME: Use native type here.
 
     @JsonProperty("group_id")
-    Long group;
+    private Long group;// FIXME: Use native type here.
 
     @JsonProperty("user_id")
-    Long user;
+    private Long user;// FIXME: Use native type here.
 
     @JsonProperty
-    Long role;
+    private Long role;// FIXME: Use native type here.
 
     @Override
     public boolean equalsQueryString(Map<String, Object> queryParams) {

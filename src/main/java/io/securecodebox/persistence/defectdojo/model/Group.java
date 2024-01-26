@@ -15,24 +15,24 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Group extends BaseModel {
+public final class Group implements Model {
     @JsonProperty
-    Long id;
+    private Long id;// FIXME: Use native type here.
 
     @JsonProperty
     @NonNull
-    String name;
+    private String name;
 
     @JsonProperty
-    String description;
+    private String description;
 
     @JsonProperty
-    List<Long> users;
+    private List<Long> users;
 
     @JsonProperty("social_provider")
-    String socialProvider;
+    private String socialProvider;
 
     @Override
     public boolean equalsQueryString(Map<String, Object> queryParams) {

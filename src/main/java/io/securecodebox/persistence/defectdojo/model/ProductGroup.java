@@ -14,20 +14,20 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductGroup extends BaseModel {
+public final class ProductGroup implements Model {
     @JsonProperty
-    Long id;
+    private Long id;// FIXME: Use native type here.
 
     @JsonProperty
-    Long product;
+    private Long product;// FIXME: Use native type here.
 
     @JsonProperty
-    Long group;
+    private Long group;// FIXME: Use native type here.
 
     @JsonProperty
-    Long role;
+    private Long role;// FIXME: Use native type here.
 
     @Override
     public boolean equalsQueryString(Map<String, Object> queryParams) {
