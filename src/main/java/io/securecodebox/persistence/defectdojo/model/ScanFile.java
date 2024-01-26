@@ -14,10 +14,8 @@ public final class ScanFile {
      * <p>
      * It does not matter however unless the parser pays attention to file endings like json or xml.
      * </p>
-     *
-     * TODO: Can this be private?
      */
-    static final String DEFAULT_NAME = "default-name.txt";
+    private static final String DEFAULT_NAME = "default-name.txt";
 
     private String content;
 
