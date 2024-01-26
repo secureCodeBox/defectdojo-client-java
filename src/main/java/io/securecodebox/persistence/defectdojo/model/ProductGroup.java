@@ -18,16 +18,16 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class ProductGroup implements Model {
     @JsonProperty
-    private Long id;// FIXME: Use native type here.
+    private long id;
 
     @JsonProperty
-    private Long product;// FIXME: Use native type here.
+    private long product;
 
     @JsonProperty
-    private Long group;// FIXME: Use native type here.
+    private long group;
 
     @JsonProperty
-    private Long role;// FIXME: Use native type here.
+    private long role;
 
     @Override
     public boolean equalsQueryString(Map<String, Object> queryParams) {

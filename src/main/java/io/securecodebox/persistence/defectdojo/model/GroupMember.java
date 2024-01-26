@@ -18,16 +18,16 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class GroupMember implements Model {
     @JsonProperty
-    private Long id;// FIXME: Use native type here.
+    private long id;
 
     @JsonProperty("group_id")
-    private Long group;// FIXME: Use native type here.
+    private long group;
 
     @JsonProperty("user_id")
-    private Long user;// FIXME: Use native type here.
+    private long user;
 
     @JsonProperty
-    private Long role;// FIXME: Use native type here.
+    private long role;
 
     @Override
     public boolean equalsQueryString(Map<String, Object> queryParams) {

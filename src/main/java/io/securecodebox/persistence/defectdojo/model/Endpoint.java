@@ -18,7 +18,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Endpoint implements Model {
   @JsonProperty
-  private Long id;// FIXME: Use native type here.
+  private long id;
 
   @JsonProperty
   private String protocol;
@@ -30,7 +30,7 @@ public final class Endpoint implements Model {
   private String fullyQualifiedDomainName;
 
   @JsonProperty
-  private Long port;// FIXME: Use native type here.
+  private long port;
 
   @JsonProperty
   private String path;
@@ -42,10 +42,10 @@ public final class Endpoint implements Model {
   private String fragment;
 
   @JsonProperty
-  private Long product;// FIXME: Use native type here.
+  private long product;
 
   @JsonProperty
-  private Boolean mitigated;// FIXME: Use native type here.
+  private boolean mitigated;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

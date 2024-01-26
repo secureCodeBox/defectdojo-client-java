@@ -23,7 +23,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Finding implements Model {
     @JsonProperty
-    private Long id;// FIXME: Use native type here.
+    private long id;
 
     @JsonProperty
     @NonNull
@@ -43,7 +43,7 @@ public final class Finding implements Model {
 
     @JsonProperty
     @NonNull
-    private Long test;// FIXME: Use native type here.
+    private long test;
 
     @JsonProperty
     private String mitigation;
@@ -53,37 +53,30 @@ public final class Finding implements Model {
 
     @JsonProperty
     @NonNull
-    @Builder.Default
-    private Boolean active = true;// FIXME: Use native type here.
+    private boolean active;
 
     @JsonProperty
     @NonNull
-    @Builder.Default
-    private Boolean verified = true;// FIXME: Use native type here.
+    private boolean verified;
 
     @JsonProperty("risk_accepted")
     @NonNull
-    @Builder.Default
-    private Boolean riskAccepted = false;// FIXME: Use native type here.
+    private boolean riskAccepted;
 
     @JsonProperty("out_of_scope")
     @NonNull
-    @Builder.Default
-    private Boolean outOfScope = false;// FIXME: Use native type here.
+    private boolean outOfScope;
 
     @JsonProperty
     @NonNull
-    @Builder.Default
-    private Boolean duplicate = false;// FIXME: Use native type here.
+    private boolean duplicate;
 
     @JsonProperty("duplicate_finding")
-    @Builder.Default
-    private Long duplicateFinding = null;// FIXME: Use native type here.
+    private long duplicateFinding;
 
     @JsonProperty("false_p")
     @NonNull
-    @Builder.Default
-    private Boolean falsePositive = false;// FIXME: Use native type here.
+    private boolean falsePositive;
 
     @JsonProperty("component_name")
     private String componentName;

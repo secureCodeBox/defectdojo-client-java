@@ -9,6 +9,7 @@ import lombok.Data;
 
 import java.util.List;
 
+// TODO: Why we do not have as many annotations as the other models here?
 @Data
 public final class Response<T> {
   @JsonProperty

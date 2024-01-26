@@ -28,7 +28,7 @@ public final class Engagement implements Model {
   private String name;
 
   @JsonProperty
-  private Long product;// FIXME: Use native type here.
+  private long product;
 
   @JsonProperty("target_start")
   private String targetStart;
@@ -37,7 +37,7 @@ public final class Engagement implements Model {
   private String targetEnd;
 
   @JsonProperty
-  private Long lead;// FIXME: Use native type here.
+  private long lead;
 
   @JsonProperty("engagement_type")
   @Builder.Default
@@ -63,13 +63,13 @@ public final class Engagement implements Model {
   private String repo;
 
   @JsonProperty("build_server")
-  private Long buildServer; // FIXME: Use native type here.
+  private long buildServer;
 
   @JsonProperty("source_code_management_server")
-  private Long scmServer; // FIXME: Use natvive type here.
+  private long scmServer;
 
   @JsonProperty("orchestration_engine")
-  private Long orchestrationEngine; // FIXME: Use natvive type here.
+  private long orchestrationEngine;
 
   @JsonProperty
   private String description;
@@ -78,20 +78,16 @@ public final class Engagement implements Model {
   private boolean deduplicationOnEngagement;
 
   @JsonProperty("threat_model")
-  @Builder.Default // FIXME: Use native type here.
-  private Boolean threatModel = false;
+  private boolean threatModel;
 
   @JsonProperty("api_test")
-  @Builder.Default // FIXME: Use native type here.
-  private Boolean apiTest = false;
+  private boolean apiTest;
 
   @JsonProperty("pen_test")
-  @Builder.Default // FIXME: Use native type here.
-  private Boolean penTest = false;
+  private boolean penTest;
 
   @JsonProperty("check_list")
-  @Builder.Default // FIXME: Use native type here.
-  private Boolean checkList = false;
+  private boolean checkList;
 
   @JsonProperty
   private String version;

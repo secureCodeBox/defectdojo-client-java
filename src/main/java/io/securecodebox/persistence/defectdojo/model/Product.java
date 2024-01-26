@@ -19,7 +19,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Product implements Model {
   @JsonProperty
-  private Long id;// FIXME: Use native type here.
+  private long id;
 
   @JsonProperty
   private String name;
@@ -31,19 +31,19 @@ public final class Product implements Model {
   private String description;
 
   @JsonProperty("findings_count")
-  private Long findingsCount;// FIXME: Use native type here.
+  private long findingsCount;
 
   @JsonProperty("authorized_users")
   private List<String> authorizedUsers;
 
   @JsonProperty("prod_type")
-  private Long productType;// FIXME: Use native type here.
+  private long productType;
   
   @JsonProperty("enable_simple_risk_acceptance")
-  private Boolean enableSimpleRiskAcceptance;// FIXME: Use native type here.
+  private boolean enableSimpleRiskAcceptance;
   
   @JsonProperty("enable_full_risk_acceptance")
-  private Boolean enableFullRiskAcceptance;// FIXME: Use native type here.
+  private boolean enableFullRiskAcceptance;
 
   @JsonProperty("authorization_groups")
   private List<Long> authorizationGroups;
