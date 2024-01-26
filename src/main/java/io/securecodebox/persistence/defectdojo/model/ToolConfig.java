@@ -38,12 +38,18 @@ public final class ToolConfig implements Model {
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
+    if (queryParams == null) {
+      return false;
+    }
+
     if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
       return true;
     }
+
     if (queryParams.containsKey("name") && queryParams.get("name").equals(this.name)) {
       return true;
     }
+
     if (queryParams.containsKey("configuration_url") && queryParams.get("configuration_url").equals(this.configUrl)) {
       return true;
     }

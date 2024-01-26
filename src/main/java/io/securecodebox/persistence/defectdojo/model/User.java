@@ -32,9 +32,14 @@ public final class User implements Model {
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
+    if (queryParams == null) {
+      return false;
+    }
+
     if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
       return true;
     }
+
     if (queryParams.containsKey("username") && queryParams.get("username").equals(this.username)) {
       return true;
     }

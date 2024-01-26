@@ -63,12 +63,18 @@ public final class Test implements Model {
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
+    if (queryParams == null) {
+      return false;
+    }
+
     if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
       return true;
     }
+
     if (queryParams.containsKey("title") && queryParams.get("title").equals(this.title)) {
       return true;
     }
+
     if (queryParams.containsKey("engagement") && queryParams.get("engagement").equals(this.engagement)) {
       return true;
     }
