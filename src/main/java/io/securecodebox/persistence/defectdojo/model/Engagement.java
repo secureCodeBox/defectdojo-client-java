@@ -17,12 +17,12 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public final class Engagement implements Model {
+public final class Engagement implements Model, HasId, HasName {
   @JsonProperty("branch_tag")
   private String branch;
 
   @JsonProperty
-  private Long id;
+  private long id;
 
   @JsonProperty
   private String name;
@@ -94,15 +94,15 @@ public final class Engagement implements Model {
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
-    if (queryParams == null) {
+    if (QueryParamsComparator.isNull(queryParams)) {
       return false;
     }
 
-    if (queryParams.containsKey("id") && queryParams.get("id") != null && queryParams.get("id").equals(this.id)) {
+    if (QueryParamsComparator.isIdEqual(this, queryParams)) {
       return true;
     }
 
-    if (queryParams.containsKey("name") && queryParams.get("name") != null && queryParams.get("name").equals(this.name)) {
+    if (QueryParamsComparator.isNameEqual(this, queryParams)) {
       return true;
     }
 
