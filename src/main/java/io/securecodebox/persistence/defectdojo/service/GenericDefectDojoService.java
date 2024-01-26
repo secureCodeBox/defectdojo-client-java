@@ -63,7 +63,6 @@ public abstract class GenericDefectDojoService<T extends Model> {
   }
 
 
-
   /**
    * @return The DefectDojo Authentication Header
    */

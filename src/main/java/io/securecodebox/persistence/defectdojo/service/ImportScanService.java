@@ -20,48 +20,48 @@ import java.util.Map;
  * Service to re/import findings into DefectDojo
  */
 public interface ImportScanService {
-    /**
-     * Factory method to create new instance of service default implementation
-     *
-     * @param config must not be {@code null}
-     * @return never {@code null}
-     */
-    static ImportScanService createDefault(final Config config) {
-        return createDefault(config, new ProxyConfigFactory().create());
-    }
+  /**
+   * Factory method to create new instance of service default implementation
+   *
+   * @param config must not be {@code null}
+   * @return never {@code null}
+   */
+  static ImportScanService createDefault(final Config config) {
+    return createDefault(config, new ProxyConfigFactory().create());
+  }
 
-    /**
-     * Factory method to create new instance of service default implementation
-     *
-     * @param config      must not be {@code null}
-     * @param proxyConfig must not be {@code null}
-     * @return never {@code null}
-     */
-    static ImportScanService createDefault(@NonNull final Config config, @NonNull final ProxyConfig proxyConfig) {
-        return new DefaultImportScanService(config, proxyConfig);
-    }
+  /**
+   * Factory method to create new instance of service default implementation
+   *
+   * @param config      must not be {@code null}
+   * @param proxyConfig must not be {@code null}
+   * @return never {@code null}
+   */
+  static ImportScanService createDefault(@NonNull final Config config, @NonNull final ProxyConfig proxyConfig) {
+    return new DefaultImportScanService(config, proxyConfig);
+  }
 
-    default ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
-        return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, new HashMap<>());
-    }
+  default ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {
+    return this.importScan(scanFile, engagementId, lead, currentDate, scanType, testType, new HashMap<>());
+  }
 
-    ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, Map<String, String> options);
+  ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType, Map<String, String> options);
 
-    default ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
-        return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, new HashMap<>());
-    }
+  default ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType) {
+    return this.reimportScan(scanFile, testId, lead, currentDate, scanType, testType, new HashMap<>());
+  }
 
-    ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, Map<String, String> options);
+  ImportScanResponse reimportScan(ScanFile scanFile, long testId, long lead, String currentDate, ScanType scanType, long testType, Map<String, String> options);
 
-    @Data
-    class ImportScanResponse {
-        @JsonProperty
-        protected Boolean verified;
+  @Data
+  class ImportScanResponse {
+    @JsonProperty
+    protected Boolean verified;
 
-        @JsonProperty
-        protected Boolean active;
+    @JsonProperty
+    protected Boolean active;
 
-        @JsonProperty("test")
-        protected long testId;
-    }
+    @JsonProperty("test")
+    protected long testId;
+  }
 }

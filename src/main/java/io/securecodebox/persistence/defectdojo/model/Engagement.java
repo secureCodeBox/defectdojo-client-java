@@ -19,7 +19,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Engagement implements Model {
   @JsonProperty("branch_tag")
-  private  String branch;
+  private String branch;
 
   @JsonProperty
   private Long id;

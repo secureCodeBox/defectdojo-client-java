@@ -25,71 +25,71 @@ import java.util.Base64;
  * Placeholder to move duplicated code, will be named better later
  */
 public final class Foo {
-    private final Config config;
-    private final ProxyConfig proxyConfig;
+  private final Config config;
+  private final ProxyConfig proxyConfig;
 
-    public Foo(@NonNull final Config config, @NonNull final ProxyConfig proxyConfig) {
-        super();
-        this.config = config;
-        this.proxyConfig = proxyConfig;
+  public Foo(@NonNull final Config config, @NonNull final ProxyConfig proxyConfig) {
+    super();
+    this.config = config;
+    this.proxyConfig = proxyConfig;
+  }
+
+  /**
+   * This method generates appropriate authorization headers
+   *
+   * @return never {@code null}
+   */
+  public HttpHeaders generateAuthorizationHeaders() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.set(HttpHeaders.AUTHORIZATION, "Token " + this.config.getApiKey());
+
+    if (proxyConfig.isComplete()) {
+      // FIXME: System.out logging is a real bad code smell. Standard loging should be used.
+      System.out.println("Setting Proxy Auth Header...");
+      headers.set(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + encodeProxyCredentials(proxyConfig));
     }
 
-    /**
-     * This method generates appropriate authorization headers
-     *
-     * @return never {@code null}
-     */
-    public HttpHeaders generateAuthorizationHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.AUTHORIZATION, "Token " + this.config.getApiKey());
+    return headers;
+  }
 
-        if (proxyConfig.isComplete()) {
-            // FIXME: System.out logging is a real bad code smell. Standard loging should be used.
-            System.out.println("Setting Proxy Auth Header...");
-            headers.set(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + encodeProxyCredentials(proxyConfig));
-        }
+  static String encodeProxyCredentials(@NonNull final ProxyConfig cfg) {
+    final var credential = String.format("%s:%s", cfg.getUser(), cfg.getPassword());
+    return Base64.getEncoder().encodeToString(credential.getBytes(StandardCharsets.UTF_8));
+  }
 
-        return headers;
+  public RestTemplate createRestTemplate() {
+    if (proxyConfig.isComplete()) {
+      // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
+      final var builder = HttpClientBuilder.create()
+        .useSystemProperties()
+        .setProxy(createHttpHost())
+        .setDefaultCredentialsProvider(createCredentialsProvider())
+        .setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+
+      final var factory = new HttpComponentsClientHttpRequestFactory();
+      factory.setHttpClient(builder.build());
+
+      return new RestTemplate(factory);
     }
 
-    static String encodeProxyCredentials(@NonNull final ProxyConfig cfg) {
-        final var credential = String.format("%s:%s", cfg.getUser(), cfg.getPassword());
-        return Base64.getEncoder().encodeToString(credential.getBytes(StandardCharsets.UTF_8));
-    }
+    return new RestTemplate();
+  }
 
-    public RestTemplate createRestTemplate() {
-        if (proxyConfig.isComplete()) {
-            // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
-            final var builder = HttpClientBuilder.create()
-                    .useSystemProperties()
-                    .setProxy(createHttpHost())
-                    .setDefaultCredentialsProvider(createCredentialsProvider())
-                    .setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+  CredentialsProvider createCredentialsProvider() {
+    final var provider = new BasicCredentialsProvider();
+    provider.setCredentials(createAuthScope(), createCredentials());
+    return provider;
+  }
 
-            final var factory = new HttpComponentsClientHttpRequestFactory();
-            factory.setHttpClient(builder.build());
+  AuthScope createAuthScope() {
+    return new AuthScope(proxyConfig.getHost(), proxyConfig.getPort());
+  }
 
-            return new RestTemplate(factory);
-        }
+  Credentials createCredentials() {
+    return new UsernamePasswordCredentials(proxyConfig.getUser(), proxyConfig.getPassword());
+  }
 
-        return new RestTemplate();
-    }
-
-    CredentialsProvider createCredentialsProvider() {
-        final var provider = new BasicCredentialsProvider();
-        provider.setCredentials(createAuthScope(), createCredentials());
-        return provider;
-    }
-
-    AuthScope createAuthScope() {
-        return new AuthScope(proxyConfig.getHost(), proxyConfig.getPort());
-    }
-
-    Credentials createCredentials() {
-        return new UsernamePasswordCredentials(proxyConfig.getUser(), proxyConfig.getPassword());
-    }
-
-    HttpHost createHttpHost() {
-        return new HttpHost(proxyConfig.getHost(), proxyConfig.getPort());
-    }
+  HttpHost createHttpHost() {
+    return new HttpHost(proxyConfig.getHost(), proxyConfig.getPort());
+  }
 }

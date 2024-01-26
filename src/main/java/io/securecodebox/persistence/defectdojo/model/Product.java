@@ -38,16 +38,16 @@ public final class Product implements Model {
 
   @JsonProperty("prod_type")
   private long productType;
-  
+
   @JsonProperty("enable_simple_risk_acceptance")
   private boolean enableSimpleRiskAcceptance;
-  
+
   @JsonProperty("enable_full_risk_acceptance")
   private boolean enableFullRiskAcceptance;
 
   @JsonProperty("authorization_groups")
   private List<Long> authorizationGroups;
-  
+
   @JsonProperty
   private String lifecycle;
 
