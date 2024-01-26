@@ -39,7 +39,10 @@ final class QueryParamsComparator {
       return false;
     }
 
-    // FIXME: Since th generic type for value is Object, possible NPE here!
+    if (isNull(queryParams.get(QUERY_PARAM_KEY_FOR_ID))) {
+      return false;
+    }
+
     return queryParams.get(QUERY_PARAM_KEY_FOR_ID).equals(model.getId());
   }
 

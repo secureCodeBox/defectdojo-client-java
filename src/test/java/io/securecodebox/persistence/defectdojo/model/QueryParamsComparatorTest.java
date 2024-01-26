@@ -50,7 +50,6 @@ class QueryParamsComparatorTest {
   }
 
   @Test
-  @Disabled("Unclear if this behaviour will break something.")
   void isIdEqual_falseIfQueryParamValueIsNull() {
     final var queryParams = new HashMap<String, Object>();
     queryParams.put(QueryParamsComparator.QUERY_PARAM_KEY_FOR_ID, null);
