@@ -17,7 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public final class RiskAcceptance implements Model {
+public final class RiskAcceptance implements Model, HasId {
   @JsonProperty
   private long id;
 
@@ -58,10 +58,10 @@ public final class RiskAcceptance implements Model {
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
-    if (queryParams == null) {
+    if (QueryParamsComparator.isNull(queryParams)) {
       return false;
     }
 
-    return queryParams.containsKey("id") && queryParams.get("id").equals(this.id);
+    return QueryParamsComparator.isIdEqual(this, queryParams);
   }
 }
