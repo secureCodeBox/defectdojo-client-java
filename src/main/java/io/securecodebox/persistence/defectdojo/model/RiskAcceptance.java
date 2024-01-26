@@ -58,6 +58,6 @@ public final class RiskAcceptance implements Model {
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
-      return queryParams.containsKey("id") && queryParams.get("id").equals(this.id);
+    return queryParams.containsKey("id") && queryParams.get("id").equals(this.id);
   }
 }

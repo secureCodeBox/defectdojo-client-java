@@ -18,30 +18,30 @@ import java.util.Map;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Group implements Model {
-    @JsonProperty
-    private long id;
+  @JsonProperty
+  private long id;
 
-    @JsonProperty
-    @NonNull
-    private String name;
+  @JsonProperty
+  @NonNull
+  private String name;
 
-    @JsonProperty
-    private String description;
+  @JsonProperty
+  private String description;
 
-    @JsonProperty
-    private List<Long> users;
+  @JsonProperty
+  private List<Long> users;
 
-    @JsonProperty("social_provider")
-    private String socialProvider;
+  @JsonProperty("social_provider")
+  private String socialProvider;
 
-    @Override
-    public boolean equalsQueryString(Map<String, Object> queryParams) {
-        if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
-            return true;
-        }
-        if (queryParams.containsKey("name") && queryParams.get("name").equals(this.name)) {
-            return true;
-        }
-        return false;
+  @Override
+  public boolean equalsQueryString(Map<String, Object> queryParams) {
+    if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
+      return true;
     }
+    if (queryParams.containsKey("name") && queryParams.get("name").equals(this.name)) {
+      return true;
+    }
+    return false;
+  }
 }

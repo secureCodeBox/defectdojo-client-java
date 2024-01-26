@@ -19,80 +19,80 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * Tests for {@link DefaultImportScanService}
  */
 class DefaultImportScanServiceTest {
-    private final Config config = new Config(
-        "http://localhost",
-        "apiKey",
-        23
+  private final Config config = new Config(
+    "http://localhost",
+    "apiKey",
+    23
+  );
+  private final DefaultImportScanService sut = new DefaultImportScanService(config, ProxyConfig.NULL);
+
+  @Test
+  void constructorShouldThrowExceptionOnNullConfig() {
+    assertThrows(NullPointerException.class, () -> {
+      new DefaultImportScanService(null, ProxyConfig.NULL);
+    });
+  }
+
+  @Test
+  void constructorShouldThrowExceptionOnNullProxyConfig() {
+    assertThrows(NullPointerException.class, () -> {
+      new DefaultImportScanService(Config.NULL, null);
+    });
+  }
+
+  @Test
+  void createDefectDojoAuthorizationHeaders_apiKeyFromConfigShouldBePresentAsAuthHEader() {
+    final var authorizationHeaders = sut.createDefectDojoAuthorizationHeaders();
+    assertAll(
+      () -> assertThat(authorizationHeaders.size(), is(1)),
+      () -> assertThat(authorizationHeaders.get(HttpHeaders.AUTHORIZATION).get(0), is("Token apiKey"))
     );
-    private final DefaultImportScanService sut = new DefaultImportScanService(config, ProxyConfig.NULL);
+  }
 
-    @Test
-    void constructorShouldThrowExceptionOnNullConfig() {
-        assertThrows(NullPointerException.class, () -> {
-            new DefaultImportScanService(null, ProxyConfig.NULL);
-        });
-    }
+  @Test
+  void shouldConfigureProxySettings_trueIfProxyConfigIsComplete() {
+    final var proxyConfig = ProxyConfig.builder()
+      .user("user")
+      .password("pw")
+      .host("host")
+      .port(42)
+      .build();
+    final var innerSut = new DefaultImportScanService(config, proxyConfig);
 
-    @Test
-    void constructorShouldThrowExceptionOnNullProxyConfig() {
-        assertThrows(NullPointerException.class, () -> {
-            new DefaultImportScanService(Config.NULL, null);
-        });
-    }
+    assertThat(innerSut.shouldConfigureProxySettings(), is(true));
+  }
 
-    @Test
-    void createDefectDojoAuthorizationHeaders_apiKeyFromConfigShouldBePresentAsAuthHEader() {
-        final var authorizationHeaders = sut.createDefectDojoAuthorizationHeaders();
-        assertAll(
-            () -> assertThat(authorizationHeaders.size(), is(1)),
-            () -> assertThat(authorizationHeaders.get(HttpHeaders.AUTHORIZATION).get(0), is("Token apiKey"))
-        );
-    }
+  @Test
+  void shouldConfigureProxySettings_falseIfProxyConfigIsIncomplete() {
+    final var proxyConfig = ProxyConfig.builder()
+      .build();
+    final var innerSut = new DefaultImportScanService(config, proxyConfig);
 
-    @Test
-    void shouldConfigureProxySettings_trueIfProxyConfigIsComplete() {
-        final var proxyConfig = ProxyConfig.builder()
-            .user("user")
-            .password("pw")
-            .host("host")
-            .port(42)
-            .build();
-        final var innerSut = new DefaultImportScanService(config, proxyConfig);
+    assertThat(innerSut.shouldConfigureProxySettings(), is(false));
+  }
 
-        assertThat(innerSut.shouldConfigureProxySettings(), is(true));
-    }
+  @Test
+  void generateApiUrl() {
+    assertThat(sut.generateApiUrl("foo"), is("http://localhost/api/v2/foo/"));
+  }
 
-    @Test
-    void shouldConfigureProxySettings_falseIfProxyConfigIsIncomplete() {
-        final var proxyConfig = ProxyConfig.builder()
-            .build();
-        final var innerSut = new DefaultImportScanService(config, proxyConfig);
+  @Test
+  @Disabled("Not implemented yet")
+  void importScan_shouldPassImportScanAsEndpoint() {
+  }
 
-        assertThat(innerSut.shouldConfigureProxySettings(), is(false));
-    }
+  @Test
+  @Disabled("Not implemented yet")
+  void importScan_shouldPassEngagementIdAsEngagement() {
+  }
 
-    @Test
-    void generateApiUrl() {
-        assertThat(sut.generateApiUrl("foo"), is("http://localhost/api/v2/foo/"));
-    }
+  @Test
+  @Disabled("Not implemented yet")
+  void reimportScan_shouldPassReimportScanAsEndpoint() {
+  }
 
-    @Test
-    @Disabled("Not implemented yet")
-    void importScan_shouldPassImportScanAsEndpoint() {
-    }
-
-    @Test
-    @Disabled("Not implemented yet")
-    void importScan_shouldPassEngagementIdAsEngagement() {
-    }
-
-    @Test
-    @Disabled("Not implemented yet")
-    void reimportScan_shouldPassReimportScanAsEndpoint() {
-    }
-
-    @Test
-    @Disabled("Not implemented yet")
-    void reimportScan_shouldPassEngagementIdAsTest() {
-    }
+  @Test
+  @Disabled("Not implemented yet")
+  void reimportScan_shouldPassEngagementIdAsTest() {
+  }
 }

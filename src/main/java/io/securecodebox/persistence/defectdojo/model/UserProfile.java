@@ -18,13 +18,13 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class UserProfile implements Model {
 
-    @JsonProperty
-    private User user;
+  @JsonProperty
+  private User user;
 
-    @Override
-    public boolean equalsQueryString(Map<String, Object> queryParams) {
-        // The user_profile endpoint does not have query parameters that's why this function will just return true
-        return true;
-    }
-    
+  @Override
+  public boolean equalsQueryString(Map<String, Object> queryParams) {
+    // The user_profile endpoint does not have query parameters that's why this function will just return true
+    return true;
+  }
+
 }

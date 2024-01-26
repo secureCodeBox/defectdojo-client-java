@@ -18,26 +18,26 @@ import lombok.Getter;
  */
 @Getter
 public enum ProxyConfigNames {
-    /**
-     * System property name for the proxy username
-     */
-    HTTP_PROXY_USER("http.proxyUser"),
-    /**
-     * System property name for the proxy user's password
-     */
-    HTTP_PROXY_PASSWORD("http.proxyPassword"),
-    /**
-     * System property name for the proxy's hostname
-     */
-    HTTP_PROXY_HOST("http.proxyHost"),
-    /**
-     * System property for the proxy's port number
-     */
-    HTTP_PROXY_PORT("http.proxyPort");
+  /**
+   * System property name for the proxy username
+   */
+  HTTP_PROXY_USER("http.proxyUser"),
+  /**
+   * System property name for the proxy user's password
+   */
+  HTTP_PROXY_PASSWORD("http.proxyPassword"),
+  /**
+   * System property name for the proxy's hostname
+   */
+  HTTP_PROXY_HOST("http.proxyHost"),
+  /**
+   * System property for the proxy's port number
+   */
+  HTTP_PROXY_PORT("http.proxyPort");
 
-    private final String literat;
+  private final String literat;
 
-    ProxyConfigNames(String literat) {
-        this.literat = literat;
-    }
+  ProxyConfigNames(String literat) {
+    this.literat = literat;
+  }
 }

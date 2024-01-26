@@ -4,43 +4,43 @@
 
 package io.securecodebox.persistence.defectdojo.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.Response;
 import io.securecodebox.persistence.defectdojo.model.UserProfile;
 
-public class UserProfileService extends GenericDefectDojoService<UserProfile>{
+import java.util.ArrayList;
+import java.util.List;
 
-    public UserProfileService(Config config) {
-        super(config);
-    }
+public class UserProfileService extends GenericDefectDojoService<UserProfile> {
 
-    @Override
-    protected String getUrlPath() {
-        return "user_profile";
-    }
+  public UserProfileService(Config config) {
+    super(config);
+  }
 
-    @Override
-    protected Class<UserProfile> getModelClass() {
-        return UserProfile.class;
-    }
+  @Override
+  protected String getUrlPath() {
+    return "user_profile";
+  }
 
-    @Override
-    protected Response<UserProfile> deserializeList(String response) throws JsonProcessingException {
-        // GenericDefectDojoService expects that the response from the defectdojo api is a list
-        // This endpoint returns a single object though, to not break the code this response gets converted to a defectdojo response
-        UserProfile userProfile = this.objectMapper.readValue(response, new TypeReference<>() {});
-        List<UserProfile> userProfileList = new ArrayList<>();
-        userProfileList.add(userProfile);
+  @Override
+  protected Class<UserProfile> getModelClass() {
+    return UserProfile.class;
+  }
 
-        Response<UserProfile> fakeResult = new Response<>();
-        fakeResult.setResults(userProfileList);
-        fakeResult.setCount(1);
-        return fakeResult;
-    }
+  @Override
+  protected Response<UserProfile> deserializeList(String response) throws JsonProcessingException {
+    // GenericDefectDojoService expects that the response from the defectdojo api is a list
+    // This endpoint returns a single object though, to not break the code this response gets converted to a defectdojo response
+    UserProfile userProfile = this.objectMapper.readValue(response, new TypeReference<>() {
+    });
+    List<UserProfile> userProfileList = new ArrayList<>();
+    userProfileList.add(userProfile);
+
+    Response<UserProfile> fakeResult = new Response<>();
+    fakeResult.setResults(userProfileList);
+    fakeResult.setCount(1);
+    return fakeResult;
+  }
 }

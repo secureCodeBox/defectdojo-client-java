@@ -9,10 +9,11 @@ package io.securecodebox.persistence.defectdojo.exception;
  * Indicates a missing {@link io.securecodebox.persistence.defectdojo.config.Config config property}
  */
 public final class ConfigException extends RuntimeException {
-    public ConfigException(final String message) {
-        super(message);
-    }
-    public ConfigException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
+  public ConfigException(final String message) {
+    super(message);
+  }
+
+  public ConfigException(final String message, final Throwable cause) {
+    super(message, cause);
+  }
 }

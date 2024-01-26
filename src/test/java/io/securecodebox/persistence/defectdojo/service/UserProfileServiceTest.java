@@ -8,17 +8,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.User;
 import io.securecodebox.persistence.defectdojo.model.UserProfile;
-
-import java.net.URISyntaxException;
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 
+import java.net.URISyntaxException;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
