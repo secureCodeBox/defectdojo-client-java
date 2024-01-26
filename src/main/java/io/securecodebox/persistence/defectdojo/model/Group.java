@@ -36,12 +36,18 @@ public final class Group implements Model {
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
+    if (queryParams == null) {
+      return false;
+    }
+
     if (queryParams.containsKey("id") && queryParams.get("id").equals(this.id)) {
       return true;
     }
+
     if (queryParams.containsKey("name") && queryParams.get("name").equals(this.name)) {
       return true;
     }
+
     return false;
   }
 }

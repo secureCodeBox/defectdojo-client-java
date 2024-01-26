@@ -7,6 +7,7 @@ package io.securecodebox.persistence.defectdojo.model;
 import lombok.Data;
 
 // TODO: Why we do not have as many annotations as the other models here?
+// TODO: Why does this class does not implement Model?
 @Data
 public final class ScanFile {
   /**

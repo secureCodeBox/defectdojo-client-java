@@ -121,6 +121,10 @@ public final class Finding implements Model {
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
+    if (queryParams == null) {
+      return false;
+    }
+
     return queryParams.containsKey("id") && queryParams.get("id").equals(this.id);
   }
 

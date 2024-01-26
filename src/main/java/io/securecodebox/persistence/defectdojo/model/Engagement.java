@@ -97,9 +97,11 @@ public final class Engagement implements Model {
     if (queryParams == null) {
       return false;
     }
+
     if (queryParams.containsKey("id") && queryParams.get("id") != null && queryParams.get("id").equals(this.id)) {
       return true;
     }
+
     if (queryParams.containsKey("name") && queryParams.get("name") != null && queryParams.get("name").equals(this.name)) {
       return true;
     }
