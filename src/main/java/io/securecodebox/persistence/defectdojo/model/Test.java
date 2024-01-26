@@ -20,7 +20,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Test implements Model {
   @JsonProperty
-  private Long id;// FIXME: Use native type here.
+  private long id;
 
   @JsonProperty
   private String title;
@@ -39,16 +39,16 @@ public final class Test implements Model {
   private List<String> tags = new LinkedList<>();
 
   @JsonProperty("test_type")
-  private Long testType;// FIXME: Use native type here.
+  private long testType;
 
   @JsonProperty
-  private Long lead;// FIXME: Use native type here.
+  private long lead;
 
   @JsonProperty("percent_complete")
-  private Long percentComplete;// FIXME: Use native type here.
+  private long percentComplete;
 
   @JsonProperty
-  private Long engagement;// FIXME: Use native type here.
+  private long engagement;
 
   @JsonProperty
   private String version;
@@ -59,7 +59,7 @@ public final class Test implements Model {
    */
   @JsonProperty
   @Builder.Default
-  private Long environment = 1L;// FIXME: Use native type here.
+  private long environment = 1L;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

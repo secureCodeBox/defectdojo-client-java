@@ -18,7 +18,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class ToolConfig implements Model {
   @JsonProperty
-  private Long id;// FIXME: Use native type here.
+  private long id;
 
   @JsonProperty
   String url;
@@ -28,7 +28,7 @@ public final class ToolConfig implements Model {
   String name;
 
   @JsonProperty("tool_type")
-  private Long toolType;// FIXME: Use native type here.
+  private long toolType;
 
   @JsonProperty("configuration_url")
   String configUrl;

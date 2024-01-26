@@ -19,7 +19,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class RiskAcceptance implements Model {
   @JsonProperty
-  private Long id;// FIXME: Use native type here.
+  private long id;
 
   @JsonProperty
   private String recommendation;
@@ -54,7 +54,7 @@ public final class RiskAcceptance implements Model {
   private OffsetDateTime updatedAt;
 
   @JsonProperty
-  private Long owner;// FIXME: Use native type here.
+  private long owner;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

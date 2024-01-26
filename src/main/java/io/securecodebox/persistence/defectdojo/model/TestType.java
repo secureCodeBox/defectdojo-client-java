@@ -18,17 +18,17 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class TestType implements Model {
   @JsonProperty
-  private Long id;// FIXME: Use native type here.
+  private long id;
 
   @JsonProperty
   @NonNull
   private String name;
 
   @JsonProperty("static_tool")
-  private Boolean staticTool;// FIXME: Use native type here.
+  private boolean staticTool;
 
   @JsonProperty("dynamic_tool")
-  private Boolean dynamicTool;// FIXME: Use native type here.
+  private boolean dynamicTool;
 
 
   @Override

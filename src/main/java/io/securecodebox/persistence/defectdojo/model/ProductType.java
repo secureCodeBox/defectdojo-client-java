@@ -18,17 +18,17 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class ProductType implements Model {
   @JsonProperty
-  private Long id;// FIXME: Use native type here.
+  private long id;
 
   @JsonProperty
   @NonNull
   private String name;
 
   @JsonProperty("critical_product")
-  private Boolean criticalProduct;// FIXME: Use native type here.
+  private boolean criticalProduct;
 
   @JsonProperty("key_product")
-  private Boolean keyProduct;// FIXME: Use native type here.
+  private boolean keyProduct;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
