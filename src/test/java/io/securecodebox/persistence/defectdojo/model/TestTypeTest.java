@@ -1,6 +1,7 @@
 package io.securecodebox.persistence.defectdojo.model;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +14,9 @@ import static org.hamcrest.Matchers.*;
  */
 class TestTypeTest {
     @Test
-    @Disabled("#23 Fails due to wrong equals implementation")
     void equalsAndHashCode() {
-        EqualsVerifier.forClass(TestType.class).verify();
+        EqualsVerifier.forClass(TestType.class)
+          .suppress(Warning.NONFINAL_FIELDS)
+          .verify();
     }
 }

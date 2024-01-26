@@ -15,41 +15,41 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Product extends BaseModel {
+public final class Product implements Model {
   @JsonProperty
-  Long id;
+  private Long id;// FIXME: Use native type here.
 
   @JsonProperty
-  String name;
+  private String name;
 
   @JsonProperty
-  List<String> tags;
+  private List<String> tags;
 
   @JsonProperty
-  String description;
+  private String description;
 
   @JsonProperty("findings_count")
-  Long findingsCount;
+  private Long findingsCount;// FIXME: Use native type here.
 
   @JsonProperty("authorized_users")
-  List<String> authorizedUsers;
+  private List<String> authorizedUsers;
 
   @JsonProperty("prod_type")
-  Long productType;
+  private Long productType;// FIXME: Use native type here.
   
   @JsonProperty("enable_simple_risk_acceptance")
-  Boolean enableSimpleRiskAcceptance;
+  private Boolean enableSimpleRiskAcceptance;// FIXME: Use native type here.
   
   @JsonProperty("enable_full_risk_acceptance")
-  Boolean enableFullRiskAcceptance;
+  private Boolean enableFullRiskAcceptance;// FIXME: Use native type here.
 
   @JsonProperty("authorization_groups")
-  List<Long> authorizationGroups;
+  private List<Long> authorizationGroups;
   
   @JsonProperty
-  String lifecycle;
+  private String lifecycle;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

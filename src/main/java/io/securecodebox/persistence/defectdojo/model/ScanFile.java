@@ -6,19 +6,22 @@ package io.securecodebox.persistence.defectdojo.model;
 
 import lombok.Data;
 
+// TODO: Why we do not have as many annotations as the other models here?
 @Data
-public class ScanFile {
+public final class ScanFile {
     /**
      * A default name must be set
      * <p>
      * It does not matter however unless the parser pays attention to file endings like json or xml.
      * </p>
+     *
+     * TODO: Can this be private?
      */
     static final String DEFAULT_NAME = "default-name.txt";
 
-    String content;
+    private String content;
 
-    String name;
+    private String name;
 
     public ScanFile(String content) {
         this(content, DEFAULT_NAME);

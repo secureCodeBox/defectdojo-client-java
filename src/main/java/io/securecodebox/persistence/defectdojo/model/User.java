@@ -14,21 +14,21 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class User extends BaseModel {
+public final class User implements Model {
   @JsonProperty
-  Long id;
+  private Long id;// FIXME: Use native type here.
 
   @JsonProperty
   @NonNull
-  String username;
+  private String username;
 
   @JsonProperty("first_name")
-  String firstName;
+  private String firstName;
 
   @JsonProperty("last_name")
-  String lastName;
+  private String lastName;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

@@ -19,94 +19,94 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Finding extends BaseModel {
+public final class Finding implements Model {
     @JsonProperty
-    Long id;
+    private Long id;// FIXME: Use native type here.
 
     @JsonProperty
     @NonNull
-    String title;
+    private String title;
 
     @JsonProperty
     @NonNull
-    String description;
+    private String description;
 
     @JsonProperty("found_by")
     @NonNull
-    List<Long> foundBy;
+    private List<Long> foundBy;
 
     @JsonProperty
     @NonNull
-    Severity severity;
+    private Severity severity;
 
     @JsonProperty
     @NonNull
-    Long test;
+    private Long test;// FIXME: Use native type here.
 
     @JsonProperty
-    String mitigation;
+    private String mitigation;
 
     @JsonProperty
-    String impact;
-
-    @JsonProperty
-    @NonNull
-    @Builder.Default
-    Boolean active = true;
+    private String impact;
 
     @JsonProperty
     @NonNull
     @Builder.Default
-    Boolean verified = true;
+    private Boolean active = true;// FIXME: Use native type here.
+
+    @JsonProperty
+    @NonNull
+    @Builder.Default
+    private Boolean verified = true;// FIXME: Use native type here.
 
     @JsonProperty("risk_accepted")
     @NonNull
     @Builder.Default
-    Boolean riskAccepted = false;
+    private Boolean riskAccepted = false;// FIXME: Use native type here.
 
     @JsonProperty("out_of_scope")
     @NonNull
     @Builder.Default
-    Boolean outOfScope = false;
+    private Boolean outOfScope = false;// FIXME: Use native type here.
 
     @JsonProperty
     @NonNull
     @Builder.Default
-    Boolean duplicate = false;
+    private Boolean duplicate = false;// FIXME: Use native type here.
 
     @JsonProperty("duplicate_finding")
     @Builder.Default
-    Long duplicateFinding = null;
+    private Long duplicateFinding = null;// FIXME: Use native type here.
 
     @JsonProperty("false_p")
     @NonNull
     @Builder.Default
-    Boolean falsePositive = false;
+    private Boolean falsePositive = false;// FIXME: Use native type here.
 
     @JsonProperty("component_name")
-    String componentName;
+    private String componentName;
 
     @JsonProperty("component_version")
-    String componentVersion;
+    private String componentVersion;
 
     @JsonProperty("file_path")
-    String filePath;
+    private String filePath;
 
     @JsonProperty
     @NonNull
     @Builder.Default
-    List<Long> endpoints = new LinkedList<>();
+    private List<Long> endpoints = new LinkedList<>();
 
     @JsonProperty("created")
-    OffsetDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @JsonProperty("mitigated")
-    OffsetDateTime mitigatedAt;
+    private OffsetDateTime mitigatedAt;
 
     @JsonProperty("accepted_risks")
-    List<RiskAcceptance> acceptedRisks;
+    private List<RiskAcceptance> acceptedRisks;
 
     @JsonProperty("numerical_severity")
     public String getNumericalSeverity() {

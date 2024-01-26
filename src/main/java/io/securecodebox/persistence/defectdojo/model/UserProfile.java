@@ -14,17 +14,16 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-
-public class UserProfile extends BaseModel {
+public final class UserProfile implements Model {
 
     @JsonProperty
-    User user;
+    private User user;
 
     @Override
     public boolean equalsQueryString(Map<String, Object> queryParams) {
-        // The user_profile endpoint does not have query parameters thats why this function will just return true
+        // The user_profile endpoint does not have query parameters that's why this function will just return true
         return true;
     }
     

@@ -14,38 +14,38 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Endpoint extends BaseModel {
+public final class Endpoint implements Model {
   @JsonProperty
-  Long id;
+  private Long id;// FIXME: Use native type here.
 
   @JsonProperty
-  String protocol;
+  private String protocol;
 
   @JsonProperty
-  String host;
+  private String host;
 
   @JsonProperty("fqdm")
-  String fullyQualifiedDomainName;
+  private String fullyQualifiedDomainName;
 
   @JsonProperty
-  Long port;
+  private Long port;// FIXME: Use native type here.
 
   @JsonProperty
-  String path;
+  private String path;
 
   @JsonProperty
-  String query;
+  private String query;
 
   @JsonProperty
-  String fragment;
+  private String fragment;
 
   @JsonProperty
-  Long product;
+  private Long product;// FIXME: Use native type here.
 
   @JsonProperty
-  Boolean mitigated;
+  private Boolean mitigated;// FIXME: Use native type here.
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

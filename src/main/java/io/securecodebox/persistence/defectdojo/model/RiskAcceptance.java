@@ -15,46 +15,46 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RiskAcceptance extends BaseModel {
+public final class RiskAcceptance implements Model {
   @JsonProperty
-  Long id;
+  private Long id;// FIXME: Use native type here.
 
   @JsonProperty
-  String recommendation;
+  private String recommendation;
 
   @JsonProperty("recommendation_details")
-  String recommendationDetails;
+  private String recommendationDetails;
 
-  String decision;
+  private String decision;
 
   @JsonProperty("decision_details")
-  String decisionDetails;
+  private String decisionDetails;
 
   @JsonProperty
-  String path;
+  private String path;
 
   @JsonProperty("accepted_by")
-  String acceptedBy;
+  private String acceptedBy;
 
   @JsonProperty("expiration_date")
-  OffsetDateTime expirationDate;
+  private OffsetDateTime expirationDate;
 
   @JsonProperty("expiration_date_warned")
-  OffsetDateTime expirationDateWarned;
+  private OffsetDateTime expirationDateWarned;
 
   @JsonProperty("expiration_date_handled")
-  OffsetDateTime expirationDateHandled;
+  private OffsetDateTime expirationDateHandled;
 
   @JsonProperty("created")
-  OffsetDateTime createdAt;
+  private OffsetDateTime createdAt;
 
   @JsonProperty("updated")
-  OffsetDateTime updatedAt;
+  private OffsetDateTime updatedAt;
 
   @JsonProperty
-  Long owner;
+  private Long owner;// FIXME: Use native type here.
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

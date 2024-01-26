@@ -16,42 +16,42 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Test extends BaseModel {
+public final class Test implements Model {
   @JsonProperty
-  Long id;
+  private Long id;// FIXME: Use native type here.
 
   @JsonProperty
-  String title;
+  private String title;
 
   @JsonProperty
-  String description;
+  private String description;
 
   @JsonProperty("target_start")
-  String targetStart;
+  private String targetStart;
 
   @JsonProperty("target_end")
-  String targetEnd;
+  private String targetEnd;
 
   @JsonProperty
   @Builder.Default
-  List<String> tags = new LinkedList<>();
+  private List<String> tags = new LinkedList<>();
 
   @JsonProperty("test_type")
-  Long testType;
+  private Long testType;// FIXME: Use native type here.
 
   @JsonProperty
-  Long lead;
+  private Long lead;// FIXME: Use native type here.
 
   @JsonProperty("percent_complete")
-  Long percentComplete;
+  private Long percentComplete;// FIXME: Use native type here.
 
   @JsonProperty
-  Long engagement;
+  private Long engagement;// FIXME: Use native type here.
 
   @JsonProperty
-  String version;
+  private String version;
 
   /**
    * 1 Development
@@ -59,7 +59,7 @@ public class Test extends BaseModel {
    */
   @JsonProperty
   @Builder.Default
-  Long environment = 1L;
+  private Long environment = 1L;// FIXME: Use native type here.
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

@@ -15,86 +15,86 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Engagement extends BaseModel {
+public final class Engagement implements Model {
   @JsonProperty("branch_tag")
-  public String branch;
+  private  String branch;
 
   @JsonProperty
-  protected Long id;
+  private Long id;
 
   @JsonProperty
-  protected String name;
+  private String name;
 
   @JsonProperty
-  protected Long product;
+  private Long product;// FIXME: Use native type here.
 
   @JsonProperty("target_start")
-  protected String targetStart;
+  private String targetStart;
 
   @JsonProperty("target_end")
-  protected String targetEnd;
+  private String targetEnd;
 
   @JsonProperty
-  protected Long lead;
+  private Long lead;// FIXME: Use native type here.
 
   @JsonProperty("engagement_type")
   @Builder.Default
-  protected String engagementType = "CI/CD";
+  private String engagementType = "CI/CD";
 
   @JsonProperty
   @Builder.Default
-  protected Status status = Status.IN_PROGRESS;
+  private Status status = Status.IN_PROGRESS;
 
   @JsonProperty
-  protected List<String> tags;
+  private List<String> tags;
 
   @JsonProperty
-  protected String tracker;
+  private String tracker;
 
   @JsonProperty("build_id")
-  protected String buildID;
+  private String buildID;
 
   @JsonProperty("commit_hash")
-  protected String commitHash;
+  private String commitHash;
 
   @JsonProperty("source_code_management_uri")
-  protected String repo;
+  private String repo;
 
   @JsonProperty("build_server")
-  protected Long buildServer;
+  private Long buildServer; // FIXME: Use native type here.
 
   @JsonProperty("source_code_management_server")
-  protected Long scmServer;
+  private Long scmServer; // FIXME: Use natvive type here.
 
   @JsonProperty("orchestration_engine")
-  protected Long orchestrationEngine;
+  private Long orchestrationEngine; // FIXME: Use natvive type here.
 
   @JsonProperty
-  protected String description;
+  private String description;
 
   @JsonProperty("deduplication_on_engagement")
-  protected boolean deduplicationOnEngagement;
+  private boolean deduplicationOnEngagement;
 
   @JsonProperty("threat_model")
-  @Builder.Default
-  protected Boolean threatModel = false;
+  @Builder.Default // FIXME: Use native type here.
+  private Boolean threatModel = false;
 
   @JsonProperty("api_test")
-  @Builder.Default
-  protected Boolean apiTest = false;
+  @Builder.Default // FIXME: Use native type here.
+  private Boolean apiTest = false;
 
   @JsonProperty("pen_test")
-  @Builder.Default
-  protected Boolean penTest = false;
+  @Builder.Default // FIXME: Use native type here.
+  private Boolean penTest = false;
 
   @JsonProperty("check_list")
-  @Builder.Default
-  protected Boolean checkList = false;
+  @Builder.Default // FIXME: Use native type here.
+  private Boolean checkList = false;
 
   @JsonProperty
-  protected String version;
+  private String version;
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

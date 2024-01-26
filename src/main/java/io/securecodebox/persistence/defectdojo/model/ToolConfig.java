@@ -14,11 +14,11 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ToolConfig extends BaseModel {
+public final class ToolConfig implements Model {
   @JsonProperty
-  Long id;
+  private Long id;// FIXME: Use native type here.
 
   @JsonProperty
   String url;
@@ -28,7 +28,7 @@ public class ToolConfig extends BaseModel {
   String name;
 
   @JsonProperty("tool_type")
-  Long toolType;
+  private Long toolType;// FIXME: Use native type here.
 
   @JsonProperty("configuration_url")
   String configUrl;
