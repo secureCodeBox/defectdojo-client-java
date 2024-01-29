@@ -74,7 +74,7 @@
         <!-- Dependency versions: -->
         <com.fasterxml.jackson.version>2.16.1</com.fasterxml.jackson.version>
         <org.springframework.version>5.3.29</org.springframework.version>
-        <org.mockito.version>5.9.0</org.mockito.version>
+        <org.mockito.version>5.10.0</org.mockito.version>
     </properties>
 
     <dependencyManagement>
