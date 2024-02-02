@@ -9,10 +9,13 @@ import lombok.Data;
 
 import java.util.List;
 
-// TODO: Why we do not have as many annotations as the other models here?
-// TODO: Why does this class does not implement Model?
+/**
+ * This class wraps the paginated results from DefectDojo
+ *
+ * @param <T> type of results
+ */
 @Data
-public final class Response<T> {
+public final class PaginatedResult<T> {
   @JsonProperty
   private int count;
 

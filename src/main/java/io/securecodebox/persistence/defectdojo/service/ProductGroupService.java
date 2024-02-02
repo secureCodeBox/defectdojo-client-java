@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.ProductGroup;
-import io.securecodebox.persistence.defectdojo.model.Response;
+import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 
 public class ProductGroupService extends GenericDefectDojoService<ProductGroup> {
   public ProductGroupService(Config config) {
@@ -26,7 +26,7 @@ public class ProductGroupService extends GenericDefectDojoService<ProductGroup> 
   }
 
   @Override
-  protected Response<ProductGroup> deserializeList(String response) throws JsonProcessingException {
+  protected PaginatedResult<ProductGroup> deserializeList(String response) throws JsonProcessingException {
     return this.objectMapper.readValue(response, new TypeReference<>() {
     });
   }

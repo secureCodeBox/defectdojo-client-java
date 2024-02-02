@@ -16,7 +16,7 @@ import io.securecodebox.persistence.defectdojo.http.Foo;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
 import io.securecodebox.persistence.defectdojo.model.Model;
-import io.securecodebox.persistence.defectdojo.model.Response;
+import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import lombok.Getter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -87,7 +87,7 @@ public abstract class GenericDefectDojoService<T extends Model> {
 
   protected abstract Class<T> getModelClass();
 
-  protected abstract Response<T> deserializeList(String response) throws JsonProcessingException;
+  protected abstract PaginatedResult<T> deserializeList(String response) throws JsonProcessingException;
 
   public T get(long id) {
     var restTemplate = this.getRestTemplate();
@@ -103,7 +103,7 @@ public abstract class GenericDefectDojoService<T extends Model> {
     return response.getBody();
   }
 
-  protected Response<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) throws JsonProcessingException, URISyntaxException {
+  protected PaginatedResult<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) throws JsonProcessingException, URISyntaxException {
     var restTemplate = this.getRestTemplate();
     HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
