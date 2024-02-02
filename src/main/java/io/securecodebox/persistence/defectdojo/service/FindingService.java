@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.Finding;
-import io.securecodebox.persistence.defectdojo.model.Response;
+import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -30,7 +30,7 @@ public class FindingService extends GenericDefectDojoService<Finding> {
   }
 
   @Override
-  protected Response<Finding> deserializeList(String response) throws JsonProcessingException {
+  protected PaginatedResult<Finding> deserializeList(String response) throws JsonProcessingException {
     return this.objectMapper.readValue(response, new TypeReference<>() {
     });
   }

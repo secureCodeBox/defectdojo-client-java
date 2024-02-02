@@ -7,7 +7,7 @@ package io.securecodebox.persistence.defectdojo.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.securecodebox.persistence.defectdojo.config.Config;
-import io.securecodebox.persistence.defectdojo.model.Response;
+import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import io.securecodebox.persistence.defectdojo.model.UserProfile;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class UserProfileService extends GenericDefectDojoService<UserProfile> {
   }
 
   @Override
-  protected Response<UserProfile> deserializeList(String response) throws JsonProcessingException {
+  protected PaginatedResult<UserProfile> deserializeList(String response) throws JsonProcessingException {
     // GenericDefectDojoService expects that the response from the defectdojo api is a list
     // This endpoint returns a single object though, to not break the code this response gets converted to a defectdojo response
     UserProfile userProfile = this.objectMapper.readValue(response, new TypeReference<>() {
@@ -38,7 +38,7 @@ public class UserProfileService extends GenericDefectDojoService<UserProfile> {
     List<UserProfile> userProfileList = new ArrayList<>();
     userProfileList.add(userProfile);
 
-    Response<UserProfile> fakeResult = new Response<>();
+    PaginatedResult<UserProfile> fakeResult = new PaginatedResult<>();
     fakeResult.setResults(userProfileList);
     fakeResult.setCount(1);
     return fakeResult;

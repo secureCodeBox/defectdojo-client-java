@@ -5,12 +5,12 @@ import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests for {@link Response}
+ * Tests for {@link PaginatedResult}
  */
-class ResponseTest {
+class PaginatedResultTest {
   @Test
   void equalsAndHashCode() {
-    EqualsVerifier.forClass(Response.class)
+    EqualsVerifier.forClass(PaginatedResult.class)
       .suppress(Warning.NONFINAL_FIELDS)
       .verify();
   }

@@ -7,7 +7,7 @@ package io.securecodebox.persistence.defectdojo.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.securecodebox.persistence.defectdojo.config.Config;
-import io.securecodebox.persistence.defectdojo.model.Response;
+import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import io.securecodebox.persistence.defectdojo.model.User;
 
 public class UserService extends GenericDefectDojoService<User> {
@@ -26,7 +26,7 @@ public class UserService extends GenericDefectDojoService<User> {
   }
 
   @Override
-  protected Response<User> deserializeList(String response) throws JsonProcessingException {
+  protected PaginatedResult<User> deserializeList(String response) throws JsonProcessingException {
     return this.objectMapper.readValue(response, new TypeReference<>() {
     });
   }
