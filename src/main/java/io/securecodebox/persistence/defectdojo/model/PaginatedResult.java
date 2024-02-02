@@ -15,7 +15,7 @@ import java.util.List;
  * @param <T> type of results
  */
 @Data
-public final class PaginatedResult<T> {
+public final class PaginatedResult<T extends Model> {
   @JsonProperty
   private int count;
 
