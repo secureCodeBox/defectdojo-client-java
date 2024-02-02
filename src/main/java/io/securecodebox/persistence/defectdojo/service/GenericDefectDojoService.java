@@ -107,7 +107,7 @@ public abstract class GenericDefectDojoService<T extends Model> {
     var restTemplate = this.getRestTemplate();
     HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
-    var mutableQueryParams = new HashMap<String, Object>(queryParams);
+    var mutableQueryParams = new HashMap<>(queryParams);
 
     mutableQueryParams.put("limit", String.valueOf(limit));
     mutableQueryParams.put("offset", String.valueOf(offset));
@@ -133,7 +133,7 @@ public abstract class GenericDefectDojoService<T extends Model> {
   public List<T> search(Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
     List<T> objects = new LinkedList<>();
 
-    boolean hasNext = false;
+    boolean hasNext;
     long page = 0;
     do {
       var response = internalSearch(queryParams, DEFECT_DOJO_OBJET_LIMIT, DEFECT_DOJO_OBJET_LIMIT * page++);
