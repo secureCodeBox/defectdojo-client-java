@@ -7,6 +7,7 @@ package io.securecodebox.persistence.defectdojo.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,12 +20,16 @@ public final class PaginatedResult<T extends Model> {
   @JsonProperty
   private int count;
 
+  /**
+   * TODO: What does this contain? I would expect a number for the next page.
+   * FIXME: If this provides an empty string to prevent NPE, then UserProfileServiceTest fails.
+   */
   @JsonProperty
   private String next;
 
   @JsonProperty
-  private String previous;
+  private String previous = "";
 
   @JsonProperty
-  private List<T> results;
+  private List<T> results = new ArrayList<>();
 }
