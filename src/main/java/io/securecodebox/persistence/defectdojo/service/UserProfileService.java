@@ -13,7 +13,7 @@ import io.securecodebox.persistence.defectdojo.model.UserProfile;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfileService extends GenericDefectDojoService<UserProfile> {
+public final class UserProfileService extends GenericDefectDojoService<UserProfile> {
 
   public UserProfileService(Config config) {
     super(config);
@@ -31,16 +31,15 @@ public class UserProfileService extends GenericDefectDojoService<UserProfile> {
 
   @Override
   protected PaginatedResult<UserProfile> deserializeList(String response) throws JsonProcessingException {
-    // GenericDefectDojoService expects that the response from the defectdojo api is a list
-    // This endpoint returns a single object though, to not break the code this response gets converted to a defectdojo response
-    UserProfile userProfile = this.objectMapper.readValue(response, new TypeReference<>() {
+    /* GenericDefectDojoService expects that the response from the defectdojo api is a list.
+     * This endpoint returns a single object though, to not break the code this response
+     * gets converted to a defectdojo response.
+     */
+    final var userProfile = this.objectMapper.readValue(response, new TypeReference<UserProfile>() {
     });
-    List<UserProfile> userProfileList = new ArrayList<>();
-    userProfileList.add(userProfile);
-
-    PaginatedResult<UserProfile> fakeResult = new PaginatedResult<>();
-    fakeResult.setResults(userProfileList);
-    fakeResult.setCount(1);
-    return fakeResult;
+    final var result = new PaginatedResult<UserProfile>();
+    result.setResults(List.of(userProfile));
+    result.setCount(1);
+    return result;
   }
 }
