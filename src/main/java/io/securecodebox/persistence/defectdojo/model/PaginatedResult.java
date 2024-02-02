@@ -25,16 +25,21 @@ public final class PaginatedResult<T extends Model> {
 
   /**
    * TODO: What does this contain? I would expect a number for the next page.
-   * FIXME: If this provides an empty string to prevent NPE, then UserProfileServiceTest fails.
+   * <p>
+   * This is {@code null} if there is no next page.
+   * </p>
    */
   @JsonProperty
   private String next;
 
   /**
    * TODO: What does this contain? I would expect a number for the previous page.
+   * <p>
+   * This is {@code null} if there is no next page.
+   * </p>
    */
   @JsonProperty
-  private String previous = "";
+  private String previous;
 
   @JsonProperty
   private List<T> results = new ArrayList<>();
