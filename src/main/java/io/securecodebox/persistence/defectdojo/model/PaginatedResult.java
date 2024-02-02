@@ -17,6 +17,9 @@ import java.util.List;
  */
 @Data
 public final class PaginatedResult<T extends Model> {
+  /**
+   * TODO: What does this count? The number of results in one page or the total number?
+   */
   @JsonProperty
   private int count;
 
@@ -27,6 +30,9 @@ public final class PaginatedResult<T extends Model> {
   @JsonProperty
   private String next;
 
+  /**
+   * TODO: What does this contain? I would expect a number for the previous page.
+   */
   @JsonProperty
   private String previous = "";
 
