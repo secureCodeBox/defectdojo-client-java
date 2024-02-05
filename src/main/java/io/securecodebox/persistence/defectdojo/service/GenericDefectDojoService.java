@@ -35,6 +35,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 // FIXME: Should be package private bc implementation detail.
+// TODO: Remove JsonProcessingException, URISyntaxException from public API and use a own runtime exception type bc these checked exceptions clutter the client coe.
 public abstract class GenericDefectDojoService<T extends Model> {
   private static final String API_PREFIX = "/api/v2/";
   private static final long DEFECT_DOJO_OBJET_LIMIT = 100L;
