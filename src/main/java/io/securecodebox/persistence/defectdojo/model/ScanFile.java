@@ -6,8 +6,13 @@ package io.securecodebox.persistence.defectdojo.model;
 
 import lombok.Data;
 
-// TODO: Why we do not have as many annotations as the other models here?
-// TODO: Why does this class does not implement Model?
+/**
+ * DTO to upload a secureCodeBox scan file
+ * <p>
+ * This is not a JSON model – thus not implementing the Model interface – because it is only used as DTO for the
+ * multi-part form upload.
+ * </p>
+ */
 @Data
 public final class ScanFile {
   /**
@@ -18,8 +23,17 @@ public final class ScanFile {
    */
   private static final String DEFAULT_NAME = "default-name.txt";
 
+  /**
+   * The file content.
+   */
   private String content;
 
+  /**
+   * Name of file.
+   * <p>
+   * Defaults to {@link #DEFAULT_NAME}.
+   * </p>
+   */
   private String name;
 
   public ScanFile(String content) {
