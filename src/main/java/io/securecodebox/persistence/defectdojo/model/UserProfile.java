@@ -23,10 +23,12 @@ public final class UserProfile implements Model {
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {
+    if (QueryParamsComparator.isNull(queryParams)) {
+      return false;
+    }
+
     // The user_profile endpoint does not have query parameters that's
     // why this function will just return true.
-    // TODO: All other implementations return false if null is given for queryParams.
-    //       We should consider to change this API according to that.
     return true;
   }
 

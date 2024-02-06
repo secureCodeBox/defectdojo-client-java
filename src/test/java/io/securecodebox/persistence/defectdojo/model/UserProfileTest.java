@@ -22,11 +22,18 @@ class UserProfileTest {
   }
 
   @Test
-  void equalsQueryString_alwaysTrue() {
+  void equalsQueryString_alwaysTrueIfNotNullGiven() {
     final var sut = UserProfile.builder()
       .build();
 
-    assertThat(sut.equalsQueryString(null), is(true));
     assertThat(sut.equalsQueryString(Collections.emptyMap()), is(true));
+  }
+
+  @Test
+  void equalsQueryString_alwaysFalseIfNull() {
+    final var sut = UserProfile.builder()
+      .build();
+
+    assertThat(sut.equalsQueryString(null), is(false));
   }
 }
