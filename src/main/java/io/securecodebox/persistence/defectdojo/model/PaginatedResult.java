@@ -18,13 +18,13 @@ import java.util.List;
 @Data
 public final class PaginatedResult<T extends Model> {
   /**
-   * TODO: What does this count? The number of results in one page or the total number?
+   * Total number of results
    */
   @JsonProperty
   private int count;
 
   /**
-   * TODO: What does this contain? I would expect a number for the next page.
+   * URL to the result's next page
    * <p>
    * This is {@code null} if there is no next page.
    * </p>
@@ -33,7 +33,7 @@ public final class PaginatedResult<T extends Model> {
   private String next;
 
   /**
-   * TODO: What does this contain? I would expect a number for the previous page.
+   * URL to the result's previous page
    * <p>
    * This is {@code null} if there is no previous page.
    * </p>
@@ -41,6 +41,12 @@ public final class PaginatedResult<T extends Model> {
   @JsonProperty
   private String previous;
 
+  /**
+   * Result for current page
+   * <p>
+   * Never {@code null}.
+   * </p>
+   */
   @JsonProperty
   private List<T> results = new ArrayList<>();
 }
