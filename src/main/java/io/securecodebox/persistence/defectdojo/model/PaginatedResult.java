@@ -35,7 +35,7 @@ public final class PaginatedResult<T extends Model> {
   /**
    * TODO: What does this contain? I would expect a number for the previous page.
    * <p>
-   * This is {@code null} if there is no next page.
+   * This is {@code null} if there is no previous page.
    * </p>
    */
   @JsonProperty
