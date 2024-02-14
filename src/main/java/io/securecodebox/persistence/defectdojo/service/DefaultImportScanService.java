@@ -11,6 +11,7 @@ import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -40,6 +41,7 @@ import java.util.Map;
 /*
  * https://defectdojo.security.iteratec.dev/api/v2/oa3/swagger-ui/#operations-tag-import-scan
  */
+@Slf4j
 class DefaultImportScanService implements ImportScanService {
     private static final List<HttpMessageConverter<?>> HTTP_MESSAGE_CONVERTERS = List.of(
             new FormHttpMessageConverter(),
@@ -123,7 +125,8 @@ class DefaultImportScanService implements ImportScanService {
             final var payload = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
             return exchangeRequest(endpoint, payload);
         } catch (HttpClientErrorException e) {
-            throw new PersistenceException("Failed to attach findings to engagement.");
+            log.error("Exception while attaching findings to engagement: {}", e.getMessage());
+            throw new PersistenceException("Failed to attach findings to engagement.", e);
         }
     }
 
