@@ -3,11 +3,9 @@
 // SPDX-License-Identifier: Apache-2.0
 package io.securecodebox.persistence.defectdojo.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.Model;
 import lombok.NonNull;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,19 +31,15 @@ public interface DefectDojoService<T extends Model> {
    *
    * @param queryParams not {@code null}
    * @return not {@code null}, maybe empty
-   * @throws URISyntaxException
-   * @throws JsonProcessingException
    */
-  List<T> search(@NonNull Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException;
+  List<T> search(@NonNull Map<String, Object> queryParams);
 
   /**
    * Get list of all model objects in DefectDojo
    *
    * @return never {@code null}, maybe empty
-   * @throws URISyntaxException
-   * @throws JsonProcessingException
    */
-  List<T> search() throws URISyntaxException, JsonProcessingException;
+  List<T> search();
 
   /**
    * Search for a single model object in DefectDojo
@@ -55,10 +49,8 @@ public interface DefectDojoService<T extends Model> {
    *
    * @param searchObject not {@code null}
    * @return never {@code null}
-   * @throws URISyntaxException
-   * @throws JsonProcessingException
    */
-  Optional<T> searchUnique(@NonNull T searchObject) throws URISyntaxException, JsonProcessingException;
+  Optional<T> searchUnique(@NonNull T searchObject);
 
   /**
    * Search for a single model object in DefectDojo
@@ -68,10 +60,8 @@ public interface DefectDojoService<T extends Model> {
    *
    * @param queryParams not {@code null}
    * @return never {@code null}
-   * @throws URISyntaxException
-   * @throws JsonProcessingException
    */
-  Optional<T> searchUnique(@NonNull Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException;
+  Optional<T> searchUnique(@NonNull Map<String, Object> queryParams);
 
   /**
    * Create the given model object in DefectDojo
