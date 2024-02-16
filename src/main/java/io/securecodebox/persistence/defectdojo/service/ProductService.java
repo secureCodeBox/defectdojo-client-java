@@ -7,8 +7,8 @@ package io.securecodebox.persistence.defectdojo.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.securecodebox.persistence.defectdojo.config.Config;
-import io.securecodebox.persistence.defectdojo.model.Product;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
+import io.securecodebox.persistence.defectdojo.model.Product;
 
 public class ProductService extends GenericDefectDojoService<Product> {
 
