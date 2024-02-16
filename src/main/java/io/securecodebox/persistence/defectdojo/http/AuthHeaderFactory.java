@@ -30,11 +30,12 @@ public final class AuthHeaderFactory {
    * @return never {@code null}
    */
   public HttpHeaders generateAuthorizationHeaders() {
-    HttpHeaders headers = new HttpHeaders();
+    final var headers = new HttpHeaders();
+    log.debug("Add Authorization header.");
     headers.set(HttpHeaders.AUTHORIZATION, "Token " + this.config.getApiKey());
 
     if (proxyConfig.isComplete()) {
-      log.info("Setting Proxy Auth Header...");
+      log.debug("Add Proxy-Authorization header.");
       headers.set(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + encodeProxyCredentials(proxyConfig));
     }
 
