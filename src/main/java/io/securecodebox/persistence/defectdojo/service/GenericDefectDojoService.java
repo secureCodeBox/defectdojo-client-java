@@ -5,12 +5,12 @@
 package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.cfg.CoercionAction;
 import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
 import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.exception.TooManyResponsesException;
 import io.securecodebox.persistence.defectdojo.http.Foo;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
@@ -36,7 +36,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
-// TODO: Remove JsonProcessingException, URISyntaxException from public API and use a own runtime exception type bc these checked exceptions clutter the client coe.
 @Slf4j
 abstract class GenericDefectDojoService<T extends Model> implements DefectDojoService<T> {
   private static final String API_PREFIX = "/api/v2/";
@@ -84,7 +83,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   @Override
-  public final List<T> search(@NonNull Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
+  public final List<T> search(@NonNull Map<String, Object> queryParams) {
     List<T> objects = new LinkedList<>();
 
     boolean hasNext;
@@ -103,13 +102,13 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   @Override
-  public final List<T> search() throws URISyntaxException, JsonProcessingException {
+  public final List<T> search() {
     return search(new LinkedHashMap<>());
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public final Optional<T> searchUnique(T searchObject) throws URISyntaxException, JsonProcessingException {
+  public final Optional<T> searchUnique(@NonNull T searchObject) {
     Map<String, Object> queryParams = searchStringMapper.convertValue(searchObject, Map.class);
 
     var objects = search(queryParams);
@@ -120,7 +119,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   @Override
-  public final Optional<T> searchUnique(@NonNull Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
+  public final Optional<T> searchUnique(@NonNull Map<String, Object> queryParams) {
     var objects = search(queryParams);
 
     return objects.stream()
@@ -173,9 +172,8 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
    *
    * @param response not {@code null}, maybe empty
    * @return not {@code null}
-   * @throws JsonProcessingException if string is not parsable as JSON
    */
-  protected abstract PaginatedResult<T> deserializeList(@NonNull String response) throws JsonProcessingException;
+  protected abstract PaginatedResult<T> deserializeList(@NonNull String response);
 
   /**
    * @return The DefectDojo Authentication Header
@@ -197,7 +195,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     return restTemplate;
   }
 
-  protected PaginatedResult<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) throws JsonProcessingException, URISyntaxException {
+  protected PaginatedResult<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) {
     var restTemplate = this.getRestTemplate();
     HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
@@ -211,12 +209,18 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
       multiValueMap.set(entry.getKey(), String.valueOf(entry.getValue()));
     }
 
-    var url = new URI(this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/");
-    log.debug("Requesting URL: " + url);
-    var uriBuilder = UriComponentsBuilder.fromUri(url).queryParams(multiValueMap);
+    final var url = this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/";
+    final UriComponentsBuilder builder;
+    try {
+      builder = UriComponentsBuilder
+        .fromUri(new URI(url))
+        .queryParams(multiValueMap);
+    } catch (URISyntaxException e) {
+      throw new PersistenceException("Bad URL given: " + url, e);
+    }
 
-    ResponseEntity<String> responseString = restTemplate.exchange(
-      uriBuilder.build(mutableQueryParams),
+    final ResponseEntity<String> responseString = restTemplate.exchange(
+      builder.build(mutableQueryParams),
       HttpMethod.GET,
       payload,
       String.class
