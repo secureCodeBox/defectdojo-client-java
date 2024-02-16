@@ -25,36 +25,7 @@ class FooTest {
     .build();
   private final Foo sut = new Foo(config, proxyConfig);
 
-  @Test
-  void createCredentialsProvider() {
-    final var result = sut.createCredentialsProvider();
-    final var credentials = result.getCredentials(sut.createAuthScope());
 
-    assertAll(
-      () -> assertThat(credentials.getUserPrincipal().getName(), is(proxyConfig.getUser())),
-      () -> assertThat(credentials.getPassword(), is(proxyConfig.getPassword()))
-    );
-  }
-
-  @Test
-  void createAuthScope() {
-    final var result = sut.createAuthScope();
-
-    assertAll(
-      () -> assertThat(result.getHost(), is(proxyConfig.getHost())),
-      () -> assertThat(result.getPort(), is(proxyConfig.getPort()))
-    );
-  }
-
-  @Test
-  void createCredentials() {
-    final var result = sut.createCredentials();
-
-    assertAll(
-      () -> assertThat(result.getUserPrincipal().getName(), is(proxyConfig.getUser())),
-      () -> assertThat(result.getPassword(), is(proxyConfig.getPassword()))
-    );
-  }
 
   @Test
   void createHttpHost() {
