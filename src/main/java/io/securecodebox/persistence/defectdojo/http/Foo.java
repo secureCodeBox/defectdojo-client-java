@@ -36,27 +36,8 @@ public final class Foo {
     this.proxyConfig = proxyConfig;
   }
 
-  /**
-   * This method generates appropriate authorization headers
-   *
-   * @return never {@code null}
-   */
-  public HttpHeaders generateAuthorizationHeaders() {
-    HttpHeaders headers = new HttpHeaders();
-    headers.set(HttpHeaders.AUTHORIZATION, "Token " + this.config.getApiKey());
 
-    if (proxyConfig.isComplete()) {
-      log.info("Setting Proxy Auth Header...");
-      headers.set(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + encodeProxyCredentials(proxyConfig));
-    }
 
-    return headers;
-  }
-
-  static String encodeProxyCredentials(@NonNull final ProxyConfig cfg) {
-    final var credential = String.format("%s:%s", cfg.getUser(), cfg.getPassword());
-    return Base64.getEncoder().encodeToString(credential.getBytes(StandardCharsets.UTF_8));
-  }
 
   public RestTemplate createRestTemplate() {
     if (proxyConfig.isComplete()) {

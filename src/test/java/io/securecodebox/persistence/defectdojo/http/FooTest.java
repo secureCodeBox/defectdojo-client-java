@@ -26,44 +26,6 @@ class FooTest {
   private final Foo sut = new Foo(config, proxyConfig);
 
   @Test
-  void generateAuthorizationHeaders_withoutProxyAuth() {
-    final var innerSut = new Foo(config, ProxyConfig.NULL);
-
-    assertAll(
-      () -> assertThat(
-        innerSut.generateAuthorizationHeaders().get(HttpHeaders.AUTHORIZATION),
-        contains("Token apikey")),
-      () -> assertThat(
-        innerSut.generateAuthorizationHeaders().get(HttpHeaders.PROXY_AUTHORIZATION),
-        not(contains("Basic dXNlcjpwdw==")))
-    );
-  }
-
-  @Test
-  void generateAuthorizationHeaders_withProxyAuth() {
-    final var innerSut = new Foo(config, proxyConfig);
-
-    assertAll(
-      () -> assertThat(
-        innerSut.generateAuthorizationHeaders().get(HttpHeaders.AUTHORIZATION),
-        contains("Token apikey")),
-      () -> assertThat(
-        innerSut.generateAuthorizationHeaders().get(HttpHeaders.PROXY_AUTHORIZATION),
-        contains("Basic dXNlcjpwdw=="))
-    );
-  }
-
-  @Test
-  void encodeProxyCredentials() {
-    final var proxyConfig = ProxyConfig.builder()
-      .user("bärtram")
-      .password("gohze8Ae")
-      .build();
-
-    assertThat(Foo.encodeProxyCredentials(proxyConfig), is("YsOkcnRyYW06Z29oemU4QWU="));
-  }
-
-  @Test
   void createCredentialsProvider() {
     final var result = sut.createCredentialsProvider();
     final var credentials = result.getCredentials(sut.createAuthScope());

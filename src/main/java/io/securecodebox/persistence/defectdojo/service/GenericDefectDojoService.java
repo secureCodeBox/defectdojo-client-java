@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.exception.TooManyResponsesException;
+import io.securecodebox.persistence.defectdojo.http.AuthHeaderFactory;
 import io.securecodebox.persistence.defectdojo.http.Foo;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
@@ -179,7 +180,9 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
    * @return The DefectDojo Authentication Header
    */
   private HttpHeaders getDefectDojoAuthorizationHeaders() {
-    return new Foo(config, new ProxyConfigFactory().create()).generateAuthorizationHeaders();
+    final var factory = new AuthHeaderFactory(config);
+    factory.setProxyConfig(new ProxyConfigFactory().create());
+    return factory.generateAuthorizationHeaders();
   }
 
   private RestTemplate setupRestTemplate() {
