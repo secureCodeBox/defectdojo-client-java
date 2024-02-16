@@ -4,7 +4,6 @@
 
 package io.securecodebox.persistence.defectdojo.http;
 
-import io.securecodebox.persistence.defectdojo.config.Config;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
@@ -18,12 +17,10 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 public final class Foo {
-  private final Config config;
   private final ProxyConfig proxyConfig;
 
-  public Foo(@NonNull final Config config, @NonNull final ProxyConfig proxyConfig) {
+  public Foo(@NonNull ProxyConfig proxyConfig) {
     super();
-    this.config = config;
     this.proxyConfig = proxyConfig;
   }
 

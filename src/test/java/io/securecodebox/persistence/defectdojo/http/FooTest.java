@@ -16,14 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
  * Tests for {@link Foo}
  */
 class FooTest {
-  private final Config config = new Config("url", "apikey");
   private final ProxyConfig proxyConfig = ProxyConfig.builder()
     .user("user")
     .password("pw")
     .host("host")
     .port(42)
     .build();
-  private final Foo sut = new Foo(config, proxyConfig);
+  private final Foo sut = new Foo(proxyConfig);
 
 
 
