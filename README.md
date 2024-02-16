@@ -32,6 +32,7 @@ The client is supposed to be compatible with DefectDojo 1.10 and later, older ve
 
 ```java
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.service.ProductTypeService;
 
@@ -41,7 +42,7 @@ public class DefectDojoClientTest {
     public static void main(String[] args) throws URISyntaxException, JsonProcessingException {
 
         // Configure DefectDojo URl and APIv2 Key
-        var conf = new Config("https://defectdojo.example.com", "f8....");
+        var conf = new ClientConfig("https://defectdojo.example.com", "f8....");
 
         var productTypeService = new ProductTypeService(conf);
         var productTypes = productTypeService.search();

@@ -1,6 +1,6 @@
 package io.securecodebox.persistence.defectdojo.http;
 
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 
@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * Tests for {@link AuthHeaderFactory}
  */
 class AuthHeaderFactoryTest {
-  private final Config config = new Config("url", "apikey");
-  private final AuthHeaderFactory sut = new AuthHeaderFactory(config);
+  private final ClientConfig clientConfig = new ClientConfig("url", "apikey");
+  private final AuthHeaderFactory sut = new AuthHeaderFactory(clientConfig);
 
   @Test
   void setProxyConfig_doesNotAllowNull() {

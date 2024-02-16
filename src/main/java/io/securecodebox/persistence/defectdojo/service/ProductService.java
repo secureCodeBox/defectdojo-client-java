@@ -6,7 +6,7 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import io.securecodebox.persistence.defectdojo.model.Product;
@@ -14,8 +14,8 @@ import lombok.NonNull;
 
 public class ProductService extends GenericDefectDojoService<Product> {
 
-  public ProductService(Config config) {
-    super(config);
+  public ProductService(ClientConfig clientConfig) {
+    super(clientConfig);
   }
 
   @Override
@@ -29,7 +29,7 @@ public class ProductService extends GenericDefectDojoService<Product> {
   }
 
   @Override
-  protected PaginatedResult<Product> deserializeList(String response) {
+  protected PaginatedResult<Product> deserializeList(@NonNull String response) {
     try {
       return this.objectMapper.readValue(response, new TypeReference<>() {
       });

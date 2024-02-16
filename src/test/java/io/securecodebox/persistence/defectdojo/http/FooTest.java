@@ -4,9 +4,7 @@
 
 package io.securecodebox.persistence.defectdojo.http;
 
-import io.securecodebox.persistence.defectdojo.config.Config;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

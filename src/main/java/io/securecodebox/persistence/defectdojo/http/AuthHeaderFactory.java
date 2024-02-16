@@ -1,6 +1,6 @@
 package io.securecodebox.persistence.defectdojo.http;
 
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +14,14 @@ import java.util.Base64;
  */
 @Slf4j
 public final class AuthHeaderFactory {
-  private final Config config;
+  private final ClientConfig clientConfig;
   @Setter
   @NonNull
   private ProxyConfig proxyConfig = ProxyConfig.NULL;
 
-  public AuthHeaderFactory(@NonNull Config config) {
+  public AuthHeaderFactory(@NonNull ClientConfig clientConfig) {
     super();
-    this.config = config;
+    this.clientConfig = clientConfig;
   }
 
   /**
@@ -32,7 +32,7 @@ public final class AuthHeaderFactory {
   public HttpHeaders generateAuthorizationHeaders() {
     final var headers = new HttpHeaders();
     log.debug("Add Authorization header.");
-    headers.set(HttpHeaders.AUTHORIZATION, "Token " + this.config.getApiKey());
+    headers.set(HttpHeaders.AUTHORIZATION, "Token " + this.clientConfig.getApiKey());
 
     if (proxyConfig.isComplete()) {
       log.debug("Add Proxy-Authorization header.");
