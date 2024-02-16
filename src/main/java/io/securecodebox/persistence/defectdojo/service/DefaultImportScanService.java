@@ -5,7 +5,7 @@
 package io.securecodebox.persistence.defectdojo.service;
 
 import io.securecodebox.persistence.defectdojo.ScanType;
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
@@ -56,13 +56,13 @@ class DefaultImportScanService implements ImportScanService {
   /**
    * Dedicated constructor.
    *
-   * @param config      not {@code null}
+   * @param clientConfig      not {@code null}
    * @param proxyConfig not {@code null}
    */
-  DefaultImportScanService(final @NonNull Config config, @NonNull ProxyConfig proxyConfig) {
+  DefaultImportScanService(final @NonNull ClientConfig clientConfig, @NonNull ProxyConfig proxyConfig) {
     super();
-    this.defectDojoUrl = config.getUrl();
-    this.defectDojoApiKey = config.getApiKey();
+    this.defectDojoUrl = clientConfig.getUrl();
+    this.defectDojoApiKey = clientConfig.getApiKey();
     this.proxyConfig = proxyConfig;
   }
 

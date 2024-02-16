@@ -4,7 +4,7 @@
 
 package io.securecodebox.persistence.defectdojo.config;
 
-import io.securecodebox.persistence.defectdojo.exception.ConfigException;
+import io.securecodebox.persistence.defectdojo.exception.ClientConfigException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
-public final class Config {
+public final class ClientConfig {
   /**
    * Default for {@link #maxPageCountForGets}
    */
@@ -24,7 +24,7 @@ public final class Config {
   /**
    * Null pattern object.
    */
-  public static final Config NULL = new Config("", "", DEFAULT_MAX_PAGE_COUNT_FOR_GETS);
+  public static final ClientConfig NULL = new ClientConfig("", "", DEFAULT_MAX_PAGE_COUNT_FOR_GETS);
 
   /**
    * URL of the host which serves the DefectDojo API.
@@ -59,7 +59,7 @@ public final class Config {
    * @param url    not {@code null}
    * @param apiKey not {@code null}
    */
-  public Config(final @NonNull String url, final @NonNull String apiKey) {
+  public ClientConfig(final @NonNull String url, final @NonNull String apiKey) {
     this(url, apiKey, DEFAULT_MAX_PAGE_COUNT_FOR_GETS);
   }
 
@@ -70,7 +70,7 @@ public final class Config {
    * @param apiKey              not {@code null}
    * @param maxPageCountForGets not less than 1
    */
-  public Config(final @NonNull String url, final @NonNull String apiKey, final int maxPageCountForGets) {
+  public ClientConfig(final @NonNull String url, final @NonNull String apiKey, final int maxPageCountForGets) {
     super();
     this.url = url;
     this.apiKey = apiKey;
@@ -90,7 +90,7 @@ public final class Config {
    *
    * @return never {@code null}
    */
-  public static Config fromEnv() {
+  public static ClientConfig fromEnv() {
     final var url = findRequiredEnvVar(EnvVars.DEFECTDOJO_URL);
     final var apiKey = findRequiredEnvVar(EnvVars.DEFECTDOJO_APIKEY);
     final int maxPageCountForGets;
@@ -99,14 +99,14 @@ public final class Config {
       try {
         maxPageCountForGets = Integer.parseInt(findEnvVar(EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS));
       } catch (final NumberFormatException e) {
-        throw new ConfigException(String.format("Given value for environment variable '%s' is not a valid number! Given was '%s'.", EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS.literal, findEnvVar(EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS)),
+        throw new ClientConfigException(String.format("Given value for environment variable '%s' is not a valid number! Given was '%s'.", EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS.literal, findEnvVar(EnvVars.DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS)),
           e);
       }
     } else {
       maxPageCountForGets = DEFAULT_MAX_PAGE_COUNT_FOR_GETS;
     }
 
-    return new Config(url, apiKey, maxPageCountForGets);
+    return new ClientConfig(url, apiKey, maxPageCountForGets);
   }
 
   private static boolean hasEnvVar(final @NonNull EnvVars name) {
@@ -121,7 +121,7 @@ public final class Config {
     final var envVar = System.getenv(name.literal);
 
     if (envVar == null) {
-      throw new ConfigException(String.format("Missing environment variable '%s'!", name.literal));
+      throw new ClientConfigException(String.format("Missing environment variable '%s'!", name.literal));
     }
     return envVar;
   }

@@ -4,7 +4,7 @@
 
 package io.securecodebox.persistence.defectdojo.service;
 
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -18,13 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Tests for {@link DefaultImportScanService}
  */
-final class DefaultImportScanServiceTest {
-  private final Config config = new Config(
+class DefaultImportScanServiceTest {
+  private final ClientConfig clientConfig = new ClientConfig(
     "http://localhost",
     "apiKey",
     23
   );
-  private final DefaultImportScanService sut = new DefaultImportScanService(config, ProxyConfig.NULL);
+  private final DefaultImportScanService sut = new DefaultImportScanService(clientConfig, ProxyConfig.NULL);
 
   @Test
   void constructorShouldThrowExceptionOnNullConfig() {
@@ -36,7 +36,7 @@ final class DefaultImportScanServiceTest {
   @Test
   void constructorShouldThrowExceptionOnNullProxyConfig() {
     assertThrows(NullPointerException.class, () -> {
-      new DefaultImportScanService(Config.NULL, null);
+      new DefaultImportScanService(ClientConfig.NULL, null);
     });
   }
 
@@ -57,7 +57,7 @@ final class DefaultImportScanServiceTest {
       .host("host")
       .port(42)
       .build();
-    final var innerSut = new DefaultImportScanService(config, proxyConfig);
+    final var innerSut = new DefaultImportScanService(clientConfig, proxyConfig);
 
     assertThat(innerSut.shouldConfigureProxySettings(), is(true));
   }
@@ -66,7 +66,7 @@ final class DefaultImportScanServiceTest {
   void shouldConfigureProxySettings_falseIfProxyConfigIsIncomplete() {
     final var proxyConfig = ProxyConfig.builder()
       .build();
-    final var innerSut = new DefaultImportScanService(config, proxyConfig);
+    final var innerSut = new DefaultImportScanService(clientConfig, proxyConfig);
 
     assertThat(innerSut.shouldConfigureProxySettings(), is(false));
   }

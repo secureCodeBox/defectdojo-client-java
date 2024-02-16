@@ -6,7 +6,7 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import io.securecodebox.persistence.defectdojo.model.ToolType;
@@ -21,8 +21,8 @@ public class ToolTypeService extends GenericDefectDojoService<ToolType> {
   @Deprecated(forRemoval = true) // Unused
   public static final String SECURITY_TEST_SERVER_NAME = "Security Test Orchestration Engine";
 
-  public ToolTypeService(Config config) {
-    super(config);
+  public ToolTypeService(ClientConfig clientConfig) {
+    super(clientConfig);
   }
 
   @Override
@@ -36,7 +36,7 @@ public class ToolTypeService extends GenericDefectDojoService<ToolType> {
   }
 
   @Override
-  protected PaginatedResult<ToolType> deserializeList(String response) {
+  protected PaginatedResult<ToolType> deserializeList(@NonNull String response) {
     try {
       return this.objectMapper.readValue(response, new TypeReference<>() {
       });

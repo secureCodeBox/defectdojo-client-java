@@ -6,7 +6,7 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.securecodebox.persistence.defectdojo.ScanType;
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
@@ -23,22 +23,22 @@ public interface ImportScanService {
   /**
    * Factory method to create new instance of service default implementation
    *
-   * @param config must not be {@code null}
+   * @param clientConfig must not be {@code null}
    * @return never {@code null}
    */
-  static ImportScanService createDefault(final Config config) {
-    return createDefault(config, new ProxyConfigFactory().create());
+  static ImportScanService createDefault(final ClientConfig clientConfig) {
+    return createDefault(clientConfig, new ProxyConfigFactory().create());
   }
 
   /**
    * Factory method to create new instance of service default implementation
    *
-   * @param config      must not be {@code null}
+   * @param clientConfig      must not be {@code null}
    * @param proxyConfig must not be {@code null}
    * @return never {@code null}
    */
-  static ImportScanService createDefault(@NonNull final Config config, @NonNull final ProxyConfig proxyConfig) {
-    return new DefaultImportScanService(config, proxyConfig);
+  static ImportScanService createDefault(@NonNull final ClientConfig clientConfig, @NonNull final ProxyConfig proxyConfig) {
+    return new DefaultImportScanService(clientConfig, proxyConfig);
   }
 
   default ImportScanResponse importScan(ScanFile scanFile, long engagementId, long lead, String currentDate, ScanType scanType, long testType) {

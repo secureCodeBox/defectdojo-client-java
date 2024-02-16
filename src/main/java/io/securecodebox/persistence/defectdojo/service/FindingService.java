@@ -6,7 +6,7 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.model.Finding;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 public class FindingService extends GenericDefectDojoService<Finding> {
-  public FindingService(Config config) {
-    super(config);
+  public FindingService(ClientConfig clientConfig) {
+    super(clientConfig);
   }
 
   @Override
@@ -31,7 +31,7 @@ public class FindingService extends GenericDefectDojoService<Finding> {
   }
 
   @Override
-  protected PaginatedResult<Finding> deserializeList(String response) {
+  protected PaginatedResult<Finding> deserializeList(@NonNull String response) {
     try {
       return this.objectMapper.readValue(response, new TypeReference<>() {
       });

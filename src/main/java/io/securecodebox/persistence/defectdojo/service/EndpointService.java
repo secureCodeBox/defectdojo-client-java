@@ -6,15 +6,15 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.model.Endpoint;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import lombok.NonNull;
 
 public class EndpointService extends GenericDefectDojoService<Endpoint> {
-  public EndpointService(Config config) {
-    super(config);
+  public EndpointService(ClientConfig clientConfig) {
+    super(clientConfig);
   }
 
   @Override
@@ -28,7 +28,7 @@ public class EndpointService extends GenericDefectDojoService<Endpoint> {
   }
 
   @Override
-  protected PaginatedResult<Endpoint> deserializeList(String response) {
+  protected PaginatedResult<Endpoint> deserializeList(@NonNull String response) {
     try {
       return this.objectMapper.readValue(response, new TypeReference<>() {
       });
