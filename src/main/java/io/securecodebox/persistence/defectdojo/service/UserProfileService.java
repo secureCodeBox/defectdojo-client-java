@@ -10,7 +10,6 @@ import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import io.securecodebox.persistence.defectdojo.model.UserProfile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class UserProfileService extends GenericDefectDojoService<UserProfile> {
