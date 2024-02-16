@@ -6,9 +6,9 @@
 package io.securecodebox.persistence.defectdojo.exception;
 
 /**
- * Indicates a missing {@link io.securecodebox.persistence.defectdojo.config.Config config property}
+ * Indicates a missing/bad {@link io.securecodebox.persistence.defectdojo.config.Config config property}
  */
-public final class ConfigException extends RuntimeException {
+public final class ConfigException extends PersistenceException {
   public ConfigException(final String message) {
     super(message);
   }

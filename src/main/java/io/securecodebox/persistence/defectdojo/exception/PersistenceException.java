@@ -4,7 +4,10 @@
 
 package io.securecodebox.persistence.defectdojo.exception;
 
-public final class PersistenceException extends RuntimeException {
+/**
+ * Generic exception which is thrown for any unforeseen error at runtime
+ */
+public class PersistenceException extends RuntimeException {
   public PersistenceException(String message) {
     super(message);
   }
