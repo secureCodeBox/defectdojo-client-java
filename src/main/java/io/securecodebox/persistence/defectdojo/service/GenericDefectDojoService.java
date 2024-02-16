@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.cfg.CoercionAction;
 import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
 import io.securecodebox.persistence.defectdojo.config.Config;
-import io.securecodebox.persistence.defectdojo.exception.LoopException;
+import io.securecodebox.persistence.defectdojo.exception.TooManyResponsesException;
 import io.securecodebox.persistence.defectdojo.http.Foo;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
@@ -95,7 +95,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
       hasNext = response.getNext() != null;
       if (page > this.config.getMaxPageCountForGets()) {
-        throw new LoopException("Found too many response object. Quitting after " + (page - 1) + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
+        throw new TooManyResponsesException("Found too many response object. Quitting after " + (page - 1) + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
       }
     } while (hasNext);
 
