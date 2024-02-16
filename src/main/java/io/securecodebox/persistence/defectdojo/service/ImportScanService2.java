@@ -30,7 +30,10 @@ import java.util.List;
 
 /**
  * Copied the version before I did refactoring for easier compare of duplicated code
+ *
+ * @deprecated Will be removed when refactoring is finished
  */
+@Deprecated(forRemoval = true)
 public class ImportScanService2 {
 
   private final Config config;
