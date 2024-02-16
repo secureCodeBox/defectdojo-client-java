@@ -6,6 +6,7 @@ package io.securecodebox.persistence.defectdojo.http;
 
 import io.securecodebox.persistence.defectdojo.config.Config;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
@@ -24,6 +25,7 @@ import java.util.Base64;
 /**
  * Placeholder to move duplicated code, will be named better later
  */
+@Slf4j
 public final class Foo {
   private final Config config;
   private final ProxyConfig proxyConfig;
@@ -44,8 +46,7 @@ public final class Foo {
     headers.set(HttpHeaders.AUTHORIZATION, "Token " + this.config.getApiKey());
 
     if (proxyConfig.isComplete()) {
-      // FIXME: System.out logging is a real bad code smell. Standard loging should be used.
-      System.out.println("Setting Proxy Auth Header...");
+      log.info("Setting Proxy Auth Header...");
       headers.set(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + encodeProxyCredentials(proxyConfig));
     }
 
