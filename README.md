@@ -41,7 +41,7 @@ public class DefectDojoClientTest {
     public static void main(String[] args) throws URISyntaxException, JsonProcessingException {
 
         // Configure DefectDojo URl and APIv2 Key
-        var conf = new DefectDojoConfig("https://defectdojo.example.com", "f8....");
+        var conf = new Config("https://defectdojo.example.com", "f8....");
 
         var productTypeService = new ProductTypeService(conf);
         var productTypes = productTypeService.search();
