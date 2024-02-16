@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
+import io.securecodebox.persistence.defectdojo.http.AuthHeaderFactory;
 import io.securecodebox.persistence.defectdojo.http.Foo;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
@@ -47,7 +48,9 @@ public class ImportScanService2 {
    * @return The DefectDojo Authentication Header
    */
   private HttpHeaders getDefectDojoAuthorizationHeaders() {
-    return new Foo(config, new ProxyConfigFactory().create()).generateAuthorizationHeaders();
+    final var factory = new AuthHeaderFactory(config);
+    factory.setProxyConfig(new ProxyConfigFactory().create());
+    return factory.generateAuthorizationHeaders();
   }
 
   protected RestTemplate setupRestTemplate() {
