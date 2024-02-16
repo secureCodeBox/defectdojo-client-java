@@ -7,7 +7,7 @@ package io.securecodebox.persistence.defectdojo.exception;
 import io.securecodebox.persistence.defectdojo.config.Config;
 
 /**
- * Thrown if we receive more objects than {@link Config#getMaxPageCountForGets() configured}
+ * Thrown if we receive more objects than {@link Config configured}
  */
 public final class TooManyResponsesException extends PersistenceException {
   public TooManyResponsesException(String message) {
