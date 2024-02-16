@@ -186,7 +186,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   private RestTemplate setupRestTemplate() {
-    RestTemplate restTemplate = new Foo(config, new ProxyConfigFactory().create()).createRestTemplate();
+    RestTemplate restTemplate = new Foo(new ProxyConfigFactory().create()).createRestTemplate();
     MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
     converter.setObjectMapper(this.objectMapper);
     restTemplate.setMessageConverters(List.of(

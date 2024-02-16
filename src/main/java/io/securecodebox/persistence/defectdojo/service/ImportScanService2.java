@@ -54,7 +54,7 @@ public class ImportScanService2 {
   }
 
   protected RestTemplate setupRestTemplate() {
-    return new Foo(config, new ProxyConfigFactory().create()).createRestTemplate();
+    return new Foo(new ProxyConfigFactory().create()).createRestTemplate();
   }
 
   /**
