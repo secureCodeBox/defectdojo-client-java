@@ -26,6 +26,7 @@ public final class Foo {
 
   public RestTemplate createRestTemplate() {
     if (proxyConfig.isComplete()) {
+      log.debug("Configure proxy authentication for REST template.");
       // Configuring Proxy Authentication explicitly as it isn't done by default for spring rest templates :(
       final var builder = HttpClientBuilder.create()
         .useSystemProperties()
