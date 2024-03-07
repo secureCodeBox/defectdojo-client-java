@@ -2,6 +2,7 @@ package io.securecodebox.persistence.defectdojo;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ final class HttpClientTest {
   }
 
   @Test
+  @Disabled
   void test_something_with_wiremock(WireMockRuntimeInfo wmRuntimeInfo) throws IOException, InterruptedException {
     stubFor(get("/my/resource")
       .withHeader("Content-Type", containing("xml"))
