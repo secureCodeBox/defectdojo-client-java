@@ -18,6 +18,7 @@ import io.securecodebox.persistence.defectdojo.model.Engagement;
 import io.securecodebox.persistence.defectdojo.model.Model;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -36,6 +37,7 @@ import java.util.*;
 
 // FIXME: Should be package private bc implementation detail.
 // TODO: Remove JsonProcessingException, URISyntaxException from public API and use a own runtime exception type bc these checked exceptions clutter the client coe.
+@Slf4j
 public abstract class GenericDefectDojoService<T extends Model> {
   private static final String API_PREFIX = "/api/v2/";
   private static final long DEFECT_DOJO_OBJET_LIMIT = 100L;
@@ -94,8 +96,10 @@ public abstract class GenericDefectDojoService<T extends Model> {
     var restTemplate = this.getRestTemplate();
     HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
+    final var url = this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/" + id;
+    log.debug("Requesting URL: {}", url);
     ResponseEntity<T> response = restTemplate.exchange(
-      this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/" + id,
+      url,
       HttpMethod.GET,
       payload,
       getModelClass()
@@ -119,6 +123,7 @@ public abstract class GenericDefectDojoService<T extends Model> {
     }
 
     var url = new URI(this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/");
+    log.debug("Requesting URL: "  + url);
     var uriBuilder = UriComponentsBuilder.fromUri(url).queryParams(multiValueMap);
 
     ResponseEntity<String> responseString = restTemplate.exchange(
