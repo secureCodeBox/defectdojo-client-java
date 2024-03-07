@@ -1,0 +1,35 @@
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 2,
+      "name": "secureCodeBox",
+      "description": null,
+      "critical_product": false,
+      "key_product": false,
+      "updated": "2024-03-01T15:06:29.409840Z",
+      "created": "2024-03-01T15:06:29.409873Z",
+      "members": [
+        3,
+        6
+      ],
+      "authorization_groups": []
+    },
+    {
+      "id": 1,
+      "name": "Research and Development",
+      "description": null,
+      "critical_product": true,
+      "key_product": false,
+      "updated": null,
+      "created": null,
+      "members": [
+        1
+      ],
+      "authorization_groups": []
+    }
+  ],
+  "prefetch": {}
+}
