@@ -10,7 +10,7 @@ import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import io.securecodebox.persistence.defectdojo.model.ProductType;
 
-public class ProductTypeService extends GenericDefectDojoService<ProductType> {
+public final class ProductTypeService extends GenericDefectDojoService<ProductType> {
 
   public ProductTypeService(Config config) {
     super(config);
