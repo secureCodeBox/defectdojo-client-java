@@ -19,6 +19,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 
 // This test is sufficient for all services (except user profile) as all the code is generic
+// TODO: Add WireMock integration test.
 class FindingServiceTest {
   private static final String FINDING_RESPONSE = """
      {

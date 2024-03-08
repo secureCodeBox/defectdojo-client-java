@@ -27,6 +27,8 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
  * This test is special because the defectdojo api does not return a list, but the generic code assumes every endpoint
  * returns a list.
  * </p>
+ *
+ * TODO: Add WireMock integration test.
  */
 class UserProfileServiceTest {
   /**
