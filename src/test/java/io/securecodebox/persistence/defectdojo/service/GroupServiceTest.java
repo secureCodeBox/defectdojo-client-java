@@ -25,7 +25,7 @@ final class GroupServiceTest extends WireMockBaseTestCase {
       get("/api/v2/dojo_groups/?offset=0&limit=100")
         .willReturn(
           ok()
-            .withBody(readResponseBodyFromFixture("GroupService_response_fixture.json"))
+            .withBody(readFixtureFile("GroupService_response_fixture.json"))
         )
     );
 

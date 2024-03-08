@@ -24,7 +24,7 @@ final class TestTypeServiceTest extends WireMockBaseTestCase {
       get("/api/v2/test_types/?offset=0&limit=100")
         .willReturn(
           ok()
-            .withBody(readResponseBodyFromFixture("TestTypeService_response_fixture.json"))
+            .withBody(readFixtureFile("TestTypeService_response_fixture.json"))
         )
     );
 

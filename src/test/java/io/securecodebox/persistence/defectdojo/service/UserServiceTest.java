@@ -1,14 +1,10 @@
 package io.securecodebox.persistence.defectdojo.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.User;
-import lombok.Getter;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +23,7 @@ final class UserServiceTest  extends WireMockBaseTestCase{
       get("/api/v2/users/?offset=0&limit=100")
         .willReturn(
           ok()
-            .withBody(readResponseBodyFromFixture("UserService_response_fixture.json"))
+            .withBody(readFixtureFile("UserService_response_fixture.json"))
         )
     );
 

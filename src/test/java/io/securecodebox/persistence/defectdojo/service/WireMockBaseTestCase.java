@@ -23,7 +23,7 @@ abstract class WireMockBaseTestCase {
     String.format("http://localhost:%d/", PORT),
     "not-required-for-tests");
 
-  String readResponseBodyFromFixture(String fixtureFile) throws IOException {
+  String readFixtureFile(String fixtureFile) throws IOException {
     final var fixtureFilePath = FIXTURE_BASE_PACKAGE + "/" + fixtureFile;
 
     try (final var input = getClass().getClassLoader().getResourceAsStream(fixtureFilePath)) {
