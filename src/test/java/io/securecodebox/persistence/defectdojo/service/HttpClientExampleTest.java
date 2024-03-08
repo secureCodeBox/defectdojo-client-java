@@ -1,12 +1,14 @@
-package io.securecodebox.persistence.defectdojo;
+package io.securecodebox.persistence.defectdojo.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
-import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import io.securecodebox.persistence.defectdojo.config.Config;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -22,10 +24,7 @@ import static org.hamcrest.Matchers.is;
  * See https://wiremock.org/docs/quickstart/java-junit/
  * and https://wiremock.org/docs/junit-jupiter/
  */
-@WireMockTest(httpPort = HttpClientTest.PORT)
-final class HttpClientTest {
-
-  public static final int PORT = 8888;
+final class HttpClientExampleTest extends WireMockBaseTestCase {
 
   private URI createUri(String path) {
     return URI.create("http://localhost:%d/%s".formatted(PORT, path));
@@ -33,7 +32,7 @@ final class HttpClientTest {
 
   @Test
   @Disabled
-  void test_something_with_wiremock(WireMockRuntimeInfo wmRuntimeInfo) throws IOException, InterruptedException {
+  void somethingWithWreMock(WireMockRuntimeInfo wmRuntimeInfo) throws IOException, InterruptedException {
     stubFor(get("/my/resource")
       .withHeader("Content-Type", containing("xml"))
       .willReturn(ok()
