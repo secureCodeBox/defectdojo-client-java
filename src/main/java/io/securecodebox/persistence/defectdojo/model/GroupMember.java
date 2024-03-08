@@ -20,10 +20,10 @@ public final class GroupMember implements Model {
   @JsonProperty
   private long id;
 
-  @JsonProperty("group_id")
+  @JsonProperty
   private long group;
 
-  @JsonProperty("user_id")
+  @JsonProperty
   private long user;
 
   @JsonProperty
