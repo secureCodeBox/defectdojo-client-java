@@ -18,6 +18,7 @@ import io.securecodebox.persistence.defectdojo.model.Engagement;
 import io.securecodebox.persistence.defectdojo.model.Model;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -35,10 +36,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
-// FIXME: Should be package private bc implementation detail.
 // TODO: Remove JsonProcessingException, URISyntaxException from public API and use a own runtime exception type bc these checked exceptions clutter the client coe.
 @Slf4j
-public abstract class GenericDefectDojoService<T extends Model> {
+abstract class GenericDefectDojoService<T extends Model> implements DefectDojoService<T>{
   private static final String API_PREFIX = "/api/v2/";
   private static final long DEFECT_DOJO_OBJET_LIMIT = 100L;
   protected Config config;
@@ -49,7 +49,8 @@ public abstract class GenericDefectDojoService<T extends Model> {
   @Getter
   protected RestTemplate restTemplate;
 
-  public GenericDefectDojoService(Config config) {
+  public GenericDefectDojoService(@NonNull Config config) {
+    super();
     this.config = config;
 
     this.objectMapper = new ObjectMapper();
@@ -92,7 +93,8 @@ public abstract class GenericDefectDojoService<T extends Model> {
 
   protected abstract PaginatedResult<T> deserializeList(String response) throws JsonProcessingException;
 
-  public T get(long id) {
+  @Override
+  public final T get(long id) {
     var restTemplate = this.getRestTemplate();
     HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
@@ -136,7 +138,8 @@ public abstract class GenericDefectDojoService<T extends Model> {
     return deserializeList(responseString.getBody());
   }
 
-  public List<T> search(Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
+  @Override
+  public final List<T> search(Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
     List<T> objects = new LinkedList<>();
 
     boolean hasNext;
@@ -154,12 +157,14 @@ public abstract class GenericDefectDojoService<T extends Model> {
     return objects;
   }
 
-  public List<T> search() throws URISyntaxException, JsonProcessingException {
+  @Override
+  public final List<T> search() throws URISyntaxException, JsonProcessingException {
     return search(new LinkedHashMap<>());
   }
 
+  @Override
   @SuppressWarnings("unchecked")
-  public Optional<T> searchUnique(T searchObject) throws URISyntaxException, JsonProcessingException {
+  public final Optional<T> searchUnique(T searchObject) throws URISyntaxException, JsonProcessingException {
     Map<String, Object> queryParams = searchStringMapper.convertValue(searchObject, Map.class);
 
     var objects = search(queryParams);
@@ -169,7 +174,8 @@ public abstract class GenericDefectDojoService<T extends Model> {
       .findFirst();
   }
 
-  public Optional<T> searchUnique(Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
+  @Override
+  public final Optional<T> searchUnique(Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
     var objects = search(queryParams);
 
     return objects.stream()
@@ -177,7 +183,8 @@ public abstract class GenericDefectDojoService<T extends Model> {
       .findFirst();
   }
 
-  public T create(T object) {
+  @Override
+  public final T create(T object) {
     var restTemplate = this.getRestTemplate();
     HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
@@ -185,14 +192,16 @@ public abstract class GenericDefectDojoService<T extends Model> {
     return response.getBody();
   }
 
-  public void delete(long id) {
+  @Override
+  public final void delete(long id) {
     var restTemplate = this.getRestTemplate();
     HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
     restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
   }
 
-  public T update(T object, long objectId) {
+  @Override
+  public final T update(T object, long objectId) {
     var restTemplate = this.getRestTemplate();
     HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
