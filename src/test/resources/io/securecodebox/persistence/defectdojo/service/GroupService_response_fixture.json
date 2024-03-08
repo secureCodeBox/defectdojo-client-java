@@ -1,1 +1,42 @@
-{}
+{
+  "count": 11,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "configuration_permissions": [],
+      "name": "foo",
+      "description": null,
+      "social_provider": "GitHub",
+      "users": [
+        4
+      ]
+    },
+    {
+      "id": 2,
+      "configuration_permissions": [],
+      "name": "bar",
+      "description": null,
+      "social_provider": "GitHub",
+      "users": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": 3,
+      "configuration_permissions": [],
+      "name": "snafu",
+      "description": null,
+      "social_provider": "GitHub",
+      "users": [
+        4,
+        5
+      ]
+    }
+  ],
+  "prefetch": {}
+}
+
