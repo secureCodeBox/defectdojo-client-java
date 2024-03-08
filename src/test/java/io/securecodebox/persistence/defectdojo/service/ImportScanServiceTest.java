@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link ImportScanService}.
- *
- * TODO: Add WireMock integration test.
  */
 class ImportScanServiceTest {
 
