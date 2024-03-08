@@ -24,7 +24,7 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
       get("/api/v2/endpoints/?offset=0&limit=100")
         .willReturn(
           ok()
-            .withBody(readResponseBodyFromFixture("EndpointService_response_fixture.json"))
+            .withBody(readFixtureFile("EndpointService_response_fixture.json"))
         )
     );
 

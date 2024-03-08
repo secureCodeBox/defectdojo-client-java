@@ -24,7 +24,7 @@ final class ToolTypeServiceTest extends WireMockBaseTestCase {
       get("/api/v2/tool_types/?offset=0&limit=100")
         .willReturn(
           ok()
-            .withBody(readResponseBodyFromFixture("ToolTypeService_response_fixture.json"))
+            .withBody(readFixtureFile("ToolTypeService_response_fixture.json"))
         )
     );
 

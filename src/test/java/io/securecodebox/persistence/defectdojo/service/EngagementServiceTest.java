@@ -25,7 +25,7 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
       get("/api/v2/engagements/?offset=0&limit=100")
         .willReturn(
           ok()
-            .withBody(readResponseBodyFromFixture("EngagementService_response_fixture.json"))
+            .withBody(readFixtureFile("EngagementService_response_fixture.json"))
         )
     );
 
