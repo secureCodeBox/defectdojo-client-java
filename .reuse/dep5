@@ -2,3 +2,8 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: defectdojo-client-java
 Upstream-Contact: Robert Seedorff <robert.seedorff@iteratec.com>
 Source: https://github.com/secureCodeBox/defectdojo-client-java
+
+# Test fixture files with JSON responses from a DefectDojo test installation:
+Files: src/test/resources/io/securecodebox/persistence/defectdojo/service/*.json
+Copyright: the secureCodeBox authors
+License: Apache-2.0

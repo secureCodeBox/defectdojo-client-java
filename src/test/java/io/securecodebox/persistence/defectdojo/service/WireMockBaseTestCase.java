@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: the secureCodeBox authors
+//
+// SPDX-License-Identifier: Apache-2.0
 package io.securecodebox.persistence.defectdojo.service;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
