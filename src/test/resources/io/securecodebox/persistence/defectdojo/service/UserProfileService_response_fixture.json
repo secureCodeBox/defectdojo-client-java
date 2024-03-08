@@ -1,1 +1,13 @@
-{}
+{
+  "user": {
+    "id": 0,
+    "username": "username",
+    "first_name": "first_name",
+    "last_name": "last_name",
+    "email": "user@example.com",
+    "last_login": "2022-11-01T16:20:19.373Z",
+    "is_active": true,
+    "is_superuser": true,
+    "configuration_permissions": [0]
+  }
+}
