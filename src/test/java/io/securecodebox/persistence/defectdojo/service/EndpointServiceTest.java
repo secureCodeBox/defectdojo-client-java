@@ -1,7 +1,13 @@
 package io.securecodebox.persistence.defectdojo.service;
 
+import io.securecodebox.persistence.defectdojo.model.Endpoint;
+import io.securecodebox.persistence.defectdojo.model.User;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -11,4 +17,58 @@ import static org.hamcrest.Matchers.*;
  */
 final class EndpointServiceTest extends WireMockBaseTestCase {
   private final EndpointService sut = new EndpointService(conf());
+
+  @Test
+  void search() throws URISyntaxException, IOException {
+    stubFor(
+      get("/api/v2/endpoints/?offset=0&limit=100")
+        .willReturn(
+          ok()
+            .withBody(readResponseBodyFromFixture("io/securecodebox/persistence/defectdojo/service/fixture_EndpointService.json"))
+        )
+    );
+
+    final var result = sut.search();
+
+    assertAll(
+      () -> assertThat(result, hasSize(5)),
+      () -> assertThat(result, containsInAnyOrder(
+        Endpoint.builder()
+          .id(956)
+          .protocol("tcp")
+          .host("10.0.0.1")
+          .port(80)
+          .product(320)
+          .build(),
+        Endpoint.builder()
+          .id(957)
+          .protocol("tcp")
+          .host("10.0.0.1")
+          .port(443)
+          .product(320)
+          .build(),
+        Endpoint.builder()
+          .id(961)
+          .protocol("tcp")
+          .host("10.0.0.2")
+          .port(80)
+          .product(323)
+          .build(),
+        Endpoint.builder()
+          .id(962)
+          .protocol("tcp")
+          .host("10.0.0.2")
+          .port(443)
+          .product(323)
+          .build(),
+        Endpoint.builder()
+          .id(893)
+          .protocol("tcp")
+          .host("10.0.0.3")
+          .port(443)
+          .product(296)
+          .build()
+      ))
+    );
+  }
 }
