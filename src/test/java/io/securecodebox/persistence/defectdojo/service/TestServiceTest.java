@@ -6,6 +6,7 @@
 package io.securecodebox.persistence.defectdojo.service;
 
 import io.securecodebox.persistence.defectdojo.model.Test;
+import org.junit.jupiter.api.Disabled;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -75,5 +76,41 @@ final class TestServiceTest extends WireMockBaseTestCase {
           .build()
       ))
     );
+  }
+
+  @org.junit.jupiter.api.Test
+  @Disabled("TODO: Implement test.")
+  void search_withQueryParams() {
+  }
+
+  @org.junit.jupiter.api.Test
+  @Disabled("TODO: Implement test.")
+  void get_byId() {
+  }
+
+
+  @org.junit.jupiter.api.Test
+  @Disabled("TODO: Implement test.")
+  void searchUnique_withSearchObject() {
+  }
+
+  @org.junit.jupiter.api.Test
+  @Disabled("TODO: Implement test.")
+  void searchUnique_withQueryParams() {
+  }
+
+  @org.junit.jupiter.api.Test
+  @Disabled("TODO: Implement test.")
+  void create() {
+  }
+
+  @org.junit.jupiter.api.Test
+  @Disabled("TODO: Implement test.")
+  void delete() {
+  }
+
+  @org.junit.jupiter.api.Test
+  @Disabled("TODO: Implement test.")
+  void update() {
   }
 }

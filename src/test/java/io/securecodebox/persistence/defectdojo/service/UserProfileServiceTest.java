@@ -6,6 +6,7 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import io.securecodebox.persistence.defectdojo.model.User;
 import io.securecodebox.persistence.defectdojo.model.UserProfile;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -48,5 +49,41 @@ final class UserProfileServiceTest extends WireMockBaseTestCase {
           .build()
       ))
     );
+  }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void search_withQueryParams() {
+  }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void get_byId() {
+  }
+
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void searchUnique_withSearchObject() {
+  }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void searchUnique_withQueryParams() {
+  }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void create() {
+  }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void delete() {
+  }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void update() {
   }
 }
