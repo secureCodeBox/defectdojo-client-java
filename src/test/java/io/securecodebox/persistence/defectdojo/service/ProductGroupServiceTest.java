@@ -42,4 +42,40 @@ final class ProductGroupServiceTest extends WireMockBaseTestCase {
       ))
     );
   }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void search_withQueryParams() {
+  }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void get_byId() {
+  }
+
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void searchUnique_withSearchObject() {
+  }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void searchUnique_withQueryParams() {
+  }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void create() {
+  }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void delete() {
+  }
+
+  @Test
+  @Disabled("TODO: Implement test.")
+  void update() {
+  }
 }
