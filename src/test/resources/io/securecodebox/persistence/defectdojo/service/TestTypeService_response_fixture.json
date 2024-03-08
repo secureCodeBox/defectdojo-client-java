@@ -1,1 +1,70 @@
-{}
+{
+  "count": 9,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 99,
+      "name": "Acunetix360 Scan",
+      "static_tool": false,
+      "dynamic_tool": false,
+      "active": true
+    },
+    {
+      "id": 19,
+      "name": "Acunetix Scan",
+      "static_tool": false,
+      "dynamic_tool": false,
+      "active": true
+    },
+    {
+      "id": 125,
+      "name": "AnchoreCTL Policies Report",
+      "static_tool": false,
+      "dynamic_tool": false,
+      "active": true
+    },
+    {
+      "id": 47,
+      "name": "AnchoreCTL Vuln Report",
+      "static_tool": false,
+      "dynamic_tool": false,
+      "active": true
+    },
+    {
+      "id": 112,
+      "name": "Anchore Engine Scan",
+      "static_tool": false,
+      "dynamic_tool": false,
+      "active": true
+    },
+    {
+      "id": 172,
+      "name": "Anchore Enterprise Policy Check",
+      "static_tool": false,
+      "dynamic_tool": false,
+      "active": true
+    },
+    {
+      "id": 106,
+      "name": "Anchore Grype",
+      "static_tool": true,
+      "dynamic_tool": false,
+      "active": true
+    },
+    {
+      "id": 1,
+      "name": "API Test",
+      "static_tool": false,
+      "dynamic_tool": false,
+      "active": true
+    },
+    {
+      "id": 100,
+      "name": "AppSpider Scan",
+      "static_tool": false,
+      "dynamic_tool": true,
+      "active": true
+    }
+  ]
+}
