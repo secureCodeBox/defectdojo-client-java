@@ -1,14 +1,11 @@
 package io.securecodebox.persistence.defectdojo.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
-import io.securecodebox.persistence.defectdojo.config.Config;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -27,7 +24,7 @@ import static org.hamcrest.Matchers.is;
 final class HttpClientExampleTest extends WireMockBaseTestCase {
 
   private URI createUri(String path) {
-    return URI.create("http://localhost:%d/%s".formatted(PORT, path));
+    return URI.create("http://localhost:%d/%s".formatted(8080, path));
   }
 
   @Test
