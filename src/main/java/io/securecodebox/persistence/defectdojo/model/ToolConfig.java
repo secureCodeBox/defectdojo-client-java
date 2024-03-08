@@ -30,6 +30,7 @@ public final class ToolConfig implements Model, HasId, HasName {
   @JsonProperty("tool_type")
   private long toolType;
 
+  // FIXME: This is not present in my actual JSON response. Should remove?
   @JsonProperty("configuration_url")
   String configUrl;
 
