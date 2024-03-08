@@ -17,10 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link DefaultImportScanService}
- *
- * TODO: Add WireMock integration test.
  */
-class DefaultImportScanServiceTest {
+final class DefaultImportScanServiceTest {
   private final Config config = new Config(
     "http://localhost",
     "apiKey",
