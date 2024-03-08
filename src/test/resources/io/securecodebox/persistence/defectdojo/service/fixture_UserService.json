@@ -1,0 +1,40 @@
+{
+  "count": 7,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "username": "admin",
+      "first_name": "Admin",
+      "last_name": "User",
+      "email": "admin@defectdojo.local",
+      "last_login": "2024-03-01T14:53:58.920659Z",
+      "is_active": true,
+      "is_superuser": true,
+      "configuration_permissions": []
+    },
+    {
+      "id": 2,
+      "username": "JannikHollenbach",
+      "first_name": "Jannik",
+      "last_name": "Hollenbach",
+      "email": "jannik.hollenbach@owasp.org",
+      "last_login": "2024-03-01T15:02:06.007669Z",
+      "is_active": true,
+      "is_superuser": true,
+      "configuration_permissions": []
+    },
+    {
+      "id": 3,
+      "username": "SvenStrittmatter",
+      "first_name": "Sven",
+      "last_name": "Strittmatter",
+      "email": "sven.strittmatter@owasp.org",
+      "last_login": null,
+      "is_active": true,
+      "is_superuser": true,
+      "configuration_permissions": []
+    }
+  ]
+}
