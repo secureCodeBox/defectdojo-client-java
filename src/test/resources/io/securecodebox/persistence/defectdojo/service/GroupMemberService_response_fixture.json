@@ -1,1 +1,51 @@
-{}
+{
+  "count": 7,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 10,
+      "group": 10,
+      "user": 4,
+      "role": 3
+    },
+    {
+      "id": 1,
+      "group": 1,
+      "user": 2,
+      "role": 3
+    },
+    {
+      "id": 9,
+      "group": 9,
+      "user": 4,
+      "role": 3
+    },
+    {
+      "id": 4,
+      "group": 4,
+      "user": 4,
+      "role": 3
+    },
+    {
+      "id": 12,
+      "group": 1,
+      "user": 4,
+      "role": 3
+    },
+    {
+      "id": 6,
+      "group": 6,
+      "user": 4,
+      "role": 3
+    },
+    {
+      "id": 14,
+      "group": 1,
+      "user": 5,
+      "role": 3
+    }
+  ],
+  "prefetch": {}
+}
+
