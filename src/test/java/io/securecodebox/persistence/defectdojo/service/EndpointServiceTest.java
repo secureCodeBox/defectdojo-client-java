@@ -1,16 +1,16 @@
 package io.securecodebox.persistence.defectdojo.service;
 
 import io.securecodebox.persistence.defectdojo.model.Endpoint;
-import io.securecodebox.persistence.defectdojo.model.User;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * Tests for {@link EndpointService}
@@ -24,7 +24,7 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
       get("/api/v2/endpoints/?offset=0&limit=100")
         .willReturn(
           ok()
-            .withBody(readResponseBodyFromFixture("io/securecodebox/persistence/defectdojo/service/fixture_EndpointService.json"))
+            .withBody(readResponseBodyFromFixture("EndpointService_response_fixture.json"))
         )
     );
 

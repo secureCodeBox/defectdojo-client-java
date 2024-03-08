@@ -17,12 +17,15 @@ import java.util.Objects;
 @WireMockTest(httpPort = WireMockBaseTestCase.PORT)
 abstract class WireMockBaseTestCase {
   static final int PORT = 8888;
+  private static final String FIXTURE_BASE_PACKAGE = "io/securecodebox/persistence/defectdojo/service";
 
   private final Config conf = new Config(
     String.format("http://localhost:%d/", PORT),
     "not-required-for-tests");
 
-  String readResponseBodyFromFixture(String fixtureFilePath) throws IOException {
+  String readResponseBodyFromFixture(String fixtureFile) throws IOException {
+    final var fixtureFilePath = FIXTURE_BASE_PACKAGE + "/" + fixtureFile;
+
     try (final var input = getClass().getClassLoader().getResourceAsStream(fixtureFilePath)) {
       final var bytes = Objects.requireNonNull(input).readAllBytes();
       return new String(bytes, StandardCharsets.UTF_8);

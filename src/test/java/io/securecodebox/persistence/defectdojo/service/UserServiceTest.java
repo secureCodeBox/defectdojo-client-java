@@ -27,7 +27,7 @@ final class UserServiceTest  extends WireMockBaseTestCase{
       get("/api/v2/users/?offset=0&limit=100")
         .willReturn(
           ok()
-            .withBody(readResponseBodyFromFixture("io/securecodebox/persistence/defectdojo/service/fixture_UserService.json"))
+            .withBody(readResponseBodyFromFixture("UserService_response_fixture.json"))
         )
     );
 
