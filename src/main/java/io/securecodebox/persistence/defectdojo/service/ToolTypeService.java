@@ -12,8 +12,11 @@ import io.securecodebox.persistence.defectdojo.model.ToolType;
 
 public class ToolTypeService extends GenericDefectDojoService<ToolType> {
 
+  @Deprecated(forRemoval = true) // Unused
   public static final String GIT_SERVER_NAME = "Git Server";
+  @Deprecated(forRemoval = true) // Unused
   public static final String BUILD_SERVER_NAME = "Build Server";
+  @Deprecated(forRemoval = true) // Unused
   public static final String SECURITY_TEST_SERVER_NAME = "Security Test Orchestration Engine";
 
   public ToolTypeService(Config config) {
