@@ -102,8 +102,48 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
   }
 
   @Test
-  @Disabled("TODO: Implement test.")
   void get_byId() {
+    final var response = """
+      {
+        "id": 42,
+        "tags": [],
+        "protocol": "tcp",
+        "userinfo": null,
+        "host": "www.owasp.org",
+        "port": 443,
+        "path": null,
+        "query": null,
+        "fragment": null,
+        "product": 285,
+        "endpoint_params": [],
+        "findings": [
+          34706,
+          34684,
+          34679,
+          34677
+        ],
+        "prefetch": {}
+      }
+      """;
+    stubFor(
+      get("/api/v2/endpoints/42")
+        .willReturn(
+          ok()
+            .withHeaders(responseHeaders(response.length()))
+            .withBody(response)
+        )
+    );
+    final var expected = Endpoint.builder()
+      .id(42)
+      .protocol("tcp")
+      .host("www.owasp.org")
+      .port(443)
+      .product(285)
+      .build();
+
+    final var result = sut.get(42L);
+
+    assertThat(result, is(expected));
   }
 
 
