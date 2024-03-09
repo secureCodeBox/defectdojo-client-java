@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,6 +22,42 @@ import static org.junit.jupiter.api.Assertions.assertAll;
  */
 final class EndpointServiceTest extends WireMockBaseTestCase {
   private final EndpointService sut = new EndpointService(conf());
+  private final Endpoint[] expectedFromSearch = new Endpoint[]{
+    Endpoint.builder()
+      .id(956)
+      .protocol("tcp")
+      .host("10.0.0.1")
+      .port(80)
+      .product(320)
+      .build(),
+    Endpoint.builder()
+      .id(957)
+      .protocol("tcp")
+      .host("10.0.0.1")
+      .port(443)
+      .product(320)
+      .build(),
+    Endpoint.builder()
+      .id(961)
+      .protocol("tcp")
+      .host("10.0.0.2")
+      .port(80)
+      .product(323)
+      .build(),
+    Endpoint.builder()
+      .id(962)
+      .protocol("tcp")
+      .host("10.0.0.2")
+      .port(443)
+      .product(323)
+      .build(),
+    Endpoint.builder()
+      .id(893)
+      .protocol("tcp")
+      .host("10.0.0.3")
+      .port(443)
+      .product(296)
+      .build()};
 
   @Test
   void search() throws URISyntaxException, IOException {
@@ -36,49 +73,29 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
 
     assertAll(
       () -> assertThat(result, hasSize(5)),
-      () -> assertThat(result, containsInAnyOrder(
-        Endpoint.builder()
-          .id(956)
-          .protocol("tcp")
-          .host("10.0.0.1")
-          .port(80)
-          .product(320)
-          .build(),
-        Endpoint.builder()
-          .id(957)
-          .protocol("tcp")
-          .host("10.0.0.1")
-          .port(443)
-          .product(320)
-          .build(),
-        Endpoint.builder()
-          .id(961)
-          .protocol("tcp")
-          .host("10.0.0.2")
-          .port(80)
-          .product(323)
-          .build(),
-        Endpoint.builder()
-          .id(962)
-          .protocol("tcp")
-          .host("10.0.0.2")
-          .port(443)
-          .product(323)
-          .build(),
-        Endpoint.builder()
-          .id(893)
-          .protocol("tcp")
-          .host("10.0.0.3")
-          .port(443)
-          .product(296)
-          .build()
-      ))
+      () -> assertThat(result, containsInAnyOrder(expectedFromSearch))
     );
   }
 
   @Test
-  @Disabled("TODO: Implement test.")
-  void search_withQueryParams() {
+  void search_withQueryParams() throws URISyntaxException, IOException {
+    stubFor(
+      get("/api/v2/endpoints/?limit=100&bar=42&offset=0&foo=23")
+        .willReturn(
+          ok()
+            .withBody(readFixtureFile("EndpointService_response_fixture.json"))
+        )
+    );
+    final var params = new HashMap<String, Object>();
+    params.put("foo", 23);
+    params.put("bar", 42);
+
+    final var result = sut.search(params);
+
+    assertAll(
+      () -> assertThat(result, hasSize(5)),
+      () -> assertThat(result, containsInAnyOrder(expectedFromSearch))
+    );
   }
 
   @Test
