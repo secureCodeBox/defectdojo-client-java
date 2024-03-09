@@ -13,8 +13,7 @@ import java.util.HashMap;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
@@ -61,11 +60,13 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
 
   @Test
   void search() throws URISyntaxException, IOException {
+    final var response = readFixtureFile("EndpointService_response_fixture.json");
     stubFor(
       get("/api/v2/endpoints/?offset=0&limit=100")
         .willReturn(
           ok()
-            .withBody(readFixtureFile("EndpointService_response_fixture.json"))
+            .withHeaders(responseHeaders(response.length()))
+            .withBody(response)
         )
     );
 
@@ -79,11 +80,13 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
 
   @Test
   void search_withQueryParams() throws URISyntaxException, IOException {
+    final var response = readFixtureFile("EndpointService_response_fixture.json");
     stubFor(
       get("/api/v2/endpoints/?limit=100&bar=42&offset=0&foo=23")
         .willReturn(
           ok()
-            .withBody(readFixtureFile("EndpointService_response_fixture.json"))
+            .withHeaders(responseHeaders(response.length()))
+            .withBody(response)
         )
     );
     final var params = new HashMap<String, Object>();
