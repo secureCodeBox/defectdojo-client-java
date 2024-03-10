@@ -5,7 +5,6 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.Endpoint;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -22,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
  * Tests for {@link EndpointService}
  */
 final class EndpointServiceTest extends WireMockBaseTestCase {
+  private static final String RESPONSE_LIST_FIXTURE_JSON = "EndpointService_response_list_fixture.json";
   private final EndpointService sut = new EndpointService(conf());
   private final Endpoint[] expectedFromSearch = new Endpoint[]{
     Endpoint.builder()
@@ -62,7 +62,7 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
 
   @Test
   void search() throws URISyntaxException, IOException {
-    final var response = readFixtureFile("EndpointService_response_fixture.json");
+    final var response = readFixtureFile(RESPONSE_LIST_FIXTURE_JSON);
     stubFor(get(urlPathEqualTo("/api/v2/endpoints/"))
       .withQueryParam("limit", equalTo("100"))
       .withQueryParam("offset", equalTo("0"))
@@ -81,7 +81,7 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
 
   @Test
   void search_withQueryParams() throws URISyntaxException, IOException {
-    final var response = readFixtureFile("EndpointService_response_fixture.json");
+    final var response = readFixtureFile(RESPONSE_LIST_FIXTURE_JSON);
     stubFor(get(urlPathEqualTo("/api/v2/endpoints/"))
       .withQueryParam("limit", equalTo("100"))
       .withQueryParam("offset", equalTo("0"))
@@ -150,25 +150,17 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
   void searchUnique_withSearchObjectWhichReturnsEmptyResult() throws URISyntaxException, JsonProcessingException {
     // Here we only test that the object properties are correctly mapped to get params,
     // since the response parsing and binding is covered by the other tests.
-    final var response = """
-      {
-        "count": 0,
-        "next": null,
-        "previous": null,
-        "results": [],
-        "prefetch": {}
-      }
-      """;
     stubFor(get(urlPathEqualTo("/api/v2/endpoints/"))
       .withQueryParam("limit", equalTo("100"))
-      .withQueryParam("product", equalTo("285"))
-      .withQueryParam("id", equalTo("42"))
       .withQueryParam("offset", equalTo("0"))
+      .withQueryParam("id", equalTo("42"))
+      .withQueryParam("product", equalTo("285"))
+      // Defaults from model:
       .withQueryParam("port", equalTo("0"))
       .withQueryParam("mitigated", equalTo("false"))
       .willReturn(ok()
-        .withHeaders(responseHeaders(response.length()))
-        .withBody(response)
+        .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
+        .withBody(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE)
       ));
     final var searchObject = Endpoint.builder()
       .id(42)
@@ -184,23 +176,14 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
   void searchUnique_withQueryParamsWhichReturnsEmptyResult() throws URISyntaxException, JsonProcessingException {
     // Here we only test that the object properties are correctly mapped to get params,
     // since the response parsing and binding is covered by the other tests.
-    final var response = """
-      {
-        "count": 0,
-        "next": null,
-        "previous": null,
-        "results": [],
-        "prefetch": {}
-      }
-      """;
     stubFor(get(urlPathEqualTo("/api/v2/endpoints/"))
       .withQueryParam("limit", equalTo("100"))
       .withQueryParam("offset", equalTo("0"))
       .withQueryParam("foo", equalTo("42"))
       .withQueryParam("bar", equalTo("23"))
       .willReturn(ok()
-        .withHeaders(responseHeaders(response.length()))
-        .withBody(response)
+        .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
+        .withBody(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE)
       ));
     final var queryParams = new HashMap<String, Object>();
     queryParams.put("foo", 42);
@@ -213,26 +196,33 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
 
   @Test
   void create() {
-    final var expectedRequest = "{\"id\":0,\"protocol\":\"tcp\",\"host\":\"www.owasp.org\",\"port\":443,\"product\":285,\"mitigated\":false}";
-    final var response = "{\"id\":42,\"protocol\":\"tcp\",\"host\":\"www.owasp.org\",\"port\":443,\"product\":285,\"mitigated\":false}";
-
+    final var json = """
+      {
+        "id": 42,
+        "protocol": "tcp",
+        "host": "www.owasp.org",
+        "port":443,
+        "product": 285,
+        "mitigated": false
+      }
+      """;
     stubFor(post(urlPathEqualTo("/api/v2/endpoints/"))
-      .withRequestBody(equalTo(expectedRequest))
+      .withRequestBody(equalToJson(json))
       .willReturn(created()
-        .withHeaders(responseHeaders(response.length()))
-        .withBody(response)
+        .withHeaders(responseHeaders(json.length()))
+        .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
-
-    final var endpoint = Endpoint.builder()
+    final var toCreate = Endpoint.builder()
+      .id(42)
       .protocol("tcp")
       .host("www.owasp.org")
       .port(443)
       .product(285)
       .build();
 
-    final var result = sut.create(endpoint);
+    final var result = sut.create(toCreate);
 
-    assertThat(result.getId(), is(42L));
+    assertThat(result, is(toCreate));
   }
 
   @Test
@@ -247,15 +237,24 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
 
   @Test
   void update() {
-    final var json = "{\"id\":42,\"protocol\":\"tcp\",\"host\":\"www.owasp.org\",\"port\":443,\"product\":285,\"mitigated\":false}";
+    final var json = """
+      {
+        "id": 42,
+        "protocol": "tcp",
+        "host": "www.owasp.org",
+        "port": 443,
+        "product":285,
+        "mitigated": false
+      }
+      """;
     stubFor(put(urlPathEqualTo("/api/v2/endpoints/42/"))
-      .withRequestBody(equalTo(json))
+      .withRequestBody(equalToJson(json))
       .willReturn(ok()
         .withHeaders(responseHeaders(json.length()))
         .withBody(json)
       ));
 
-    final var endpoint = Endpoint.builder()
+    final var toUpdate = Endpoint.builder()
       .id(42)
       .protocol("tcp")
       .host("www.owasp.org")
@@ -263,8 +262,8 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
       .product(285)
       .build();
 
-    final var updated = sut.update(endpoint, 42L);
+    final var result = sut.update(toUpdate, 42L);
 
-    assertThat(updated, is(endpoint));
+    assertThat(result, is(toUpdate));
   }
 }

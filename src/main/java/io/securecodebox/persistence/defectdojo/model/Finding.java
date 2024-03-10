@@ -11,6 +11,7 @@ import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import lombok.*;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -99,7 +100,8 @@ public final class Finding implements Model, HasId {
   private OffsetDateTime mitigatedAt;
 
   @JsonProperty("accepted_risks")
-  private List<RiskAcceptance> acceptedRisks;
+  @Builder.Default
+  private List<RiskAcceptance> acceptedRisks = new ArrayList<>();
 
   @JsonProperty("numerical_severity")
   public String getNumericalSeverity() {

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +47,8 @@ public final class Product implements Model, HasId, HasName {
   private boolean enableFullRiskAcceptance;
 
   @JsonProperty("authorization_groups")
-  private List<Long> authorizationGroups;
+  @Builder.Default
+  private List<Long> authorizationGroups = new ArrayList<>();
 
   @JsonProperty
   private String lifecycle;
