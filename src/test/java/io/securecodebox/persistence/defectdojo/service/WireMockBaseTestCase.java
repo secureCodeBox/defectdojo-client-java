@@ -25,6 +25,15 @@ import java.util.Objects;
 @WireMockTest(httpPort = WireMockBaseTestCase.PORT)
 abstract class WireMockBaseTestCase {
   static final int PORT = 8888;
+  static final String EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE = """
+    {
+      "count": 0,
+      "next": null,
+      "previous": null,
+      "results": [],
+      "prefetch": {}
+    }
+    """;
   private static final String FIXTURE_BASE_PACKAGE = "io/securecodebox/persistence/defectdojo/service";
 
   private final Config conf = new Config(
