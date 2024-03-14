@@ -103,7 +103,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final List<T> search() {
-    return search(new LinkedHashMap<>());
+    return search(Collections.emptyMap());
   }
 
   @Override
