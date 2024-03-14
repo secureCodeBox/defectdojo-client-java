@@ -70,7 +70,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     var restTemplate = this.getRestTemplate();
     HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
-    final var url = this.clientConfig.getUrl() + API_PREFIX + this.getUrlPath() + "/" + id;
+    final var url = createBaseUrl() + id;
     log.debug("Requesting URL: {}", url);
     ResponseEntity<T> response = restTemplate.exchange(
       url,
@@ -132,7 +132,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     var restTemplate = this.getRestTemplate();
     HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
-    ResponseEntity<T> response = restTemplate.exchange(this.clientConfig.getUrl() + API_PREFIX + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
+    ResponseEntity<T> response = restTemplate.exchange(createBaseUrl(), HttpMethod.POST, payload, getModelClass());
     return response.getBody();
   }
 
@@ -141,7 +141,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     var restTemplate = this.getRestTemplate();
     HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
-    restTemplate.exchange(this.clientConfig.getUrl() + API_PREFIX + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
+    restTemplate.exchange(createBaseUrl() + id + "/", HttpMethod.DELETE, payload, String.class);
   }
 
   @Override
@@ -149,7 +149,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     var restTemplate = this.getRestTemplate();
     HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
-    ResponseEntity<T> response = restTemplate.exchange(this.clientConfig.getUrl() + API_PREFIX + getUrlPath() + "/" + id + "/", HttpMethod.PUT, payload, getModelClass());
+    ResponseEntity<T> response = restTemplate.exchange(createBaseUrl() + id + "/", HttpMethod.PUT, payload, getModelClass());
     return response.getBody();
   }
   
@@ -174,6 +174,10 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
    * @return not {@code null}
    */
   protected abstract PaginatedResult<T> deserializeList(@NonNull String response);
+
+  private String createBaseUrl() {
+    return this.clientConfig.getUrl() + API_PREFIX + getUrlPath() + "/";
+  }
 
   /**
    * @return The DefectDojo Authentication Header
@@ -211,7 +215,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
       multiValueMap.set(entry.getKey(), String.valueOf(entry.getValue()));
     }
 
-    final var url = this.clientConfig.getUrl() + API_PREFIX + this.getUrlPath() + "/";
+    final var url = createBaseUrl();
     final UriComponentsBuilder builder;
     try {
       builder = UriComponentsBuilder
