@@ -120,9 +120,9 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final Optional<T> searchUnique(@NonNull Map<String, Object> queryParams) {
-    var objects = search(queryParams);
+    var found = search(queryParams);
 
-    return objects.stream()
+    return found.stream()
       .filter(object -> object.equalsQueryString(queryParams))
       .findFirst();
   }
