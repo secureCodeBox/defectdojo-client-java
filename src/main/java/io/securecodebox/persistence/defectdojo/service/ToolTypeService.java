@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import io.securecodebox.persistence.defectdojo.model.ToolType;
+import lombok.NonNull;
 
 public class ToolTypeService extends GenericDefectDojoService<ToolType> {
 
@@ -34,7 +35,7 @@ public class ToolTypeService extends GenericDefectDojoService<ToolType> {
   }
 
   @Override
-  protected PaginatedResult<ToolType> deserializeList(String response) throws JsonProcessingException {
+  protected PaginatedResult<ToolType> deserializeList(@NonNull String response) throws JsonProcessingException {
     return this.objectMapper.readValue(response, new TypeReference<>() {
     });
   }
