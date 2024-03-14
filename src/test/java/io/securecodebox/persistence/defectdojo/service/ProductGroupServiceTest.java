@@ -5,7 +5,6 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.ProductGroup;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -24,10 +23,28 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 final class ProductGroupServiceTest extends WireMockBaseTestCase {
   private static final String RESPONSE_LIST_FIXTURE_JSON = "ProductGroupService_response_list_fixture.json";
   private final ProductGroupService sut = new ProductGroupService(conf());
-  private final ProductGroup expectedFromSearch = ProductGroup.builder().build();
+  private final ProductGroup[] expectedFromSearch = new ProductGroup[]{
+    ProductGroup.builder()
+      .id(1)
+      .product(2)
+      .group(3)
+      .role(4)
+      .build(),
+    ProductGroup.builder()
+      .id(5)
+      .product(6)
+      .group(7)
+      .role(8)
+      .build(),
+    ProductGroup.builder()
+      .id(9)
+      .product(10)
+      .group(11)
+      .role(12)
+      .build()
+  };
 
   @Test
-  @Disabled("TODO: Add non-empty fixture for ProductGroupService.")
   void search() throws URISyntaxException, IOException {
     final var response = readFixtureFile(RESPONSE_LIST_FIXTURE_JSON);
     stubFor(get(urlPathEqualTo("/api/v2/product_groups/"))
@@ -41,13 +58,12 @@ final class ProductGroupServiceTest extends WireMockBaseTestCase {
     final var result = sut.search();
 
     assertAll(
-      () -> assertThat(result, hasSize(0)),
+      () -> assertThat(result, hasSize(3)),
       () -> assertThat(result, containsInAnyOrder(expectedFromSearch))
     );
   }
 
   @Test
-  @Disabled("TODO: Add non-empty fixture for ProductGroupService.")
   void search_withQueryParams() throws IOException, URISyntaxException {
     final var response = readFixtureFile(RESPONSE_LIST_FIXTURE_JSON);
     stubFor(get(urlPathEqualTo("/api/v2/product_groups/"))
@@ -66,16 +82,19 @@ final class ProductGroupServiceTest extends WireMockBaseTestCase {
     final var result = sut.search(params);
 
     assertAll(
-      () -> assertThat(result, hasSize(0)),
+      () -> assertThat(result, hasSize(3)),
       () -> assertThat(result, containsInAnyOrder(expectedFromSearch))
     );
   }
 
   @Test
-  @Disabled("TODO: Ad JSON fixture.")
   void get_byId() {
     final var response = """
       {
+        "id": 42,
+        "product": 2,
+        "group": 3,
+        "role": 4
       }
       """;
     stubFor(get(urlPathEqualTo("/api/v2/product_groups/42"))
@@ -85,6 +104,9 @@ final class ProductGroupServiceTest extends WireMockBaseTestCase {
       ));
     final var expected = ProductGroup.builder()
       .id(42)
+      .product(2)
+      .group(3)
+      .role(4)
       .build();
 
     final var result = sut.get(42L);
@@ -143,8 +165,31 @@ final class ProductGroupServiceTest extends WireMockBaseTestCase {
   }
 
   @Test
-  @Disabled("TODO: Implement test.")
   void create() {
+    final var json = """
+      {
+        "id": 42,
+        "product": 285,
+        "group": 23,
+        "role": 47
+      }
+      """;
+    stubFor(post(urlPathEqualTo("/api/v2/product_groups/"))
+      .withRequestBody(equalToJson(json))
+      .willReturn(created()
+        .withHeaders(responseHeaders(json.length()))
+        .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
+      ));
+    final var toCreate = ProductGroup.builder()
+      .id(42)
+      .product(285)
+      .group(23)
+      .role(47)
+      .build();
+
+    final var result = sut.create(toCreate);
+
+    assertThat(result, is(toCreate));
   }
 
   @Test
@@ -158,7 +203,31 @@ final class ProductGroupServiceTest extends WireMockBaseTestCase {
   }
 
   @Test
-  @Disabled("TODO: Implement test.")
   void update() {
+    final var json = """
+      {
+        "id": 42,
+        "product": 285,
+        "group": 23,
+        "role": 47
+      }
+      """;
+    stubFor(put(urlPathEqualTo("/api/v2/product_groups/42/"))
+      .withRequestBody(equalToJson(json))
+      .willReturn(ok()
+        .withHeaders(responseHeaders(json.length()))
+        .withBody(json)
+      ));
+
+    final var toUpdate = ProductGroup.builder()
+      .id(42)
+      .product(285)
+      .group(23)
+      .role(47)
+      .build();
+
+    final var result = sut.update(toUpdate, 42L);
+
+    assertThat(result, is(toUpdate));
   }
 }
