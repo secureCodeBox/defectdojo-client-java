@@ -73,12 +73,12 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final T get(long id) {
-    var restTemplate = this.getRestTemplate();
-    HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
+    final var restTemplate = this.getRestTemplate();
+    final HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
     final var url = createBaseUrl() + id;
     log.debug("Requesting URL: {}", url);
-    ResponseEntity<T> response = restTemplate.exchange(
+    final ResponseEntity<T> response = restTemplate.exchange(
       url,
       HttpMethod.GET,
       payload,
@@ -90,12 +90,12 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final List<T> search(@NonNull Map<String, Object> queryParams) {
-    List<T> objects = new LinkedList<>();
+    final List<T> objects = new LinkedList<>();
 
     boolean hasNext;
     long page = 0;
     do {
-      var response = internalSearch(queryParams, DEFECT_DOJO_OBJET_LIMIT, DEFECT_DOJO_OBJET_LIMIT * page++);
+      final var response = internalSearch(queryParams, DEFECT_DOJO_OBJET_LIMIT, DEFECT_DOJO_OBJET_LIMIT * page++);
       objects.addAll(response.getResults());
 
       hasNext = response.getNext() != null;
@@ -115,9 +115,8 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   @Override
   @SuppressWarnings("unchecked")
   public final Optional<T> searchUnique(@NonNull T searchObject) {
-    Map<String, Object> queryParams = searchStringMapper.convertValue(searchObject, Map.class);
-
-    var objects = search(queryParams);
+    final Map<String, Object> queryParams = searchStringMapper.convertValue(searchObject, Map.class);
+    final var objects = search(queryParams);
 
     return objects.stream()
       .filter(object -> object != null && object.equalsQueryString(queryParams))
@@ -126,7 +125,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final Optional<T> searchUnique(@NonNull Map<String, Object> queryParams) {
-    var found = search(queryParams);
+    final var found = search(queryParams);
 
     return found.stream()
       .filter(object -> object.equalsQueryString(queryParams))
@@ -135,27 +134,27 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final T create(@NonNull T object) {
-    var restTemplate = this.getRestTemplate();
-    HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
+    final var restTemplate = this.getRestTemplate();
+    final HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
+    final ResponseEntity<T> response = restTemplate.exchange(createBaseUrl(), HttpMethod.POST, payload, getModelClass());
 
-    ResponseEntity<T> response = restTemplate.exchange(createBaseUrl(), HttpMethod.POST, payload, getModelClass());
     return response.getBody();
   }
 
   @Override
   public final void delete(long id) {
-    var restTemplate = this.getRestTemplate();
-    HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
+    final var restTemplate = this.getRestTemplate();
+    final HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
     restTemplate.exchange(createBaseUrl() + id + "/", HttpMethod.DELETE, payload, String.class);
   }
 
   @Override
   public final T update(@NonNull T object, long id) {
-    var restTemplate = this.getRestTemplate();
-    HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
+    final var restTemplate = this.getRestTemplate();
+    final HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
+    final ResponseEntity<T> response = restTemplate.exchange(createBaseUrl() + id + "/", HttpMethod.PUT, payload, getModelClass());
 
-    ResponseEntity<T> response = restTemplate.exchange(createBaseUrl() + id + "/", HttpMethod.PUT, payload, getModelClass());
     return response.getBody();
   }
   
@@ -195,28 +194,27 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   private RestTemplate setupRestTemplate() {
-    RestTemplate restTemplate = new Foo(new ProxyConfigFactory().create()).createRestTemplate();
-    MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+    final RestTemplate template = new Foo(new ProxyConfigFactory().create()).createRestTemplate();
+    final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
     converter.setObjectMapper(this.objectMapper);
-    restTemplate.setMessageConverters(List.of(
+    template.setMessageConverters(List.of(
       new FormHttpMessageConverter(),
       new ResourceHttpMessageConverter(),
       new StringHttpMessageConverter(),
       converter
     ));
-    return restTemplate;
+    return template;
   }
 
   protected PaginatedResult<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) {
-    var restTemplate = this.getRestTemplate();
-    HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
+    final var restTemplate = this.getRestTemplate();
+    final HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
-    var mutableQueryParams = new HashMap<>(queryParams);
-
+    final var mutableQueryParams = new HashMap<>(queryParams);
     mutableQueryParams.put("limit", String.valueOf(limit));
     mutableQueryParams.put("offset", String.valueOf(offset));
 
-    var multiValueMap = new LinkedMultiValueMap<String, String>();
+    final var multiValueMap = new LinkedMultiValueMap<String, String>();
     for (var entry : mutableQueryParams.entrySet()) {
       multiValueMap.set(entry.getKey(), String.valueOf(entry.getValue()));
     }
