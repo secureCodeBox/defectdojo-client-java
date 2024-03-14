@@ -84,7 +84,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   @Override
-  public final List<T> search(Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
+  public final List<T> search(@NonNull Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
     List<T> objects = new LinkedList<>();
 
     boolean hasNext;
@@ -120,7 +120,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   @Override
-  public final Optional<T> searchUnique(Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
+  public final Optional<T> searchUnique(@NonNull Map<String, Object> queryParams) throws URISyntaxException, JsonProcessingException {
     var objects = search(queryParams);
 
     return objects.stream()
@@ -129,7 +129,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   @Override
-  public final T create(T object) {
+  public final T create(@NonNull T object) {
     var restTemplate = this.getRestTemplate();
     HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
@@ -146,11 +146,11 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   @Override
-  public final T update(T object, long objectId) {
+  public final T update(@NonNull T object, long id) {
     var restTemplate = this.getRestTemplate();
     HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
-    ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + objectId + "/", HttpMethod.PUT, payload, getModelClass());
+    ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + id + "/", HttpMethod.PUT, payload, getModelClass());
     return response.getBody();
   }
   
