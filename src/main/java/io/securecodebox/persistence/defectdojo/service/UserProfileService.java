@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import io.securecodebox.persistence.defectdojo.model.UserProfile;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public final class UserProfileService extends GenericDefectDojoService<UserProfi
   }
 
   @Override
-  protected PaginatedResult<UserProfile> deserializeList(String response) throws JsonProcessingException {
+  protected PaginatedResult<UserProfile> deserializeList(@NonNull String response) throws JsonProcessingException {
     /* GenericDefectDojoService expects that the response from the defectdojo api is a list.
      * This endpoint returns a single object though, to not break the code this response
      * gets converted to a defectdojo response.

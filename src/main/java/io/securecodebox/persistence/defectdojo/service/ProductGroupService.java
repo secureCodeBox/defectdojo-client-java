@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import io.securecodebox.persistence.defectdojo.model.ProductGroup;
+import lombok.NonNull;
 
 public class ProductGroupService extends GenericDefectDojoService<ProductGroup> {
   public ProductGroupService(Config config) {
@@ -26,7 +27,7 @@ public class ProductGroupService extends GenericDefectDojoService<ProductGroup> 
   }
 
   @Override
-  protected PaginatedResult<ProductGroup> deserializeList(String response) throws JsonProcessingException {
+  protected PaginatedResult<ProductGroup> deserializeList(@NonNull String response) throws JsonProcessingException {
     return this.objectMapper.readValue(response, new TypeReference<>() {
     });
   }
