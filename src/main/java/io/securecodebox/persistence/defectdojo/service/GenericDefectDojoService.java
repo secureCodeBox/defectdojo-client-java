@@ -49,7 +49,13 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   @Getter
   protected RestTemplate restTemplate;
 
+  /**
+   * Dedicated constructor
+   *
+   * @param clientConfig not {@code null}
+   */
   public GenericDefectDojoService(@NonNull ClientConfig clientConfig) {
+    super();
     this.clientConfig = clientConfig;
 
     this.objectMapper = new ObjectMapper();
