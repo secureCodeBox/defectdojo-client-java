@@ -79,10 +79,20 @@ final class UserProfileServiceTest extends WireMockBaseTestCase {
   }
 
   @Test
-  @Disabled("TODO: Ad JSON fixture.")
   void get_byId() {
     final var response = """
       {
+        "user": {
+          "id": 42,
+          "username": "alf",
+          "first_name": "Gordon",
+          "last_name": "Shumway",
+          "email": "gordon.shumway@owasp.org",
+          "last_login": "2022-11-01T16:20:19.373Z",
+          "is_active": true,
+          "is_superuser": true,
+          "configuration_permissions": [0]
+        }
       }
       """;
     stubFor(get(urlPathEqualTo("/api/v2/user_profile/42"))
@@ -91,6 +101,12 @@ final class UserProfileServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = UserProfile.builder()
+      .user(User.builder()
+        .id(42)
+        .username("alf")
+        .firstName("Gordon")
+        .lastName("Shumway")
+        .build())
       .build();
 
     final var result = sut.get(42L);
