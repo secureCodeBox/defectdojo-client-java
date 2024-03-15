@@ -6,14 +6,15 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
+import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import io.securecodebox.persistence.defectdojo.model.ProductGroup;
 import lombok.NonNull;
 
 public class ProductGroupService extends GenericDefectDojoService<ProductGroup> {
-  public ProductGroupService(Config config) {
-    super(config);
+  public ProductGroupService(ClientConfig clientConfig) {
+    super(clientConfig);
   }
 
   @Override
@@ -27,8 +28,12 @@ public class ProductGroupService extends GenericDefectDojoService<ProductGroup> 
   }
 
   @Override
-  protected PaginatedResult<ProductGroup> deserializeList(@NonNull String response) throws JsonProcessingException {
-    return this.objectMapper.readValue(response, new TypeReference<>() {
-    });
+  protected PaginatedResult<ProductGroup> deserializeList(@NonNull String response) {
+    try {
+      return modelObjectMapper().readValue(response, new TypeReference<>() {
+      });
+    } catch (JsonProcessingException e) {
+      throw new PersistenceException("Can't process JSON response!", e);
+    }
   }
 }

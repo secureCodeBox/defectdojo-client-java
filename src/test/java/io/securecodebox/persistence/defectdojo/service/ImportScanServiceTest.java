@@ -5,7 +5,7 @@
 package io.securecodebox.persistence.defectdojo.service;
 
 import io.securecodebox.persistence.defectdojo.ScanType;
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Getter;
@@ -28,21 +28,21 @@ class ImportScanServiceTest {
 
   @Test
   void createDefault_throwsExceptionIfNullPassedInAsConfig() {
-    assertThrows(NullPointerException.class, () -> {
-      ImportScanService.createDefault(null, ProxyConfig.NULL);
-    });
+    assertThrows(
+      NullPointerException.class,
+      () -> ImportScanService.createDefault(null, ProxyConfig.NULL));
   }
 
   @Test
   void createDefault_throwsExceptionIfNullPassedInAsProxyConfig() {
-    assertThrows(NullPointerException.class, () -> {
-      ImportScanService.createDefault(Config.NULL, null);
-    });
+    assertThrows(
+      NullPointerException.class,
+      () -> ImportScanService.createDefault(ClientConfig.NULL, null));
   }
 
   @Test
   void createDefault_passesConfig() {
-    final var config = new Config(
+    final var config = new ClientConfig(
       "url",
       "apiKey",
       23
