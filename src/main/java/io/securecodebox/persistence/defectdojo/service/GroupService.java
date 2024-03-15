@@ -30,7 +30,7 @@ public class GroupService extends GenericDefectDojoService<Group> {
   @Override
   protected PaginatedResult<Group> deserializeList(@NonNull String response) {
     try {
-      return this.objectMapper.readValue(response, new TypeReference<>() {
+      return modelObjectMapper().readValue(response, new TypeReference<>() {
       });
     } catch (JsonProcessingException e) {
       throw new PersistenceException("Can't process JSON response!", e);
