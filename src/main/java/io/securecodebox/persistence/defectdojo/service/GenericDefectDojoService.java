@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.cfg.CoercionAction;
 import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
 import io.securecodebox.persistence.defectdojo.config.ClientConfig;
-import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.exception.TooManyResponsesException;
 import io.securecodebox.persistence.defectdojo.http.AuthHeaderFactory;
 import io.securecodebox.persistence.defectdojo.http.Foo;
@@ -34,7 +33,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
 
 /**
@@ -44,7 +42,6 @@ import java.util.*;
  */
 @Slf4j
 abstract class GenericDefectDojoService<T extends Model> implements DefectDojoService<T> {
-  private static final String API_PREFIX = "/api/v2/";
   private static final long DEFECT_DOJO_OBJET_LIMIT = 100L;
   protected ClientConfig clientConfig;
 
@@ -81,7 +78,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     final var restTemplate = this.getRestTemplate();
     final HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
-    final var url = createBaseUrl() + id;
+    final var url = createBaseUrl().resolve(String.valueOf(id));
     log.debug("Requesting URL: {}", url);
     final ResponseEntity<T> response = restTemplate.exchange(
       url,
@@ -151,20 +148,22 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     final var restTemplate = this.getRestTemplate();
     final HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
-    restTemplate.exchange(createBaseUrl() + id + "/", HttpMethod.DELETE, payload, String.class);
+    final var url = createBaseUrl().resolve(id + "/");
+    restTemplate.exchange(url, HttpMethod.DELETE, payload, String.class);
   }
 
   @Override
   public final T update(@NonNull T object, long id) {
     final var restTemplate = this.getRestTemplate();
     final HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
-    final ResponseEntity<T> response = restTemplate.exchange(createBaseUrl() + id + "/", HttpMethod.PUT, payload, getModelClass());
+    final var url = createBaseUrl().resolve(id + "/");
+    final ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.PUT, payload, getModelClass());
 
     return response.getBody();
   }
-  
+
   /**
-   * Get the URL path for the REST endpoint relative to {@link #API_PREFIX}
+   * Get the URL path for the REST endpoint relative to {@link ClientConfig#API_PREFIX}
    *
    * @return not {@code null}, not empty
    */
@@ -185,8 +184,13 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
    */
   protected abstract PaginatedResult<T> deserializeList(@NonNull String response);
 
-  private String createBaseUrl() {
-    return this.clientConfig.getUrl() + API_PREFIX + getUrlPath() + "/";
+  final URI createBaseUrl() {
+    final var buffer = clientConfig.getUrl() +
+      ClientConfig.API_PREFIX +
+      getUrlPath() +
+      '/';
+
+    return URI.create(buffer).normalize();
   }
 
   /**
@@ -226,13 +230,9 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
     final var url = createBaseUrl();
     final UriComponentsBuilder builder;
-    try {
-      builder = UriComponentsBuilder
-        .fromUri(new URI(url))
-        .queryParams(multiValueMap);
-    } catch (URISyntaxException e) {
-      throw new PersistenceException("Bad URL given: " + url, e);
-    }
+    builder = UriComponentsBuilder
+      .fromUri(url)
+      .queryParams(multiValueMap);
 
     final ResponseEntity<String> responseString = restTemplate.exchange(
       builder.build(mutableQueryParams),
