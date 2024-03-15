@@ -18,6 +18,10 @@ import lombok.ToString;
 @EqualsAndHashCode
 public final class ClientConfig {
   /**
+   * Path prefix for the Defectdojo REST API
+   */
+  public static final String API_PREFIX = "/api/v2/";
+  /**
    * Default for {@link #maxPageCountForGets}
    */
   static final int DEFAULT_MAX_PAGE_COUNT_FOR_GETS = 100;
