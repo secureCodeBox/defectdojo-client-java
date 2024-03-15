@@ -91,6 +91,11 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   @Override
+  public final List<T> search() {
+    return search(Collections.emptyMap());
+  }
+
+  @Override
   public final List<T> search(@NonNull Map<String, Object> queryParams) {
     final List<T> objects = new LinkedList<>();
 
@@ -107,11 +112,6 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     } while (hasNext);
 
     return objects;
-  }
-
-  @Override
-  public final List<T> search() {
-    return search(Collections.emptyMap());
   }
 
   @Override
