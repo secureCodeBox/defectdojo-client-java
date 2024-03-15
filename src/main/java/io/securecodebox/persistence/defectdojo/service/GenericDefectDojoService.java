@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.exception.TooManyResponsesException;
 import io.securecodebox.persistence.defectdojo.http.AuthHeaderFactory;
-import io.securecodebox.persistence.defectdojo.http.Foo;
+import io.securecodebox.persistence.defectdojo.http.RestTemplateFactory;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.Model;
@@ -199,7 +199,8 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   private RestTemplate setupRestTemplate() {
-    final RestTemplate template = new Foo(new ProxyConfigFactory().create()).createRestTemplate();
+    final RestTemplate template = new RestTemplateFactory(new ProxyConfigFactory().create()).createRestTemplate();
+    // TODO: Maybe all of this could be moved into the factory.
     final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
     converter.setObjectMapper(mapper.modelObjectMapper());
     template.setMessageConverters(List.of(
