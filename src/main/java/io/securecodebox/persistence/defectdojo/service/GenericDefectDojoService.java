@@ -43,7 +43,7 @@ import java.util.*;
 @Slf4j
 abstract class GenericDefectDojoService<T extends Model> implements DefectDojoService<T> {
   private static final long DEFECT_DOJO_OBJET_LIMIT = 100L;
-  protected ClientConfig clientConfig;
+  private final ClientConfig clientConfig;
 
   protected ObjectMapper objectMapper;
   protected ObjectMapper searchStringMapper;
