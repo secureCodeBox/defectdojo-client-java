@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 package io.securecodebox.persistence.defectdojo.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.Endpoint;
 import org.junit.jupiter.api.Test;
 
@@ -147,7 +146,7 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
 
 
   @Test
-  void searchUnique_withSearchObjectWhichReturnsEmptyResult() throws URISyntaxException, JsonProcessingException {
+  void searchUnique_withSearchObjectWhichReturnsEmptyResult() {
     // Here we only test that the object properties are correctly mapped to get params,
     // since the response parsing and binding is covered by the other tests.
     stubFor(get(urlPathEqualTo("/api/v2/endpoints/"))
@@ -173,7 +172,7 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
   }
 
   @Test
-  void searchUnique_withQueryParamsWhichReturnsEmptyResult() throws URISyntaxException, JsonProcessingException {
+  void searchUnique_withQueryParamsWhichReturnsEmptyResult() {
     // Here we only test that the object properties are correctly mapped to get params,
     // since the response parsing and binding is covered by the other tests.
     stubFor(get(urlPathEqualTo("/api/v2/endpoints/"))
