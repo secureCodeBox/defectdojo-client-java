@@ -62,7 +62,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     super();
     this.clientConfig = clientConfig;
     this.proxyConfig = proxyConfig;
-    this.restTemplate = this.setupRestTemplate();
+    this.restTemplate = setupRestTemplate();
   }
 
   @Override
