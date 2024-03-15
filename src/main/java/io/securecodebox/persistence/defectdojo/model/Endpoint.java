@@ -26,7 +26,7 @@ public final class Endpoint implements Model, HasId {
   @JsonProperty
   private String host;
 
-  @JsonProperty("fqdm")
+  @JsonProperty("fqdm") // FIXME: This seems to be a type, should be fqdn.
   private String fullyQualifiedDomainName;
 
   @JsonProperty
