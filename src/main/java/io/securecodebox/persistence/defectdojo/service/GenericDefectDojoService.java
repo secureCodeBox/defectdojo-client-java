@@ -48,8 +48,8 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   protected ObjectMapper objectMapper;
   protected ObjectMapper searchStringMapper;
 
-  @Getter
-  protected RestTemplate restTemplate;
+  @Getter // TODO: Remove this getter
+  private final RestTemplate restTemplate;
 
   /**
    * Dedicated constructor
