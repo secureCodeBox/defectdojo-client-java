@@ -13,6 +13,7 @@ import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.exception.TooManyResponsesException;
 import io.securecodebox.persistence.defectdojo.http.AuthHeaderFactory;
 import io.securecodebox.persistence.defectdojo.http.Foo;
+import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
 import io.securecodebox.persistence.defectdojo.model.Model;
@@ -44,6 +45,7 @@ import java.util.*;
 abstract class GenericDefectDojoService<T extends Model> implements DefectDojoService<T> {
   private static final long DEFECT_DOJO_OBJET_LIMIT = 100L;
   private final ClientConfig clientConfig;
+  private final ProxyConfig proxyConfig;
 
   protected ObjectMapper objectMapper;
   protected ObjectMapper searchStringMapper;
@@ -52,13 +54,24 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   private final RestTemplate restTemplate;
 
   /**
-   * Dedicated constructor
+   * Convenience constructor which initializes {@link #proxyConfig}
    *
    * @param clientConfig not {@code null}
    */
-  public GenericDefectDojoService(@NonNull ClientConfig clientConfig) {
+  public GenericDefectDojoService(ClientConfig clientConfig) {
+    this(clientConfig, new ProxyConfigFactory().create());
+  }
+
+  /**
+   * Dedicated constructor
+   *
+   * @param clientConfig not {@code null}
+   * @param proxyConfig  not {@code null}
+   */
+  public GenericDefectDojoService(@NonNull ClientConfig clientConfig, @NonNull ProxyConfig proxyConfig) {
     super();
     this.clientConfig = clientConfig;
+    this.proxyConfig = proxyConfig;
 
     this.objectMapper = new ObjectMapper();
     this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -198,7 +211,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
    */
   private HttpHeaders getDefectDojoAuthorizationHeaders() {
     final var factory = new AuthHeaderFactory(clientConfig);
-    factory.setProxyConfig(new ProxyConfigFactory().create());
+    factory.setProxyConfig(proxyConfig);
     return factory.generateAuthorizationHeaders();
   }
 
