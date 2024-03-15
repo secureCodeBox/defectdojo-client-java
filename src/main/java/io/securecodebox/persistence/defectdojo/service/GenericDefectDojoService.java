@@ -37,6 +37,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
+/**
+ * Generic base implementation with common functionality shared by services
+ *
+ * @param <T> type of model the service handles
+ */
 @Slf4j
 abstract class GenericDefectDojoService<T extends Model> implements DefectDojoService<T> {
   private static final String API_PREFIX = "/api/v2/";
