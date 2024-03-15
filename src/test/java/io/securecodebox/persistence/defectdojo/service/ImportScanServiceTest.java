@@ -28,16 +28,16 @@ class ImportScanServiceTest {
 
   @Test
   void createDefault_throwsExceptionIfNullPassedInAsConfig() {
-    assertThrows(NullPointerException.class, () -> {
-      ImportScanService.createDefault(null, ProxyConfig.NULL);
-    });
+    assertThrows(
+      NullPointerException.class,
+      () -> ImportScanService.createDefault(null, ProxyConfig.NULL));
   }
 
   @Test
   void createDefault_throwsExceptionIfNullPassedInAsProxyConfig() {
-    assertThrows(NullPointerException.class, () -> {
-      ImportScanService.createDefault(ClientConfig.NULL, null);
-    });
+    assertThrows(
+      NullPointerException.class,
+      () -> ImportScanService.createDefault(ClientConfig.NULL, null));
   }
 
   @Test
