@@ -8,9 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.exception.TooManyResponsesException;
 import io.securecodebox.persistence.defectdojo.http.AuthHeaderFactory;
-import io.securecodebox.persistence.defectdojo.http.RestTemplateFactory;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
+import io.securecodebox.persistence.defectdojo.http.RestTemplateFactory;
 import io.securecodebox.persistence.defectdojo.model.Model;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import lombok.NonNull;
@@ -67,7 +67,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final T get(long id) {
-    final HttpEntity<String> payload = new HttpEntity<>(createAuthorizationHeaders());
+    final HttpEntity<String> payload = createRequestEntity(createAuthorizationHeaders());
 
     final var url = createBaseUrl().resolve(String.valueOf(id));
     log.debug("Requesting URL: {}", url);
@@ -133,7 +133,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final T create(@NonNull T object) {
-    final HttpEntity<T> payload = new HttpEntity<>(object, createAuthorizationHeaders());
+    final HttpEntity<T> payload = createRequestEntity(object, createAuthorizationHeaders());
     final ResponseEntity<T> response = restTemplate.exchange(createBaseUrl(), HttpMethod.POST, payload, getModelClass());
 
     return response.getBody();
@@ -141,19 +141,26 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final void delete(long id) {
-    final HttpEntity<String> payload = new HttpEntity<>(createAuthorizationHeaders());
-
+    final HttpEntity<String> payload = createRequestEntity(createAuthorizationHeaders());
     final var url = createBaseUrl().resolve(id + "/");
     restTemplate.exchange(url, HttpMethod.DELETE, payload, String.class);
   }
 
   @Override
   public final T update(@NonNull T object, long id) {
-    final HttpEntity<T> payload = new HttpEntity<>(object, createAuthorizationHeaders());
+    final HttpEntity<T> payload = createRequestEntity(object, createAuthorizationHeaders());
     final var url = createBaseUrl().resolve(id + "/");
     final ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.PUT, payload, getModelClass());
 
     return response.getBody();
+  }
+
+  private HttpEntity<String> createRequestEntity(HttpHeaders headers) {
+    return createRequestEntity("", headers);
+  }
+
+  private <M> HttpEntity<M> createRequestEntity(M body, HttpHeaders headers) {
+    return new HttpEntity<>(body, headers);
   }
 
   /**
@@ -213,7 +220,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   protected PaginatedResult<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) {
-    final HttpEntity<String> payload = new HttpEntity<>(createAuthorizationHeaders());
+    final HttpEntity<String> payload = createRequestEntity(createAuthorizationHeaders());
 
     final var mutableQueryParams = new HashMap<>(queryParams);
     mutableQueryParams.put("limit", String.valueOf(limit));
