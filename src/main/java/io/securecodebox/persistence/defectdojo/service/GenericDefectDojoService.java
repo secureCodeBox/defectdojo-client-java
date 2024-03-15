@@ -18,7 +18,6 @@ import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
 import io.securecodebox.persistence.defectdojo.model.Model;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -46,13 +45,10 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   private static final long DEFECT_DOJO_OBJET_LIMIT = 100L;
   private final ClientConfig clientConfig;
   private final ProxyConfig proxyConfig;
-
+  private final RestTemplate restTemplate;
   protected ObjectMapper objectMapper;
   protected ObjectMapper searchStringMapper;
-
-  @Getter // TODO: Remove this getter
-  private final RestTemplate restTemplate;
-
+  
   /**
    * Convenience constructor which initializes {@link #proxyConfig}
    *
@@ -88,7 +84,6 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final T get(long id) {
-    final var restTemplate = this.getRestTemplate();
     final HttpEntity<String> payload = new HttpEntity<>(createAuthorizationHeaders());
 
     final var url = createBaseUrl().resolve(String.valueOf(id));
@@ -149,7 +144,6 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final T create(@NonNull T object) {
-    final var restTemplate = this.getRestTemplate();
     final HttpEntity<T> payload = new HttpEntity<>(object, createAuthorizationHeaders());
     final ResponseEntity<T> response = restTemplate.exchange(createBaseUrl(), HttpMethod.POST, payload, getModelClass());
 
@@ -158,7 +152,6 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final void delete(long id) {
-    final var restTemplate = this.getRestTemplate();
     final HttpEntity<String> payload = new HttpEntity<>(createAuthorizationHeaders());
 
     final var url = createBaseUrl().resolve(id + "/");
@@ -167,7 +160,6 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
   @Override
   public final T update(@NonNull T object, long id) {
-    final var restTemplate = this.getRestTemplate();
     final HttpEntity<T> payload = new HttpEntity<>(object, createAuthorizationHeaders());
     final var url = createBaseUrl().resolve(id + "/");
     final ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.PUT, payload, getModelClass());
@@ -226,7 +218,6 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   }
 
   protected PaginatedResult<T> internalSearch(Map<String, Object> queryParams, long limit, long offset) {
-    final var restTemplate = this.getRestTemplate();
     final HttpEntity<String> payload = new HttpEntity<>(createAuthorizationHeaders());
 
     final var mutableQueryParams = new HashMap<>(queryParams);
