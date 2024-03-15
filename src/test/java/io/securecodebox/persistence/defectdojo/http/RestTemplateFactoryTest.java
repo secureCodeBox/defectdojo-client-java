@@ -11,16 +11,16 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
- * Tests for {@link Foo}
+ * Tests for {@link RestTemplateFactory}
  */
-class FooTest {
+class RestTemplateFactoryTest {
   private final ProxyConfig proxyConfig = ProxyConfig.builder()
     .user("user")
     .password("pw")
     .host("host")
     .port(42)
     .build();
-  private final Foo sut = new Foo(proxyConfig);
+  private final RestTemplateFactory sut = new RestTemplateFactory(proxyConfig);
 
 
 

@@ -9,7 +9,7 @@ import io.securecodebox.persistence.defectdojo.ScanType;
 import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.http.AuthHeaderFactory;
-import io.securecodebox.persistence.defectdojo.http.Foo;
+import io.securecodebox.persistence.defectdojo.http.RestTemplateFactory;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Data;
@@ -54,7 +54,7 @@ public class ImportScanService2 {
   }
 
   protected RestTemplate setupRestTemplate() {
-    return new Foo(new ProxyConfigFactory().create()).createRestTemplate();
+    return new RestTemplateFactory(new ProxyConfigFactory().create()).createRestTemplate();
   }
 
   /**

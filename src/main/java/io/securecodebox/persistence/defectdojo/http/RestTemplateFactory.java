@@ -13,13 +13,13 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Placeholder to move duplicated code, will be named better later
+ * Factory to create preconfigured {@link RestTemplate}
  */
 @Slf4j
-public final class Foo {
+public final class RestTemplateFactory {
   private final ProxyConfig proxyConfig;
 
-  public Foo(@NonNull ProxyConfig proxyConfig) {
+  public RestTemplateFactory(@NonNull ProxyConfig proxyConfig) {
     super();
     this.proxyConfig = proxyConfig;
   }
