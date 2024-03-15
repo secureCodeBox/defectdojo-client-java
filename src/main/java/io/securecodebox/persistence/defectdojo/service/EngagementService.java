@@ -30,7 +30,7 @@ public class EngagementService extends GenericDefectDojoService<Engagement> {
   @Override
   protected PaginatedResult<Engagement> deserializeList(@NonNull String response) {
     try {
-      return this.objectMapper.readValue(response, new TypeReference<>() {
+      return modelObjectMapper().readValue(response, new TypeReference<>() {
       });
     } catch (JsonProcessingException e) {
       throw new PersistenceException("Can't process JSON response!", e);

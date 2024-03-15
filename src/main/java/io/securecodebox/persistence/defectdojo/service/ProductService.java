@@ -31,7 +31,7 @@ public class ProductService extends GenericDefectDojoService<Product> {
   @Override
   protected PaginatedResult<Product> deserializeList(@NonNull String response) {
     try {
-      return this.objectMapper.readValue(response, new TypeReference<>() {
+      return modelObjectMapper().readValue(response, new TypeReference<>() {
       });
     } catch (JsonProcessingException e) {
       throw new PersistenceException("Can't process JSON response!", e);

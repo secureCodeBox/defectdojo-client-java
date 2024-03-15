@@ -4,18 +4,13 @@
 
 package io.securecodebox.persistence.defectdojo.service;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.cfg.CoercionAction;
-import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
 import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.exception.TooManyResponsesException;
 import io.securecodebox.persistence.defectdojo.http.AuthHeaderFactory;
 import io.securecodebox.persistence.defectdojo.http.Foo;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfig;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
-import io.securecodebox.persistence.defectdojo.model.Engagement;
 import io.securecodebox.persistence.defectdojo.model.Model;
 import io.securecodebox.persistence.defectdojo.model.PaginatedResult;
 import lombok.NonNull;
@@ -46,9 +41,8 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   private final ClientConfig clientConfig;
   private final ProxyConfig proxyConfig;
   private final RestTemplate restTemplate;
-  protected ObjectMapper objectMapper;
-  protected ObjectMapper searchStringMapper;
-  
+  private final Mappers mapper = new Mappers();
+
   /**
    * Convenience constructor which initializes {@link #proxyConfig}
    *
@@ -68,17 +62,6 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     super();
     this.clientConfig = clientConfig;
     this.proxyConfig = proxyConfig;
-
-    this.objectMapper = new ObjectMapper();
-    this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    this.objectMapper.coercionConfigFor(Engagement.Status.class).setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
-    this.objectMapper.findAndRegisterModules();
-
-    this.searchStringMapper = new ObjectMapper();
-    this.searchStringMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    this.searchStringMapper.coercionConfigFor(Engagement.Status.class).setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
-    this.searchStringMapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
-
     this.restTemplate = this.setupRestTemplate();
   }
 
@@ -112,10 +95,15 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     do {
       final var response = internalSearch(queryParams, DEFECT_DOJO_OBJET_LIMIT, DEFECT_DOJO_OBJET_LIMIT * page++);
       objects.addAll(response.getResults());
-
       hasNext = response.getNext() != null;
+
       if (page > this.clientConfig.getMaxPageCountForGets()) {
-        throw new TooManyResponsesException("Found too many response object. Quitting after " + (page - 1) + " paginated API pages of " + DEFECT_DOJO_OBJET_LIMIT + " each.");
+        final var msg = String.format(
+          "Found too many response object. Quitting after %d paginated API pages of %d each.",
+          page - 1,
+          DEFECT_DOJO_OBJET_LIMIT
+        );
+        throw new TooManyResponsesException(msg);
       }
     } while (hasNext);
 
@@ -125,7 +113,8 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   @Override
   @SuppressWarnings("unchecked")
   public final Optional<T> searchUnique(@NonNull T searchObject) {
-    final Map<String, Object> queryParams = searchStringMapper.convertValue(searchObject, Map.class);
+    final Map<String, Object> queryParams = mapper.searchStringMapper()
+      .convertValue(searchObject, Map.class);
     final var objects = search(queryParams);
 
     return objects.stream()
@@ -198,6 +187,11 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     return URI.create(buffer).normalize();
   }
 
+  final ObjectMapper modelObjectMapper() {
+    // We only expose this mapper to subclasses.
+    return mapper.modelObjectMapper();
+  }
+
   private HttpHeaders createAuthorizationHeaders() {
     final var factory = new AuthHeaderFactory(clientConfig);
     factory.setProxyConfig(proxyConfig);
@@ -207,7 +201,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
   private RestTemplate setupRestTemplate() {
     final RestTemplate template = new Foo(new ProxyConfigFactory().create()).createRestTemplate();
     final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-    converter.setObjectMapper(this.objectMapper);
+    converter.setObjectMapper(mapper.modelObjectMapper());
     template.setMessageConverters(List.of(
       new FormHttpMessageConverter(),
       new ResourceHttpMessageConverter(),

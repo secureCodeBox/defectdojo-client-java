@@ -38,7 +38,7 @@ public class ToolTypeService extends GenericDefectDojoService<ToolType> {
   @Override
   protected PaginatedResult<ToolType> deserializeList(@NonNull String response) {
     try {
-      return this.objectMapper.readValue(response, new TypeReference<>() {
+      return modelObjectMapper().readValue(response, new TypeReference<>() {
       });
     } catch (JsonProcessingException e) {
       throw new PersistenceException("Can't process JSON response!", e);

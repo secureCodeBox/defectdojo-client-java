@@ -62,7 +62,7 @@ final class GenericDefectDojoServiceTest {
     @Override
     @SneakyThrows
     protected PaginatedResult<TestModel> deserializeList(@NonNull String response) {
-      return this.objectMapper.readValue(response, new TypeReference<>() {
+      return modelObjectMapper().readValue(response, new TypeReference<>() {
       });
     }
   }

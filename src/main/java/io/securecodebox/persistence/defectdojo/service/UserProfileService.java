@@ -38,7 +38,7 @@ public final class UserProfileService extends GenericDefectDojoService<UserProfi
      */
     final UserProfile userProfile;
     try {
-      userProfile = this.objectMapper.readValue(response, new TypeReference<UserProfile>() {
+      userProfile = modelObjectMapper().readValue(response, new TypeReference<>() {
       });
     } catch (JsonProcessingException e) {
       throw new PersistenceException("Can't process JSON response!", e);
