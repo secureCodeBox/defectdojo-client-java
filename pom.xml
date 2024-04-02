@@ -211,7 +211,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>3.2.2</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -240,7 +240,7 @@
       <plugins>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.12.1</version>
+          <version>3.13.0</version>
           <configuration>
             <source>${project.build.version.source}</source>
             <target>${project.build.version.target}</target>
