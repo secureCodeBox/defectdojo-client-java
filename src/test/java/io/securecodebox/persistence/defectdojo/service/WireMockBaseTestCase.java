@@ -6,7 +6,7 @@ package io.securecodebox.persistence.defectdojo.service;
 import com.github.tomakehurst.wiremock.http.HttpHeader;
 import com.github.tomakehurst.wiremock.http.HttpHeaders;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -25,6 +25,7 @@ import java.util.Objects;
 @WireMockTest(httpPort = WireMockBaseTestCase.PORT)
 abstract class WireMockBaseTestCase {
   static final int PORT = 8888;
+  static final String API_KEY = "not-required-for-tests";
   static final String EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE = """
     {
       "count": 0,
@@ -36,9 +37,7 @@ abstract class WireMockBaseTestCase {
     """;
   private static final String FIXTURE_BASE_PACKAGE = "io/securecodebox/persistence/defectdojo/service";
 
-  private final Config conf = new Config(
-    String.format("http://localhost:%d/", PORT),
-    "not-required-for-tests");
+  private final ClientConfig conf = new ClientConfig(String.format("http://localhost:%d/", PORT), API_KEY);
 
   String readFixtureFile(String fixtureFile) throws IOException {
     final var fixtureFilePath = FIXTURE_BASE_PACKAGE + "/" + fixtureFile;
