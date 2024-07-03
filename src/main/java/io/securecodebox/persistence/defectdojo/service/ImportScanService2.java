@@ -6,9 +6,10 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.securecodebox.persistence.defectdojo.ScanType;
-import io.securecodebox.persistence.defectdojo.config.Config;
+import io.securecodebox.persistence.defectdojo.config.ClientConfig;
 import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
-import io.securecodebox.persistence.defectdojo.http.Foo;
+import io.securecodebox.persistence.defectdojo.http.AuthHeaderFactory;
+import io.securecodebox.persistence.defectdojo.http.RestTemplateFactory;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.ScanFile;
 import lombok.Data;
@@ -36,22 +37,24 @@ import java.util.List;
 @Deprecated(forRemoval = true)
 public class ImportScanService2 {
 
-  private final Config config;
+  private final ClientConfig clientConfig;
 
-  public ImportScanService2(Config config) {
+  public ImportScanService2(ClientConfig clientConfig) {
     super();
-    this.config = config;
+    this.clientConfig = clientConfig;
   }
 
   /**
    * @return The DefectDojo Authentication Header
    */
   private HttpHeaders getDefectDojoAuthorizationHeaders() {
-    return new Foo(config, new ProxyConfigFactory().create()).generateAuthorizationHeaders();
+    final var factory = new AuthHeaderFactory(clientConfig);
+    factory.setProxyConfig(new ProxyConfigFactory().create());
+    return factory.generateAuthorizationHeaders();
   }
 
   protected RestTemplate setupRestTemplate() {
-    return new Foo(config, new ProxyConfigFactory().create()).createRestTemplate();
+    return new RestTemplateFactory(new ProxyConfigFactory().create()).createRestTemplate();
   }
 
   /**
@@ -93,7 +96,7 @@ public class ImportScanService2 {
 
       var payload = new HttpEntity<>(mvn, headers);
 
-      return restTemplate.exchange(config.getUrl() + "/api/v2/" + endpoint + "/", HttpMethod.POST, payload, ImportScanResponse.class).getBody();
+      return restTemplate.exchange(clientConfig.getUrl() + "/api/v2/" + endpoint + "/", HttpMethod.POST, payload, ImportScanResponse.class).getBody();
     } catch (HttpClientErrorException e) {
       throw new PersistenceException("Failed to attach findings to engagement.");
     }

@@ -4,7 +4,7 @@
 
 package io.securecodebox.persistence.defectdojo.config;
 
-import io.securecodebox.persistence.defectdojo.exception.ConfigException;
+import io.securecodebox.persistence.defectdojo.exception.ClientConfigException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,10 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Tests for {@link Config}
+ * Tests for {@link ClientConfig}
  */
 @ExtendWith(SystemStubsExtension.class)
-class ConfigTest {
+class ClientConfigTest {
 
   @SystemStub
   private EnvironmentVariables environmentVariables;
@@ -31,7 +31,7 @@ class ConfigTest {
   @Test
   void constructor_urlMustNotBeNull() {
     final var thrown = assertThrows(NullPointerException.class, () -> {
-      new Config(null, "apiKey", 1);
+      new ClientConfig(null, "apiKey", 1);
     });
 
     assertThat(thrown.getMessage(), startsWith("url "));
@@ -40,7 +40,7 @@ class ConfigTest {
   @Test
   void constructor_apiKeyMustNotBeNull() {
     final var thrown = assertThrows(NullPointerException.class, () -> {
-      new Config("url", null, 1);
+      new ClientConfig("url", null, 1);
     });
 
     assertThat(thrown.getMessage(), startsWith("apiKey "));
@@ -50,7 +50,7 @@ class ConfigTest {
   @ValueSource(ints = {0, -1, -2, -23, -42, Integer.MIN_VALUE})
   void constructor_maxPageCountForGetsMustNotBeLessThanOne(final int number) {
     final var thrown = assertThrows(IllegalArgumentException.class, () -> {
-      new Config("url", "apiKey", number);
+      new ClientConfig("url", "apiKey", number);
     });
 
     assertThat(thrown.getMessage(), startsWith("maxPageCountForGets "));
@@ -63,7 +63,7 @@ class ConfigTest {
       .set("DEFECTDOJO_APIKEY", "apikey")
       .set("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS", "23");
 
-    final var sut = Config.fromEnv();
+    final var sut = ClientConfig.fromEnv();
 
     assertAll(
       () -> assertThat(sut.getUrl(), is("url")),
@@ -77,7 +77,7 @@ class ConfigTest {
     environmentVariables
       .set("DEFECTDOJO_APIKEY", "apikey");
 
-    final var thrown = assertThrows(ConfigException.class, Config::fromEnv);
+    final var thrown = assertThrows(ClientConfigException.class, ClientConfig::fromEnv);
 
     assertThat(thrown.getMessage(), is("Missing environment variable 'DEFECTDOJO_URL'!"));
   }
@@ -87,7 +87,7 @@ class ConfigTest {
     environmentVariables
       .set("DEFECTDOJO_URL", "url");
 
-    final var thrown = assertThrows(ConfigException.class, Config::fromEnv);
+    final var thrown = assertThrows(ClientConfigException.class, ClientConfig::fromEnv);
 
     assertThat(thrown.getMessage(), is("Missing environment variable 'DEFECTDOJO_APIKEY'!"));
   }
@@ -98,8 +98,8 @@ class ConfigTest {
       .set("DEFECTDOJO_URL", "url")
       .set("DEFECTDOJO_APIKEY", "apikey");
 
-    final var sut = Config.fromEnv();
-    assertThat(sut.getMaxPageCountForGets(), is(Config.DEFAULT_MAX_PAGE_COUNT_FOR_GETS));
+    final var sut = ClientConfig.fromEnv();
+    assertThat(sut.getMaxPageCountForGets(), is(ClientConfig.DEFAULT_MAX_PAGE_COUNT_FOR_GETS));
   }
 
   @Test
@@ -109,7 +109,7 @@ class ConfigTest {
       .set("DEFECTDOJO_APIKEY", "apikey")
       .set("DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS", "foo");
 
-    final var thrown = assertThrows(ConfigException.class, Config::fromEnv);
+    final var thrown = assertThrows(ClientConfigException.class, ClientConfig::fromEnv);
 
     assertThat(thrown.getMessage(), is("Given value for environment variable 'DEFECTDOJO_MAX_PAGE_COUNT_FOR_GETS' is not a valid number! Given was 'foo'."));
   }

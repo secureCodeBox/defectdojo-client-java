@@ -4,13 +4,8 @@
 
 package io.securecodebox.persistence.defectdojo.service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.Finding;
-import io.securecodebox.persistence.defectdojo.model.RiskAcceptance;
-import lombok.Builder;
-import lombok.NonNull;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -18,7 +13,6 @@ import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;

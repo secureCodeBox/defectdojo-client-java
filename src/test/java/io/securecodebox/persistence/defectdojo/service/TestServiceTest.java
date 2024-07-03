@@ -7,7 +7,6 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.Test;
-import org.junit.jupiter.api.Disabled;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
