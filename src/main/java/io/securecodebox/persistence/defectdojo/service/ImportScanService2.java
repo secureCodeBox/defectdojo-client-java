@@ -22,7 +22,7 @@ import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
@@ -94,8 +94,8 @@ public class ImportScanService2 {
       var payload = new HttpEntity<>(mvn, headers);
 
       return restTemplate.exchange(config.getUrl() + "/api/v2/" + endpoint + "/", HttpMethod.POST, payload, ImportScanResponse.class).getBody();
-    } catch (HttpClientErrorException e) {
-      throw new PersistenceException("Failed to attach findings to engagement.");
+    } catch (RestClientException e) {
+      throw new PersistenceException("Failed to attach findings to engagement.", e);
     }
   }
 

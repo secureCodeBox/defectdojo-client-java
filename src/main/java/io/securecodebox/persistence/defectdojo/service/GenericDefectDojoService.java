@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.cfg.CoercionAction;
 import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
 import io.securecodebox.persistence.defectdojo.config.Config;
 import io.securecodebox.persistence.defectdojo.exception.LoopException;
+import io.securecodebox.persistence.defectdojo.exception.PersistenceException;
 import io.securecodebox.persistence.defectdojo.http.Foo;
 import io.securecodebox.persistence.defectdojo.http.ProxyConfigFactory;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
@@ -29,6 +30,7 @@ import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -73,14 +75,19 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
     final var url = this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/" + id;
     log.debug("Requesting URL: {}", url);
-    ResponseEntity<T> response = restTemplate.exchange(
-      url,
-      HttpMethod.GET,
-      payload,
-      getModelClass()
-    );
+    try {
+      ResponseEntity<T> response = restTemplate.exchange(
+        url,
+        HttpMethod.GET,
+        payload,
+        getModelClass()
+      );
 
-    return response.getBody();
+      return response.getBody();
+    } catch (RestClientException e) {
+      log.error("Exception while getting data: {}", e.getMessage());
+      throw new PersistenceException("Failed to get data.", e);
+    }
   }
 
   @Override
