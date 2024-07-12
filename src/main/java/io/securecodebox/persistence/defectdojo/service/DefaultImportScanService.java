@@ -31,7 +31,7 @@ import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
@@ -124,7 +124,7 @@ class DefaultImportScanService implements ImportScanService {
 
       final var payload = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
       return exchangeRequest(endpoint, payload);
-    } catch (HttpClientErrorException e) {
+    } catch (RestClientException e) {
       log.error("Exception while attaching findings to engagement: {}", e.getMessage());
       throw new PersistenceException("Failed to attach findings to engagement.", e);
     }
