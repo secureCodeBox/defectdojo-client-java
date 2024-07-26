@@ -75,6 +75,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
     final var url = this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/" + id;
     log.debug("Requesting URL: {}", url);
+
     try {
       ResponseEntity<T> response = restTemplate.exchange(
         url,
@@ -85,8 +86,8 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
 
       return response.getBody();
     } catch (RestClientException e) {
-      log.error("Exception while getting data: {}", e.getMessage());
-      throw new PersistenceException("Failed to get data.", e);
+      log.error("Exception while doing a GET request to DefectDojo API: {}", e.getMessage());
+      throw new PersistenceException("Failed to do a GET to DefectDojo API!", e);
     }
   }
 
@@ -140,8 +141,17 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     var restTemplate = this.getRestTemplate();
     HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
-    ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/", HttpMethod.POST, payload, getModelClass());
-    return response.getBody();
+    try {
+      ResponseEntity<T> response = restTemplate.exchange(
+        this.config.getUrl() + API_PREFIX + getUrlPath() + "/",
+        HttpMethod.POST,
+        payload,
+        getModelClass());
+      return response.getBody();
+    } catch (RestClientException e) {
+      log.error("Exception while doing a POST request to DefectDojo API: {}", e.getMessage());
+      throw new PersistenceException("Failed to do a POST to DefectDojo API!", e);
+    }
   }
 
   @Override
@@ -149,7 +159,16 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     var restTemplate = this.getRestTemplate();
     HttpEntity<String> payload = new HttpEntity<>(getDefectDojoAuthorizationHeaders());
 
-    restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + id + "/", HttpMethod.DELETE, payload, String.class);
+    try {
+      restTemplate.exchange(
+        this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + id + "/",
+        HttpMethod.DELETE,
+        payload,
+        String.class);
+    } catch (RestClientException e) {
+      log.error("Exception while doing a DELETE request to DefectDojo API: {}", e.getMessage());
+      throw new PersistenceException("Failed to do a DELETE to DefectDojo API!", e);
+    }
   }
 
   @Override
@@ -157,10 +176,18 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     var restTemplate = this.getRestTemplate();
     HttpEntity<T> payload = new HttpEntity<>(object, getDefectDojoAuthorizationHeaders());
 
-    ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + id + "/", HttpMethod.PUT, payload, getModelClass());
-    return response.getBody();
+    try {
+      ResponseEntity<T> response = restTemplate.exchange(this.config.getUrl() + API_PREFIX + getUrlPath() + "/" + id + "/",
+        HttpMethod.PUT,
+        payload,
+        getModelClass());
+      return response.getBody();
+    } catch (RestClientException e) {
+      log.error("Exception while doing a PUT request to DefectDojo API: {}", e.getMessage());
+      throw new PersistenceException("Failed to do a PUT to DefectDojo API!", e);
+    }
   }
-  
+
   /**
    * Get the URL path for the REST endpoint relative to {@link #API_PREFIX}
    *
@@ -222,13 +249,18 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     log.debug("Requesting URL: {}", url);
     var uriBuilder = UriComponentsBuilder.fromUri(url).queryParams(multiValueMap);
 
-    ResponseEntity<String> responseString = restTemplate.exchange(
-      uriBuilder.build(mutableQueryParams),
-      HttpMethod.GET,
-      payload,
-      String.class
-    );
+    try {
+      ResponseEntity<String> responseString = restTemplate.exchange(
+        uriBuilder.build(mutableQueryParams),
+        HttpMethod.GET,
+        payload,
+        String.class
+      );
 
-    return deserializeList(responseString.getBody());
+      return deserializeList(responseString.getBody());
+    } catch (RestClientException e) {
+      log.error("Exception while doing a GET request to DefectDojo API: {}", e.getMessage());
+      throw new PersistenceException("Failed to do a GET to DefectDojo API!", e);
+    }
   }
 }
