@@ -219,7 +219,7 @@ abstract class GenericDefectDojoService<T extends Model> implements DefectDojoSe
     }
 
     var url = new URI(this.config.getUrl() + API_PREFIX + this.getUrlPath() + "/");
-    log.debug("Requesting URL: " + url);
+    log.debug("Requesting URL: {}", url);
     var uriBuilder = UriComponentsBuilder.fromUri(url).queryParams(multiValueMap);
 
     ResponseEntity<String> responseString = restTemplate.exchange(
