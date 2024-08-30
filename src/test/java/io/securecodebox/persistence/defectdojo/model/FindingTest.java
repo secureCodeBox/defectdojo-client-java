@@ -28,6 +28,7 @@ class FindingTest {
       .description("description")
       .foundBy(Collections.emptyList())
       .severity(Finding.Severity.INFORMATIONAL)
+      .test(0L)
       .build();
     assertThat(sut.equalsQueryString(null), is(false));
 

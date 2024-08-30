@@ -25,11 +25,11 @@ final class ToolConfigServiceTest extends WireMockBaseTestCase {
   private static final String RESPONSE_LIST_FIXTURE_JSON = "ToolConfigService_response_list_fixture.json";
   private final ToolConfigService sut = new ToolConfigService(conf());
   private final ToolConfig expectedFromSearch = ToolConfig.builder()
-    .id(1)
+    .id(1L)
     .name("secureCodeBox")
     .description("secureCodeBox is a kubernetes based, modularized toolchain for continuous security scans of your software project.")
     .url("https://github.com/secureCodeBox")
-    .toolType(7)
+    .toolType(7L)
     .build();
 
   @Test
@@ -97,11 +97,11 @@ final class ToolConfigServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = ToolConfig.builder()
-      .id(1)
+      .id(1L)
       .name("secureCodeBox")
       .description("secureCodeBox is a kubernetes based, modularized toolchain for continuous security scans of your software project.")
       .url("https://github.com/secureCodeBox")
-      .toolType(7)
+      .toolType(7L)
       .build();
 
     final var result = sut.get(1);
@@ -118,9 +118,6 @@ final class ToolConfigServiceTest extends WireMockBaseTestCase {
       .withQueryParam("limit", equalTo("100"))
       .withQueryParam("offset", equalTo("0"))
       .withQueryParam("name", equalTo("foo"))
-      // Defaults from model:
-      .withQueryParam("id", equalTo("0"))
-      .withQueryParam("tool_type", equalTo("0"))
       .willReturn(ok()
         .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
         .withBody(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE)
@@ -176,8 +173,8 @@ final class ToolConfigServiceTest extends WireMockBaseTestCase {
         .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
     final var toCreate = ToolConfig.builder()
-      .id(42)
-      .toolType(23)
+      .id(42L)
+      .toolType(23L)
       .name("foo")
       .description("bar")
       .configUrl("snafu")
@@ -217,8 +214,8 @@ final class ToolConfigServiceTest extends WireMockBaseTestCase {
       ));
 
     final var toUpdate = ToolConfig.builder()
-      .id(42)
-      .toolType(23)
+      .id(42L)
+      .toolType(23L)
       .name("foo")
       .description("bar")
       .configUrl("snafu")

@@ -5,7 +5,6 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.Product;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -27,7 +26,7 @@ final class ProductServiceTest extends WireMockBaseTestCase {
   private static final String RESPONSE_LIST_FIXTURE_JSON = "ProductService_response_list_fixture.json";
   private final ProductService sut = new ProductService(conf());
   private final Product[] expectedFromSearch = {Product.builder()
-    .id(419)
+    .id(419L)
     .name("10.0.0.1")
     .description("Product was automatically created by the secureCodeBox DefectDojo integration")
     .tags(List.of(
@@ -36,13 +35,14 @@ final class ProductServiceTest extends WireMockBaseTestCase {
       "org/owasp",
       "vlan/dev"
     ))
-    .productType(2)
-    .findingsCount(12)
+    .productType(2L)
+    .findingsCount(12L)
     .enableFullRiskAcceptance(true)
     .authorizationGroups(Collections.emptyList())
+    .enableSimpleRiskAcceptance(false)
     .build(),
     Product.builder()
-      .id(312)
+      .id(312L)
       .name("10.0.0.2")
       .description("Product was automatically created by the secureCodeBox DefectDojo integration")
       .tags(List.of(
@@ -51,13 +51,14 @@ final class ProductServiceTest extends WireMockBaseTestCase {
         "org/owasp",
         "vlan/dev"
       ))
-      .productType(1)
-      .findingsCount(16)
+      .productType(1L)
+      .findingsCount(16L)
       .enableFullRiskAcceptance(false)
       .authorizationGroups(List.of(1L, 2L, 3L))
+      .enableSimpleRiskAcceptance(false)
       .build(),
     Product.builder()
-      .id(297)
+      .id(297L)
       .name("10.0.0.3")
       .description("Product was automatically created by the secureCodeBox DefectDojo integration")
       .tags(List.of(
@@ -65,10 +66,11 @@ final class ProductServiceTest extends WireMockBaseTestCase {
         "office/munich",
         "org/owasp"
       ))
-      .productType(2)
-      .findingsCount(16)
+      .productType(2L)
+      .findingsCount(16L)
       .enableSimpleRiskAcceptance(true)
       .authorizationGroups(Collections.emptyList())
+      .enableFullRiskAcceptance(false)
       .build()};
 
   @Test
@@ -162,23 +164,23 @@ final class ProductServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = Product.builder()
-      .id(320)
+      .id(320L)
       .name("10.0.0.1")
       .description("Product was automatically created by the secureCodeBox DefectDojo integration")
       .tags(List.of(
         "attack-surface/internal",
         "org/owasp"
       ))
-      .findingsCount(2)
-      .productType(2)
+      .findingsCount(2L)
+      .productType(2L)
       .enableFullRiskAcceptance(true)
+      .enableSimpleRiskAcceptance(false)
       .build();
 
     final var result = sut.get(320);
 
     assertThat(result, is(expected));
   }
-
 
   @Test
   void searchUnique_withSearchObject() throws URISyntaxException, JsonProcessingException {
@@ -188,12 +190,6 @@ final class ProductServiceTest extends WireMockBaseTestCase {
       .withQueryParam("limit", equalTo("100"))
       .withQueryParam("offset", equalTo("0"))
       .withQueryParam("name", equalTo("foo"))
-      // Defaults from model:
-      .withQueryParam("prod_type", equalTo("0"))
-      .withQueryParam("enable_simple_risk_acceptance", equalTo("false"))
-      .withQueryParam("enable_full_risk_acceptance", equalTo("false"))
-      .withQueryParam("id", equalTo("0"))
-      .withQueryParam("findings_count", equalTo("0"))
       .willReturn(ok()
         .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
         .withBody(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE)
@@ -239,10 +235,7 @@ final class ProductServiceTest extends WireMockBaseTestCase {
         "name" : "foo",
         "tags" : [ "foo", "bar", "baz" ],
         "description" : "bar",
-        "findings_count" : 0,
         "prod_type" : 23,
-        "enable_simple_risk_acceptance" : false,
-        "enable_full_risk_acceptance" : false,
         "authorization_groups" : [ ]
       }
       """;
@@ -253,10 +246,10 @@ final class ProductServiceTest extends WireMockBaseTestCase {
         .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
     final var toCreate = Product.builder()
-      .id(42)
+      .id(42L)
       .name("foo")
       .description("bar")
-      .productType(23)
+      .productType(23L)
       .tags(List.of("foo", "bar", "baz"))
       .build();
 
@@ -283,10 +276,7 @@ final class ProductServiceTest extends WireMockBaseTestCase {
         "name" : "foo",
         "tags" : [ "foo", "bar", "baz" ],
         "description" : "bar",
-        "findings_count" : 0,
         "prod_type" : 23,
-        "enable_simple_risk_acceptance" : false,
-        "enable_full_risk_acceptance" : false,
         "authorization_groups" : [ ]
       }
       """;
@@ -298,10 +288,10 @@ final class ProductServiceTest extends WireMockBaseTestCase {
       ));
 
     final var toUpdate = Product.builder()
-      .id(42)
+      .id(42L)
       .name("foo")
       .description("bar")
-      .productType(23)
+      .productType(23L)
       .tags(List.of("foo", "bar", "baz"))
       .build();
 

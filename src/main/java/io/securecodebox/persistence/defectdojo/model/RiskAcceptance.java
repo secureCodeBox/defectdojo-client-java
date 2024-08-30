@@ -18,8 +18,17 @@ import java.util.Map;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class RiskAcceptance implements Model, HasId {
+  /**
+   * Uniq id of model type
+   * <p>
+   * May be {@code null} for newly created objects because in DefectDojo's Open API specification i.
+   * It is mandatory to use a boxed object type instead of a native type. A native type would result in 0 by
+   * default which is a valid id for DefectDojo. Thus creating this type via POST request would try to create
+   * one with id 0. Instead the id must be {@code null}, so that DefectDojo uses a newly generated uniq id.
+   * </p>
+   */
   @JsonProperty
-  private long id;
+  private Long id;
 
   @JsonProperty
   private String recommendation;
@@ -54,7 +63,7 @@ public final class RiskAcceptance implements Model, HasId {
   private OffsetDateTime updatedAt;
 
   @JsonProperty
-  private long owner;
+  private Long owner;// FIXME: Use native type here.
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

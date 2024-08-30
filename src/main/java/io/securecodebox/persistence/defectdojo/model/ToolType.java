@@ -17,8 +17,17 @@ import java.util.Map;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class ToolType implements Model, HasId, HasName {
+  /**
+   * Uniq id of model type
+   * <p>
+   * May be {@code null} for newly created objects because in DefectDojo's Open API specification i.
+   * It is mandatory to use a boxed object type instead of a native type. A native type would result in 0 by
+   * default which is a valid id for DefectDojo. Thus creating this type via POST request would try to create
+   * one with id 0. Instead the id must be {@code null}, so that DefectDojo uses a newly generated uniq id.
+   * </p>
+   */
   @JsonProperty
-  private long id;
+  private Long id;
 
   @JsonProperty
   @NonNull

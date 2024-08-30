@@ -19,8 +19,17 @@ import java.util.Map;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Product implements Model, HasId, HasName {
+  /**
+   * Uniq id of model type
+   * <p>
+   * May be {@code null} for newly created objects because in DefectDojo's Open API specification i.
+   * It is mandatory to use a boxed object type instead of a native type. A native type would result in 0 by
+   * default which is a valid id for DefectDojo. Thus creating this type via POST request would try to create
+   * one with id 0. Instead the id must be {@code null}, so that DefectDojo uses a newly generated uniq id.
+   * </p>
+   */
   @JsonProperty
-  private long id;
+  private Long id;
 
   @JsonProperty
   private String name;
@@ -32,19 +41,19 @@ public final class Product implements Model, HasId, HasName {
   private String description;
 
   @JsonProperty("findings_count")
-  private long findingsCount;
+  private Long findingsCount;// FIXME: Use native type here.
 
   @JsonProperty("authorized_users")
   private List<String> authorizedUsers;
 
   @JsonProperty("prod_type")
-  private long productType;
-
+  private Long productType;// FIXME: Use native type here.
+  
   @JsonProperty("enable_simple_risk_acceptance")
-  private boolean enableSimpleRiskAcceptance;
-
+  private Boolean enableSimpleRiskAcceptance;// FIXME: Use native type here.
+  
   @JsonProperty("enable_full_risk_acceptance")
-  private boolean enableFullRiskAcceptance;
+  private Boolean enableFullRiskAcceptance;// FIXME: Use native type here.
 
   @JsonProperty("authorization_groups")
   @Builder.Default

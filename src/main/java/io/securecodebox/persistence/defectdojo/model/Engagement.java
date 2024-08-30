@@ -19,18 +19,27 @@ import java.util.Map;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Engagement implements Model, HasId, HasName {
+  /**
+   * Uniq id of model type
+   * <p>
+   * May be {@code null} for newly created objects because in DefectDojo's Open API specification i.
+   * It is mandatory to use a boxed object type instead of a native type. A native type would result in 0 by
+   * default which is a valid id for DefectDojo. Thus creating this type via POST request would try to create
+   * one with id 0. Instead the id must be {@code null}, so that DefectDojo uses a newly generated uniq id.
+   * </p>
+   */
+  @JsonProperty
+  private Long id;
+
+  @JsonProperty
+  private String name;
+
   @JsonProperty("branch_tag")
   @Builder.Default
   private String branch = "";
 
   @JsonProperty
-  private long id;
-
-  @JsonProperty
-  private String name;
-
-  @JsonProperty
-  private long product;
+  private Long product;// FIXME: Use native type here.
 
   @JsonProperty("target_start")
   private String targetStart;
@@ -39,7 +48,7 @@ public final class Engagement implements Model, HasId, HasName {
   private String targetEnd;
 
   @JsonProperty
-  private long lead;
+  private Long lead;// FIXME: Use native type here.
 
   @JsonProperty("engagement_type")
   @Builder.Default
@@ -66,13 +75,13 @@ public final class Engagement implements Model, HasId, HasName {
   private String repo;
 
   @JsonProperty("build_server")
-  private long buildServer;
+  private Long buildServer; // FIXME: Use native type here.
 
   @JsonProperty("source_code_management_server")
-  private long scmServer;
+  private Long scmServer; // FIXME: Use natvive type here.
 
   @JsonProperty("orchestration_engine")
-  private long orchestrationEngine;
+  private Long orchestrationEngine; // FIXME: Use natvive type here.
 
   @JsonProperty
   @Builder.Default
@@ -82,16 +91,20 @@ public final class Engagement implements Model, HasId, HasName {
   private boolean deduplicationOnEngagement;
 
   @JsonProperty("threat_model")
-  private boolean threatModel;
+  @Builder.Default // FIXME: Use native type here.
+  private Boolean threatModel = false;
 
   @JsonProperty("api_test")
-  private boolean apiTest;
+  @Builder.Default // FIXME: Use native type here.
+  private Boolean apiTest = false;
 
   @JsonProperty("pen_test")
-  private boolean penTest;
+  @Builder.Default // FIXME: Use native type here.
+  private Boolean penTest = false;
 
   @JsonProperty("check_list")
-  private boolean checkList;
+  @Builder.Default // FIXME: Use native type here.
+  private Boolean checkList = false;
 
   @JsonProperty
   @Builder.Default

@@ -5,7 +5,6 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.User;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -25,19 +24,19 @@ final class UserServiceTest extends WireMockBaseTestCase {
   private static final String RESPONSE_LIST_FIXTURE_JSON = "UserService_response_list_fixture.json";
   private final UserService sut = new UserService(conf());
   private final User[] expectedFromSearch = {User.builder()
-    .id(1)
+    .id(1L)
     .username("admin")
     .firstName("Admin")
     .lastName("User")
     .build(),
     User.builder()
-      .id(2)
+      .id(2L)
       .username("JannikHollenbach")
       .firstName("Jannik")
       .lastName("Hollenbach")
       .build(),
     User.builder()
-      .id(3)
+      .id(3L)
       .username("SvenStrittmatter")
       .firstName("Sven")
       .lastName("Strittmatter")
@@ -108,7 +107,7 @@ final class UserServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = User.builder()
-      .id(5)
+      .id(5L)
       .username("GordonShumway")
       .firstName("Gordon")
       .lastName("Shumway")
@@ -127,8 +126,6 @@ final class UserServiceTest extends WireMockBaseTestCase {
       .withQueryParam("limit", equalTo("100"))
       .withQueryParam("offset", equalTo("0"))
       .withQueryParam("username", equalTo("foo"))
-      // Defaults from model:
-      .withQueryParam("id", equalTo("0"))
       .willReturn(ok()
         .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
         .withBody(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE)
@@ -183,7 +180,7 @@ final class UserServiceTest extends WireMockBaseTestCase {
         .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
     final var toCreate = User.builder()
-      .id(42)
+      .id(42L)
       .username("alf")
       .firstName("Gordon")
       .lastName("Shumway")
@@ -222,7 +219,7 @@ final class UserServiceTest extends WireMockBaseTestCase {
       ));
 
     final var toUpdate = User.builder()
-      .id(42)
+      .id(42L)
       .username("alf")
       .firstName("Gordon")
       .lastName("Shumway")
