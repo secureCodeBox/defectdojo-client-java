@@ -5,7 +5,6 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.ProductType;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -25,13 +24,13 @@ final class ProductTypeServiceTest extends WireMockBaseTestCase {
   private static final String RESPONSE_LIST_FIXTURE_JSON = "ProductTypeService_response_list_fixture.json";
   private final ProductTypeService sut = new ProductTypeService(conf());
   private final ProductType[] expectedFromSearch = {ProductType.builder()
-    .id(1)
+    .id(1L)
     .name("Research and Development")
     .criticalProduct(true)
     .keyProduct(false)
     .build(),
     ProductType.builder()
-      .id(2)
+      .id(2L)
       .name("secureCodeBox")
       .criticalProduct(false)
       .keyProduct(false)
@@ -105,9 +104,10 @@ final class ProductTypeServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = ProductType.builder()
-      .id(1)
+      .id(1L)
       .name("Research and Development")
       .criticalProduct(true)
+      .keyProduct(false)
       .build();
 
     final var result = sut.get(1);
@@ -124,10 +124,6 @@ final class ProductTypeServiceTest extends WireMockBaseTestCase {
       .withQueryParam("limit", equalTo("100"))
       .withQueryParam("offset", equalTo("0"))
       .withQueryParam("name", equalTo("foo"))
-      // Defaults from model:
-      .withQueryParam("id", equalTo("0"))
-      .withQueryParam("key_product", equalTo("false"))
-      .withQueryParam("critical_product", equalTo("false"))
       .willReturn(ok()
         .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
         .withBody(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE)
@@ -182,7 +178,7 @@ final class ProductTypeServiceTest extends WireMockBaseTestCase {
         .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
     final var toCreate = ProductType.builder()
-      .id(42)
+      .id(42L)
       .name("foo")
       .criticalProduct(true)
       .keyProduct(true)
@@ -221,7 +217,7 @@ final class ProductTypeServiceTest extends WireMockBaseTestCase {
       ));
 
     final var toUpdate = ProductType.builder()
-      .id(42)
+      .id(42L)
       .name("foo")
       .criticalProduct(true)
       .keyProduct(true)

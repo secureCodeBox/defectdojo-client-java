@@ -7,7 +7,6 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.Test;
-import org.junit.jupiter.api.Disabled;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -26,40 +25,40 @@ final class TestServiceTest extends WireMockBaseTestCase {
   private static final String RESPONSE_LIST_FIXTURE_JSON = "TestService_response_list_fixture.json";
   private final TestService sut = new TestService(conf());
   private final Test[] expectedFromSearch = {Test.builder()
-    .id(1)
+    .id(1L)
     .title("nuclei-owasp.org-1709280838-nmap-hostscan-6ckh4-nmap-su466fl")
     .description("# Nuclei Scan\nStarted: 01.03.2024 10:04:54\nEnded: 01.03.2024 15:06:30\nScanType: nuclei\nParameters: [-disable-update-check,-no-interactsh,-u,api.tokengate.dlt.owasp.org:443]")
     .targetStart("2024-03-01T10:04:54Z")
     .targetEnd("2024-03-01T15:06:29Z")
-    .testType(67)
-    .lead(3)
-    .percentComplete(100)
-    .engagement(1)
-    .environment(1)
+    .testType(67L)
+    .lead(3L)
+    .percentComplete(100L)
+    .engagement(1L)
+    .environment(1L)
     .build(),
     Test.builder()
-      .id(2)
+      .id(2L)
       .title("nuclei-owasp.org-1709280838-nmap-hostscan-7xd2c-nuclei-5gzps")
       .description("# Nuclei Scan\nStarted: 01.03.2024 08:47:33\nEnded: 01.03.2024 15:06:34\nScanType: nuclei\nParameters: [-disable-update-check,-no-interactsh,-u,api.tokengate-dev.dlt.owasp.org]")
       .targetStart("2024-03-01T08:47:33Z")
       .targetEnd("2024-03-01T15:06:34Z")
-      .testType(42)
-      .lead(23)
-      .percentComplete(43)
-      .engagement(2)
-      .environment(3)
+      .testType(42L)
+      .lead(23L)
+      .percentComplete(43L)
+      .engagement(2L)
+      .environment(3L)
       .build(),
     Test.builder()
-      .id(3)
+      .id(3L)
       .title("nuclei-owasp.org-1709280838-nmap-hostscan-6ckh4-nmap-sub6l7l")
       .description("# Nuclei Scan\nStarted: 01.03.2024 10:04:54\nEnded: 01.03.2024 15:06:35\nScanType: nuclei\nParameters: [-disable-update-check,-no-interactsh,-u,api.tokengate.dlt.owasp.org]")
       .targetStart("2024-03-01T10:04:54Z")
       .targetEnd("2024-03-01T15:06:35Z")
-      .testType(67)
-      .lead(3)
-      .percentComplete(100)
-      .engagement(1)
-      .environment(1)
+      .testType(67L)
+      .lead(3L)
+      .percentComplete(100L)
+      .engagement(1L)
+      .environment(1L)
       .build()};
 
   @org.junit.jupiter.api.Test
@@ -143,15 +142,15 @@ final class TestServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = Test.builder()
-      .id(200)
+      .id(200L)
       .title("nmap-owasp.org-1709367238-nmap-hostscan-tlswv")
       .description("# Nmap Scan...")
       .targetStart("2024-03-02T08:27:58Z")
       .targetEnd("2024-03-02T08:45:05Z")
-      .testType(113)
-      .lead(3)
-      .percentComplete(100)
-      .engagement(64)
+      .testType(113L)
+      .lead(3L)
+      .percentComplete(100L)
+      .engagement(64L)
       .build();
 
     final var result = sut.get(200);
@@ -170,11 +169,6 @@ final class TestServiceTest extends WireMockBaseTestCase {
       .withQueryParam("title", equalTo("foo"))
       // Defaults from model:
       .withQueryParam("environment", equalTo("1"))
-      .withQueryParam("engagement", equalTo("0"))
-      .withQueryParam("id", equalTo("0"))
-      .withQueryParam("lead", equalTo("0"))
-      .withQueryParam("test_type", equalTo("0"))
-      .withQueryParam("percent_complete", equalTo("0"))
       .withQueryParam("tags", equalTo("[]"))
       .willReturn(ok()
         .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
@@ -221,7 +215,6 @@ final class TestServiceTest extends WireMockBaseTestCase {
         "title" : "foo",
         "description" : "bar",
         "tags" : [ ],
-        "lead" : 0,
         "engagement" : 23,
         "environment" : 1,
         "target_start" : "start",
@@ -237,14 +230,14 @@ final class TestServiceTest extends WireMockBaseTestCase {
         .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
     final var toCreate = Test.builder()
-      .id(42)
+      .id(42L)
       .title("foo")
       .description("bar")
-      .engagement(23)
+      .engagement(23L)
       .targetStart("start")
       .targetEnd("end")
-      .percentComplete(100)
-      .testType(5)
+      .percentComplete(100L)
+      .testType(5L)
       .build();
 
     final var result = sut.create(toCreate);
@@ -270,7 +263,6 @@ final class TestServiceTest extends WireMockBaseTestCase {
         "title" : "foo",
         "description" : "bar",
         "tags" : [ ],
-        "lead" : 0,
         "engagement" : 23,
         "environment" : 1,
         "target_start" : "start",
@@ -287,14 +279,14 @@ final class TestServiceTest extends WireMockBaseTestCase {
       ));
 
     final var toUpdate = Test.builder()
-      .id(42)
+      .id(42L)
       .title("foo")
       .description("bar")
-      .engagement(23)
+      .engagement(23L)
       .targetStart("start")
       .targetEnd("end")
-      .percentComplete(100)
-      .testType(5)
+      .percentComplete(100L)
+      .testType(5L)
       .build();
 
     final var result = sut.update(toUpdate, 42L);

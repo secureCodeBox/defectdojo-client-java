@@ -25,22 +25,22 @@ final class ProductGroupServiceTest extends WireMockBaseTestCase {
   private final ProductGroupService sut = new ProductGroupService(conf());
   private final ProductGroup[] expectedFromSearch = new ProductGroup[]{
     ProductGroup.builder()
-      .id(1)
-      .product(2)
-      .group(3)
-      .role(4)
+      .id(1L)
+      .product(2L)
+      .group(3L)
+      .role(4L)
       .build(),
     ProductGroup.builder()
-      .id(5)
-      .product(6)
-      .group(7)
-      .role(8)
+      .id(5L)
+      .product(6L)
+      .group(7L)
+      .role(8L)
       .build(),
     ProductGroup.builder()
-      .id(9)
-      .product(10)
-      .group(11)
-      .role(12)
+      .id(9L)
+      .product(10L)
+      .group(11L)
+      .role(12L)
       .build()
   };
 
@@ -103,10 +103,10 @@ final class ProductGroupServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = ProductGroup.builder()
-      .id(42)
-      .product(2)
-      .group(3)
-      .role(4)
+      .id(42L)
+      .product(2L)
+      .group(3L)
+      .role(4L)
       .build();
 
     final var result = sut.get(42L);
@@ -123,17 +123,13 @@ final class ProductGroupServiceTest extends WireMockBaseTestCase {
       .withQueryParam("limit", equalTo("100"))
       .withQueryParam("offset", equalTo("0"))
       .withQueryParam("product", equalTo("42"))
-      // Defaults from model:
-      .withQueryParam("id", equalTo("0"))
-      .withQueryParam("role", equalTo("0"))
-      .withQueryParam("group", equalTo("0"))
       .willReturn(ok()
         .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
         .withBody(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE)
       ));
 
     final var searchObject = ProductGroup.builder()
-      .product(42)
+      .product(42L)
       .build();
 
     final var result = sut.searchUnique(searchObject);
@@ -181,10 +177,10 @@ final class ProductGroupServiceTest extends WireMockBaseTestCase {
         .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
     final var toCreate = ProductGroup.builder()
-      .id(42)
-      .product(285)
-      .group(23)
-      .role(47)
+      .id(42L)
+      .product(285L)
+      .group(23L)
+      .role(47L)
       .build();
 
     final var result = sut.create(toCreate);
@@ -220,10 +216,10 @@ final class ProductGroupServiceTest extends WireMockBaseTestCase {
       ));
 
     final var toUpdate = ProductGroup.builder()
-      .id(42)
-      .product(285)
-      .group(23)
-      .role(47)
+      .id(42L)
+      .product(285L)
+      .group(23L)
+      .role(47L)
       .build();
 
     final var result = sut.update(toUpdate, 42L);

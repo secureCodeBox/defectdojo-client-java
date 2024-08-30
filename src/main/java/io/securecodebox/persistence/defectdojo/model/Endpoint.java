@@ -17,8 +17,17 @@ import java.util.Map;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Endpoint implements Model, HasId {
+  /**
+   * Uniq id of model type
+   * <p>
+   * May be {@code null} for newly created objects because in DefectDojo's Open API specification i.
+   * It is mandatory to use a boxed object type instead of a native type. A native type would result in 0 by
+   * default which is a valid id for DefectDojo. Thus creating this type via POST request would try to create
+   * one with id 0. Instead the id must be {@code null}, so that DefectDojo uses a newly generated uniq id.
+   * </p>
+   */
   @JsonProperty
-  private long id;
+  private Long id;
 
   @JsonProperty
   private String protocol;
@@ -30,7 +39,7 @@ public final class Endpoint implements Model, HasId {
   private String fullyQualifiedDomainName;
 
   @JsonProperty
-  private long port;
+  private Long port;// FIXME: Use native type here.
 
   @JsonProperty
   private String path;
@@ -42,10 +51,10 @@ public final class Endpoint implements Model, HasId {
   private String fragment;
 
   @JsonProperty
-  private long product;
+  private Long product;// FIXME: Use native type here.
 
   @JsonProperty
-  private boolean mitigated;
+  private Boolean mitigated;// FIXME: Use native type here.
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

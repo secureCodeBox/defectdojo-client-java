@@ -5,7 +5,6 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.GroupMember;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -25,46 +24,46 @@ final class GroupMemberServiceTest extends WireMockBaseTestCase {
   private static final String RESPONSE_LIST_FIXTURE_JSON = "GroupMemberService_response_list_fixture.json";
   private final GroupMemberService sut = new GroupMemberService(conf());
   private final GroupMember[] expectedFromSearch = {GroupMember.builder()
-    .id(10)
-    .group(10)
-    .user(4)
-    .role(3)
+    .id(10L)
+    .group(10L)
+    .user(4L)
+    .role(3L)
     .build(),
     GroupMember.builder()
-      .id(1)
-      .group(1)
-      .user(2)
-      .role(3)
+      .id(1L)
+      .group(1L)
+      .user(2L)
+      .role(3L)
       .build(),
     GroupMember.builder()
-      .id(9)
-      .group(9)
-      .user(4)
-      .role(3)
+      .id(9L)
+      .group(9L)
+      .user(4L)
+      .role(3L)
       .build(),
     GroupMember.builder()
-      .id(4)
-      .group(4)
-      .user(4)
-      .role(3)
+      .id(4L)
+      .group(4L)
+      .user(4L)
+      .role(3L)
       .build(),
     GroupMember.builder()
-      .id(12)
-      .group(1)
-      .user(4)
-      .role(3)
+      .id(12L)
+      .group(1L)
+      .user(4L)
+      .role(3L)
       .build(),
     GroupMember.builder()
-      .id(6)
-      .group(6)
-      .user(4)
-      .role(3)
+      .id(6L)
+      .group(6L)
+      .user(4L)
+      .role(3L)
       .build(),
     GroupMember.builder()
-      .id(14)
-      .group(1)
-      .user(5)
-      .role(3)
+      .id(14L)
+      .group(1L)
+      .user(5L)
+      .role(3L)
       .build()};
 
   @Test
@@ -127,10 +126,10 @@ final class GroupMemberServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = GroupMember.builder()
-      .id(42)
-      .group(1)
-      .user(5)
-      .role(3)
+      .id(42L)
+      .group(1L)
+      .user(5L)
+      .role(3L)
       .build();
 
     final var result = sut.get(42L);
@@ -148,17 +147,14 @@ final class GroupMemberServiceTest extends WireMockBaseTestCase {
       .withQueryParam("offset", equalTo("0"))
       .withQueryParam("group", equalTo("23"))
       .withQueryParam("user", equalTo("42"))
-      // Defaults from model:
-      .withQueryParam("id", equalTo("0"))
-      .withQueryParam("role", equalTo("0"))
       .willReturn(ok()
         .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
         .withBody(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE)
       ));
 
     final var searchObject = GroupMember.builder()
-      .group(23)
-      .user(42)
+      .group(23L)
+      .user(42L)
       .build();
 
     final var result = sut.searchUnique(searchObject);
@@ -206,10 +202,10 @@ final class GroupMemberServiceTest extends WireMockBaseTestCase {
         .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
     final var toCreate = GroupMember.builder()
-      .id(42)
-      .user(23)
-      .role(1)
-      .group(2)
+      .id(42L)
+      .user(23L)
+      .role(1L)
+      .group(2L)
       .build();
 
     final var result = sut.create(toCreate);
@@ -245,10 +241,10 @@ final class GroupMemberServiceTest extends WireMockBaseTestCase {
       ));
 
     final var toUpdate = GroupMember.builder()
-      .id(42)
-      .user(23)
-      .role(1)
-      .group(2)
+      .id(42L)
+      .user(23L)
+      .role(1L)
+      .group(2L)
       .build();
 
     final var result = sut.update(toUpdate, 42L);

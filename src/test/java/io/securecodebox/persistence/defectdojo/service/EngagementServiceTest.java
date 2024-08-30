@@ -5,7 +5,6 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.Engagement;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -26,7 +25,7 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
   private static final String RESPONSE_LIST_FIXTURE_JSON = "EngagementService_response_list_fixture.json";
   private final EngagementService sut = new EngagementService(conf());
   private final Engagement[] expectedFromSearch = {Engagement.builder()
-    .id(806)
+    .id(806L)
     .branch("")
     .name("nmap-vienna-client-1709886900")
     .description("")
@@ -35,13 +34,13 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
     .targetEnd("2024-03-08")
     .status(Engagement.Status.IN_PROGRESS)
     .engagementType("CI/CD")
-    .lead(3)
-    .product(162)
-    .orchestrationEngine(1)
+    .lead(3L)
+    .product(162L)
+    .orchestrationEngine(1L)
     .tags(Collections.emptyList())
     .build(),
     Engagement.builder()
-      .id(807)
+      .id(807L)
       .branch("")
       .name("nmap-stuttgart-client-1709886900")
       .description("")
@@ -50,13 +49,13 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
       .targetEnd("2024-03-08")
       .status(Engagement.Status.IN_PROGRESS)
       .engagementType("CI/CD")
-      .lead(3)
-      .product(139)
-      .orchestrationEngine(1)
+      .lead(3L)
+      .product(139L)
+      .orchestrationEngine(1L)
       .tags(Collections.emptyList())
       .build(),
     Engagement.builder()
-      .id(808)
+      .id(808L)
       .branch("")
       .name("nmap-frankfurt-client-1709886900")
       .description("")
@@ -65,9 +64,9 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
       .targetEnd("2024-03-08")
       .status(Engagement.Status.IN_PROGRESS)
       .engagementType("CI/CD")
-      .lead(3)
-      .product(140)
-      .orchestrationEngine(1)
+      .lead(3L)
+      .product(140L)
+      .orchestrationEngine(1L)
       .tags(Collections.emptyList())
       .build()};
 
@@ -166,13 +165,13 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = Engagement.builder()
-      .id(42)
+      .id(42L)
       .name("nmap-office-client-1710146100")
-      .product(139)
+      .product(139L)
       .targetStart("2024-03-11")
       .targetEnd("2024-03-11")
-      .lead(3)
-      .orchestrationEngine(1)
+      .lead(3L)
+      .orchestrationEngine(1L)
       .build();
 
     final var result = sut.get(42L);
@@ -191,16 +190,10 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
       .withQueryParam("version", equalTo("foo"))
       .withQueryParam("name", equalTo("bar"))
       // Defaults from model:
-      .withQueryParam("product", equalTo("0"))
       .withQueryParam("check_list", equalTo("false"))
       .withQueryParam("pen_test", equalTo("false"))
-      .withQueryParam("source_code_management_server", equalTo("0"))
-      .withQueryParam("lead", equalTo("0"))
-      .withQueryParam("orchestration_engine", equalTo("0"))
       .withQueryParam("threat_model", equalTo("false"))
       .withQueryParam("engagement_type", equalTo("CI/CD"))
-      .withQueryParam("build_server", equalTo("0"))
-      .withQueryParam("id", equalTo("0"))
       .withQueryParam("deduplication_on_engagement", equalTo("false"))
       .withQueryParam("api_test", equalTo("false"))
       .withQueryParam("status", equalTo("In Progress"))
@@ -257,8 +250,6 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
          "target_start" : "2024-03-11",
          "target_end" : "2024-03-11",
          "engagement_type" : "CI/CD",
-         "build_server" : 0,
-         "source_code_management_server" : 0,
          "orchestration_engine" : 1,
          "deduplication_on_engagement" : false,
          "threat_model" : true,
@@ -274,7 +265,7 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
         .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
     final var toCreate = Engagement.builder()
-      .id(42)
+      .id(42L)
       .name("nmap-office-client-1710146100")
       .description("SNAFU")
       .targetStart("2024-03-11")
@@ -282,9 +273,9 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
       .status(Engagement.Status.IN_PROGRESS)
       .threatModel(true)
       .engagementType("CI/CD")
-      .lead(3)
-      .product(139)
-      .orchestrationEngine(1)
+      .lead(3L)
+      .product(139L)
+      .orchestrationEngine(1L)
       .build();
 
     final var result = sut.create(toCreate);
@@ -318,8 +309,6 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
         "target_start" : "2024-03-11",
         "target_end" : "2024-03-11",
         "engagement_type" : "CI/CD",
-        "build_server" : 0,
-        "source_code_management_server" : 0,
         "orchestration_engine" : 1,
         "deduplication_on_engagement" : false,
         "threat_model" : true,
@@ -336,7 +325,7 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
       ));
 
     final var toUpdate = Engagement.builder()
-      .id(42)
+      .id(42L)
       .name("nmap-office-client-1710146100")
       .description("SNAFU")
       .targetStart("2024-03-11")
@@ -344,9 +333,9 @@ final class EngagementServiceTest extends WireMockBaseTestCase {
       .status(Engagement.Status.IN_PROGRESS)
       .threatModel(true)
       .engagementType("CI/CD")
-      .lead(3)
-      .product(139)
-      .orchestrationEngine(1)
+      .lead(3L)
+      .product(139L)
+      .orchestrationEngine(1L)
       .build();
 
     final var result = sut.update(toUpdate, 42L);

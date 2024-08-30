@@ -12,7 +12,7 @@ package io.securecodebox.persistence.defectdojo.model;
  * </p>
  */
 interface HasId {
-  long getId();
+  Long getId();
 
-  void setId(long id);
+  void setId(Long id);
 }

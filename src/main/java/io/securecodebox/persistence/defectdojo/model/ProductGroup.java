@@ -17,17 +17,26 @@ import java.util.Map;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class ProductGroup implements Model {
+  /**
+   * Uniq id of model type
+   * <p>
+   * May be {@code null} for newly created objects because in DefectDojo's Open API specification i.
+   * It is mandatory to use a boxed object type instead of a native type. A native type would result in 0 by
+   * default which is a valid id for DefectDojo. Thus creating this type via POST request would try to create
+   * one with id 0. Instead the id must be {@code null}, so that DefectDojo uses a newly generated uniq id.
+   * </p>
+   */
   @JsonProperty
-  private long id;
+  private Long id;
 
   @JsonProperty
-  private long product;
+  private Long product;// FIXME: Use native type here.
 
   @JsonProperty
-  private long group;
+  private Long group;// FIXME: Use native type here.
 
   @JsonProperty
-  private long role;
+  private Long role;// FIXME: Use native type here.
 
   @Override
   public boolean equalsQueryString(Map<String, Object> queryParams) {

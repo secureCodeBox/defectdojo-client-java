@@ -5,7 +5,6 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.TestType;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -25,55 +24,55 @@ final class TestTypeServiceTest extends WireMockBaseTestCase {
   private static final String RESPONSE_LIST_FIXTURE_JSON = "TestTypeService_response_list_fixture.json";
   private final TestTypeService sut = new TestTypeService(conf());
   private final TestType[] expectedFromSearch = {TestType.builder()
-    .id(99)
+    .id(99L)
     .name("Acunetix360 Scan")
     .staticTool(false)
     .dynamicTool(false)
     .build(),
     TestType.builder()
-      .id(19)
+      .id(19L)
       .name("Acunetix Scan")
       .staticTool(false)
       .dynamicTool(false)
       .build(),
     TestType.builder()
-      .id(125)
+      .id(125L)
       .name("AnchoreCTL Policies Report")
       .staticTool(false)
       .dynamicTool(false)
       .build(),
     TestType.builder()
-      .id(47)
+      .id(47L)
       .name("AnchoreCTL Vuln Report")
       .staticTool(false)
       .dynamicTool(false)
       .build(),
     TestType.builder()
-      .id(112)
+      .id(112L)
       .name("Anchore Engine Scan")
       .staticTool(false)
       .dynamicTool(false)
       .build(),
     TestType.builder()
-      .id(172)
+      .id(172L)
       .name("Anchore Enterprise Policy Check")
       .staticTool(false)
       .dynamicTool(false)
       .build(),
     TestType.builder()
-      .id(106)
+      .id(106L)
       .name("Anchore Grype")
       .staticTool(true)
       .dynamicTool(false)
       .build(),
     TestType.builder()
-      .id(1)
+      .id(1L)
       .name("API Test")
       .staticTool(false)
       .dynamicTool(false)
       .build(),
     TestType.builder()
-      .id(100)
+      .id(100L)
       .name("AppSpider Scan")
       .staticTool(false)
       .dynamicTool(true)
@@ -139,7 +138,7 @@ final class TestTypeServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = TestType.builder()
-      .id(42)
+      .id(42L)
       .name("SNAFU Scan")
       .dynamicTool(true)
       .staticTool(true)
@@ -159,10 +158,6 @@ final class TestTypeServiceTest extends WireMockBaseTestCase {
       .withQueryParam("limit", equalTo("100"))
       .withQueryParam("offset", equalTo("0"))
       .withQueryParam("name", equalTo("foo"))
-      // Defaults from model:
-      .withQueryParam("static_tool", equalTo("false"))
-      .withQueryParam("dynamic_tool", equalTo("false"))
-      .withQueryParam("id", equalTo("0"))
       .willReturn(ok()
         .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
         .withBody(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE)
@@ -217,7 +212,7 @@ final class TestTypeServiceTest extends WireMockBaseTestCase {
         .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
     final var toCreate = TestType.builder()
-      .id(42)
+      .id(42L)
       .name("foo")
       .staticTool(true)
       .dynamicTool(true)
@@ -256,7 +251,7 @@ final class TestTypeServiceTest extends WireMockBaseTestCase {
       ));
 
     final var toUpdate = TestType.builder()
-      .id(42)
+      .id(42L)
       .name("foo")
       .staticTool(true)
       .dynamicTool(true)
