@@ -4,13 +4,8 @@
 
 package io.securecodebox.persistence.defectdojo.service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.Finding;
-import io.securecodebox.persistence.defectdojo.model.RiskAcceptance;
-import lombok.Builder;
-import lombok.NonNull;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -18,7 +13,6 @@ import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
@@ -35,12 +29,12 @@ final class FindingServiceTest extends WireMockBaseTestCase {
   private static final String RESPONSE_SINGLE_FIXTURE_JSON = "FindingService_response_single_fixture.json";
   private final FindingService sut = new FindingService(conf());
   private final Finding expectedFromSearch = Finding.builder()
-    .id(42)
+    .id(42L)
     .title("Open Port: 9929/TCP")
     .description("IP Address: 198.51.100.0 FQDN: scanme.nmap.org Port/Protocol: 9929/tcp")
     .foundBy(List.of(132L))
     .severity(Finding.Severity.INFORMATIONAL)
-    .test(222)
+    .test(222L)
     .mitigation("N/A")
     .impact("No impact provided")
     .verified(true)
@@ -109,15 +103,16 @@ final class FindingServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = Finding.builder()
-      .id(42)
+      .id(42L)
       .title("www.owasp.org")
       .description("Found subdomain www.owasp.org")
       .severity(Finding.Severity.INFORMATIONAL)
       .foundBy(List.of(128L))
-      .test(17)
+      .test(17L)
       .active(true)
       .endpoints(List.of(5L))
       .createdAt(OffsetDateTime.parse("2024-03-02T08:28:00.407414Z"))
+      .verified(false)
       .build();
 
     final var result = sut.get(42L);
@@ -139,14 +134,12 @@ final class FindingServiceTest extends WireMockBaseTestCase {
       .withQueryParam("severity", equalTo("High"))
       // Defaults from model:
       .withQueryParam("endpoints", equalTo("[]"))
-      .withQueryParam("test", equalTo("0"))
-      .withQueryParam("verified", equalTo("false"))
-      .withQueryParam("active", equalTo("false"))
+      .withQueryParam("test", equalTo("23"))
+      .withQueryParam("verified", equalTo("true"))
+      .withQueryParam("active", equalTo("true"))
       .withQueryParam("duplicate", equalTo("false"))
       .withQueryParam("out_of_scope", equalTo("false"))
       .withQueryParam("risk_accepted", equalTo("false"))
-      .withQueryParam("id", equalTo("0"))
-      .withQueryParam("duplicate_finding", equalTo("0"))
       .withQueryParam("numerical_severity", equalTo("S1"))
       .withQueryParam("false_p", equalTo("false"))
       .willReturn(ok()
@@ -159,6 +152,7 @@ final class FindingServiceTest extends WireMockBaseTestCase {
       .description("snafu")
       .foundBy(List.of(12L, 42L))
       .severity(Finding.Severity.HIGH)
+      .test(23L)
       .build();
 
     final var result = sut.searchUnique(searchObject);
@@ -193,19 +187,17 @@ final class FindingServiceTest extends WireMockBaseTestCase {
   void create() {
     final var json = """
       {
-        "id" : 0,
         "title" : "foo",
         "description" : "bar",
         "severity" : "High",
-        "test" : 0,
-        "active" : false,
-        "verified" : false,
+        "test" : 42,
+        "active" : true,
+        "verified" : true,
         "duplicate" : false,
         "endpoints" : [ ],
         "found_by" : [ 1, 2, 3 ],
         "risk_accepted" : false,
         "out_of_scope" : false,
-        "duplicate_finding" : 0,
         "false_p" : false,
         "accepted_risks" : [ ],
         "numerical_severity" : "S1"
@@ -222,6 +214,7 @@ final class FindingServiceTest extends WireMockBaseTestCase {
       .description("bar")
       .foundBy(List.of(1L, 2L, 3L))
       .severity(Finding.Severity.HIGH)
+      .test(42L)
       .build();
 
     final var result = sut.create(toCreate);
@@ -243,19 +236,17 @@ final class FindingServiceTest extends WireMockBaseTestCase {
   void update() {
     final var json = """
       {
-        "id" : 0,
         "title" : "foo",
         "description" : "bar",
         "severity" : "High",
-        "test" : 0,
-        "active" : false,
-        "verified" : false,
+        "test" : 42,
+        "active" : true,
+        "verified" : true,
         "duplicate" : false,
         "endpoints" : [ ],
         "found_by" : [ 1, 2, 3 ],
         "risk_accepted" : false,
         "out_of_scope" : false,
-        "duplicate_finding" : 0,
         "false_p" : false,
         "accepted_risks" : [ ],
         "numerical_severity" : "S1"
@@ -273,6 +264,7 @@ final class FindingServiceTest extends WireMockBaseTestCase {
       .description("bar")
       .foundBy(List.of(1L, 2L, 3L))
       .severity(Finding.Severity.HIGH)
+      .test(42L)
       .build();
 
     final var result = sut.update(toUpdate, 42L);

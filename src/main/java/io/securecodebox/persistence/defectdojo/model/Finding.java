@@ -23,8 +23,17 @@ import java.util.Map;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Finding implements Model, HasId {
+  /**
+   * Uniq id of model type
+   * <p>
+   * May be {@code null} for newly created objects because in DefectDojo's Open API specification i.
+   * It is mandatory to use a boxed object type instead of a native type. A native type would result in 0 by
+   * default which is a valid id for DefectDojo. Thus creating this type via POST request would try to create
+   * one with id 0. Instead the id must be {@code null}, so that DefectDojo uses a newly generated uniq id.
+   * </p>
+   */
   @JsonProperty
-  private long id;
+  private Long id;
 
   @JsonProperty
   @NonNull
@@ -44,7 +53,7 @@ public final class Finding implements Model, HasId {
 
   @JsonProperty
   @NonNull
-  private long test;
+  private Long test;// FIXME: Use native type here.
 
   @JsonProperty
   private String mitigation;
@@ -54,30 +63,37 @@ public final class Finding implements Model, HasId {
 
   @JsonProperty
   @NonNull
-  private boolean active;
+  @Builder.Default
+  private Boolean active = true;// FIXME: Use native type here.
 
   @JsonProperty
   @NonNull
-  private boolean verified;
+  @Builder.Default
+  private Boolean verified = true;// FIXME: Use native type here.
 
   @JsonProperty("risk_accepted")
   @NonNull
-  private boolean riskAccepted;
+  @Builder.Default
+  private Boolean riskAccepted = false;// FIXME: Use native type here.
 
   @JsonProperty("out_of_scope")
   @NonNull
-  private boolean outOfScope;
+  @Builder.Default
+  private Boolean outOfScope = false;// FIXME: Use native type here.
 
   @JsonProperty
   @NonNull
-  private boolean duplicate;
+  @Builder.Default
+  private Boolean duplicate = false;// FIXME: Use native type here.
 
   @JsonProperty("duplicate_finding")
-  private long duplicateFinding;
+  @Builder.Default
+  private Long duplicateFinding = null;// FIXME: Use native type here.
 
   @JsonProperty("false_p")
   @NonNull
-  private boolean falsePositive;
+  @Builder.Default
+  private Boolean falsePositive = false;// FIXME: Use native type here.
 
   @JsonProperty("component_name")
   private String componentName;

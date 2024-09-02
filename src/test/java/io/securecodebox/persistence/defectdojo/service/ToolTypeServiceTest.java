@@ -5,7 +5,6 @@ package io.securecodebox.persistence.defectdojo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.securecodebox.persistence.defectdojo.model.ToolType;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -25,32 +24,32 @@ final class ToolTypeServiceTest extends WireMockBaseTestCase {
   private static final String RESPONSE_LIST_FIXTURE_JSON = "ToolTypeService_response_list_fixture.json";
   private final ToolTypeService sut = new ToolTypeService(conf());
   private final ToolType[] expectedFromSearch = {ToolType.builder()
-    .id(6)
+    .id(6L)
     .name("BlackDuck API")
     .build(),
     ToolType.builder()
-      .id(3)
+      .id(3L)
       .name("Bugcrowd API")
       .build(),
     ToolType.builder()
-      .id(4)
+      .id(4L)
       .name("Cobalt.io")
       .build(),
     ToolType.builder()
-      .id(1)
+      .id(1L)
       .name("Edgescan")
       .build(),
     ToolType.builder()
-      .id(7)
+      .id(7L)
       .name("Security Test Orchestration Engine")
       .description("Security Test Orchestration Engine")
       .build(),
     ToolType.builder()
-      .id(5)
+      .id(5L)
       .name("SonarQube")
       .build(),
     ToolType.builder()
-      .id(2)
+      .id(2L)
       .name("Vulners")
       .build()};
 
@@ -112,7 +111,7 @@ final class ToolTypeServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = ToolType.builder()
-      .id(7)
+      .id(7L)
       .name("Security Test Orchestration Engine")
       .description("Security Test Orchestration Engine")
       .build();
@@ -131,8 +130,6 @@ final class ToolTypeServiceTest extends WireMockBaseTestCase {
       .withQueryParam("limit", equalTo("100"))
       .withQueryParam("offset", equalTo("0"))
       .withQueryParam("name", equalTo("foo"))
-      // Defaults from model:
-      .withQueryParam("id", equalTo("0"))
       .willReturn(ok()
         .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
         .withBody(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE)
@@ -186,7 +183,7 @@ final class ToolTypeServiceTest extends WireMockBaseTestCase {
         .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
     final var toCreate = ToolType.builder()
-      .id(42)
+      .id(42L)
       .name("foo")
       .description("bar")
       .build();
@@ -223,7 +220,7 @@ final class ToolTypeServiceTest extends WireMockBaseTestCase {
       ));
 
     final var toUpdate = ToolType.builder()
-      .id(42)
+      .id(42L)
       .name("foo")
       .description("bar")
       .build();

@@ -25,39 +25,39 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
   private final EndpointService sut = new EndpointService(conf());
   private final Endpoint[] expectedFromSearch = new Endpoint[]{
     Endpoint.builder()
-      .id(956)
+      .id(956L)
       .protocol("tcp")
       .host("10.0.0.1")
-      .port(80)
-      .product(320)
+      .port(80L)
+      .product(320L)
       .build(),
     Endpoint.builder()
-      .id(957)
+      .id(957L)
       .protocol("tcp")
       .host("10.0.0.1")
-      .port(443)
-      .product(320)
+      .port(443L)
+      .product(320L)
       .build(),
     Endpoint.builder()
-      .id(961)
+      .id(961L)
       .protocol("tcp")
       .host("10.0.0.2")
-      .port(80)
-      .product(323)
+      .port(80L)
+      .product(323L)
       .build(),
     Endpoint.builder()
-      .id(962)
+      .id(962L)
       .protocol("tcp")
       .host("10.0.0.2")
-      .port(443)
-      .product(323)
+      .port(443L)
+      .product(323L)
       .build(),
     Endpoint.builder()
-      .id(893)
+      .id(893L)
       .protocol("tcp")
       .host("10.0.0.3")
-      .port(443)
-      .product(296)
+      .port(443L)
+      .product(296L)
       .build()};
 
   @Test
@@ -133,11 +133,11 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
         .withBody(response)
       ));
     final var expected = Endpoint.builder()
-      .id(42)
+      .id(42L)
       .protocol("tcp")
       .host("www.owasp.org")
-      .port(443)
-      .product(285)
+      .port(443L)
+      .product(285L)
       .build();
 
     final var result = sut.get(42L);
@@ -155,16 +155,13 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
       .withQueryParam("offset", equalTo("0"))
       .withQueryParam("id", equalTo("42"))
       .withQueryParam("product", equalTo("285"))
-      // Defaults from model:
-      .withQueryParam("port", equalTo("0"))
-      .withQueryParam("mitigated", equalTo("false"))
       .willReturn(ok()
         .withHeaders(responseHeaders(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE.length()))
         .withBody(EMPTY_SEARCH_RESULT_RESPONSE_FIXTURE)
       ));
     final var searchObject = Endpoint.builder()
-      .id(42)
-      .product(285)
+      .id(42L)
+      .product(285L)
       .build();
 
     final var result = sut.searchUnique(searchObject);
@@ -202,8 +199,7 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
         "protocol": "tcp",
         "host": "www.owasp.org",
         "port":443,
-        "product": 285,
-        "mitigated": false
+        "product": 285
       }
       """;
     stubFor(post(urlPathEqualTo("/api/v2/endpoints/"))
@@ -213,11 +209,11 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
         .withBody(json) // Typically the entity with new assigned id is returned, but we ignore this here.
       ));
     final var toCreate = Endpoint.builder()
-      .id(42)
+      .id(42L)
       .protocol("tcp")
       .host("www.owasp.org")
-      .port(443)
-      .product(285)
+      .port(443L)
+      .product(285L)
       .build();
 
     final var result = sut.create(toCreate);
@@ -243,8 +239,7 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
         "protocol": "tcp",
         "host": "www.owasp.org",
         "port": 443,
-        "product":285,
-        "mitigated": false
+        "product":285
       }
       """;
     stubFor(put(urlPathEqualTo("/api/v2/endpoints/42/"))
@@ -255,11 +250,11 @@ final class EndpointServiceTest extends WireMockBaseTestCase {
       ));
 
     final var toUpdate = Endpoint.builder()
-      .id(42)
+      .id(42L)
       .protocol("tcp")
       .host("www.owasp.org")
-      .port(443)
-      .product(285)
+      .port(443L)
+      .product(285L)
       .build();
 
     final var result = sut.update(toUpdate, 42L);

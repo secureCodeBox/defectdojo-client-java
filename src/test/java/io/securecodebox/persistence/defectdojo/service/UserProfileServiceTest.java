@@ -101,7 +101,7 @@ final class UserProfileServiceTest extends WireMockBaseTestCase {
       ));
     final var expected = UserProfile.builder()
       .user(User.builder()
-        .id(42)
+        .id(42L)
         .username("alf")
         .firstName("Gordon")
         .lastName("Shumway")
@@ -186,7 +186,7 @@ final class UserProfileServiceTest extends WireMockBaseTestCase {
       ));
     final var toCreate = UserProfile.builder()
       .user(User.builder()
-        .id(42)
+        .id(42L)
         .username("alf")
         .firstName("Gordon")
         .lastName("Shumway")
@@ -229,7 +229,7 @@ final class UserProfileServiceTest extends WireMockBaseTestCase {
 
     final var toUpdate = UserProfile.builder()
       .user(User.builder()
-        .id(42)
+        .id(42L)
         .username("alf")
         .firstName("Gordon")
         .lastName("Shumway")
