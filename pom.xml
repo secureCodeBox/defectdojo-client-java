@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
 
     <groupId>io.securecodebox</groupId>
     <artifactId>defectdojo-client</artifactId>
@@ -23,17 +25,6 @@
         <name>secureCodeBox</name>
         <url>https://www.securecodebox.io/</url>
     </organization>
-
-    <prerequisites>
-        <maven>${maven.version}</maven>
-    </prerequisites>
-
-    <scm>
-        <connection>scm:git:https://github.com/secureCodeBox/defectdojo-client-java.git</connection>
-        <developerConnection>scm:git:https://github.com/secureCodeBox/defectdojo-client-java.git</developerConnection>
-        <url>https://github.com/secureCodeBox/defectdojo-client-java.git</url>
-        <tag>defectdojo-client-2.0.0</tag>
-    </scm>
 
     <developers>
         <developer>
@@ -62,6 +53,22 @@
             <email>heiko.kiesel@iteratec.com</email>
         </developer>
     </developers>
+
+    <prerequisites>
+        <maven>${maven.version}</maven>
+    </prerequisites>
+
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/secureCodeBox/defectdojo-client-java/issues</url>
+    </issueManagement>
+
+    <scm>
+        <connection>scm:git:https://github.com/secureCodeBox/defectdojo-client-java.git</connection>
+        <developerConnection>scm:git:https://github.com/secureCodeBox/defectdojo-client-java.git</developerConnection>
+        <url>https://github.com/secureCodeBox/defectdojo-client-java.git</url>
+        <tag>defectdojo-client-2.0.0</tag>
+    </scm>
 
     <properties>
         <maven.version>3.5.0</maven.version>
@@ -122,12 +129,12 @@
             <version>${com.fasterxml.jackson.version}</version>
         </dependency>
         <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-          <version>2.0.11</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.11</version>
         </dependency>
 
-      <dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
@@ -178,23 +185,25 @@
         </dependency>
     </dependencies>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
     <profiles>
         <profile>
             <id>release</id>
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.8.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <tokenAuth>true</tokenAuth>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>3.1.0</version>
                         <executions>
@@ -259,8 +268,8 @@
 
                             <configuration>
                                 <rules>
-                                    <dependencyConvergence />
-                                    <requirePluginVersions />
+                                    <dependencyConvergence/>
+                                    <requirePluginVersions/>
                                     <requireJavaVersion>
                                         <version>${project.build.version.target}</version>
                                     </requireJavaVersion>
@@ -320,18 +329,6 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.13</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <serverId>ossrh</serverId>
-                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                    </configuration>
-                </plugin>
-
-                <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.6.3</version>
                     <executions>
@@ -380,11 +377,7 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
-
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-            </plugin>
         </plugins>
     </build>
+
 </project>
