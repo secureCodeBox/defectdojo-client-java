@@ -13,7 +13,7 @@ on:
 
 jobs:
   publish-snapshot:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: github.repository == 'secureCodeBox/defectdojo-client-java'
     steps:
 
@@ -25,7 +25,7 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-          server-id: ossrh
+          server-id: central
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
 
