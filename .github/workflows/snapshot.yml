@@ -30,7 +30,7 @@ jobs:
           server-password: MAVEN_PASSWORD
 
       - name: Build & Publish to Maven Central
-        run: mvn -U -B clean deploy # -U: force updates for dependencies, -B: no user input
+        run: mvn -U -B clean deploy -P snapshot # -U: force updates for dependencies, -B: no user input
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
