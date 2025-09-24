@@ -4,7 +4,7 @@ Here we describe all the ceremonial stuff necessary to publish a Java library to
 
 ## How to Perform a Release
 
-The whole release process is automated by a [GitHub action workflow](https://github.com/secureCodeBox/defectdojo-client-java/actions) which utilizes the [Maven release plugin](https://maven.apache.org/maven-release/maven-release-plugin/). Since we need the possibility to set custom versions (e.g. 2.0.0-beta) we can not use a simple one-push-button solution. Instead, we utilize en event triggered workflow to achieve this. The release process is as following:  
+The whole release process is automated by a [GitHub action workflow](https://github.com/secureCodeBox/defectdojo-client-java/actions) which utilizes the [Maven Plugin](https://central.sonatype.org/publish/publish-portal-maven/). Since we need the possibility to set custom versions (e.g. 2.0.0-beta) we can not use a simple one-push-button solution. Instead, we utilize en event triggered workflow to achieve this. The release process is as following:  
 
 First go to the "Actions" tab and select the "Publish Release" workflow:
 
@@ -28,7 +28,7 @@ Typically, a release by Maven simply means:
 
 - Remove the "-SNAPSHOT" qualifier from the version in the `pom.xml`. E.g. "1.0.0-SNAPSHOT" will become "1.0.0".
 - Build everything, make a commit with this version and tag this version.
-- Upload the resulting artifacts to [Sonatype Nexus](https://oss.sonatype.org/) and stage them.
+- Upload the resulting artifacts to [Maven Central](https://central.sonatype.com/) and stage them.
 - Increment to next development version in `pom.xml`. In this example "1.0.1-SNAPSHOT".
 - Build everything and make a commit.
 
@@ -39,15 +39,9 @@ In the case you want to publish a custom release, e.g. a "1.0.2-beta", it is nec
 
 ![](release_05_custom-version.png)
 
-### Additional Information About the Release Process
-
-After the first release a [bot created the Maven Central sync][ossrh-jira-issue]:
-
-> Central sync is activated for io.securecodebox. After you successfully release, your component will be available to the public on Central https://repo1.maven.org/maven2/, typically within 30 minutes, though updates to https://search.maven.org can take up to four hours.
-
 ## Credentials
 
-Publishing to Maven Central requires authentication in the form of username and password or user token (as username and password). We use [user tokens][user-token] for authentication, which are stored in our password manager.
+Publishing to Maven Central requires authentication in the form of username and password or user token (as username and password). We use [user tokens](https://central.sonatype.org/publish/generate-portal-token/) for authentication, which are stored in our password manager.
 
 ### Local (on device)
 
@@ -139,7 +133,7 @@ gpg> expire
 ```shell
 gpg>  save
 ```
-6. Update the private key in out password manager and GitHub Secrets
+6. Update the private key in our password manager and GitHub Secrets
 
 [gh-secrets]:           https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/GitHub-Actions-Secrets-Example-Token-Tutorial
 [user-token]:           https://help.sonatype.com/iqserver/managing/user-management/user-tokens
